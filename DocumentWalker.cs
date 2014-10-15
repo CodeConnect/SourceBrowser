@@ -67,6 +67,15 @@ namespace SourceBrowser.Generator
                 htmlTrivia += HttpUtility.HtmlEncode(trivia.ToString());
                 htmlTrivia += "</span>";
             }
+            else if (trivia.CSharpKind() == SyntaxKind.RegionDirectiveTrivia ||
+                     trivia.CSharpKind() == SyntaxKind.EndRegionDirectiveTrivia)
+            {
+                htmlTrivia += "<span style='color:blue'>";
+                // We don't visit insides of region directives,
+                // so we need to use ToFullString() to get the new line and whitespace
+                htmlTrivia += HttpUtility.HtmlEncode(trivia.ToFullString());
+                htmlTrivia += "</span>";
+            }
             else
             {
                 htmlTrivia += HttpUtility.HtmlEncode(trivia.ToString());
