@@ -3,7 +3,7 @@ SourceBrowser.Generator
 
 C# in. HTML out.
 
-Demo: [sourcebrowser.io/Browse/CodeConnect/SourceBrowser.Generator/](sourcebrowser.io/Browse/CodeConnect/SourceBrowser.Generator/)
+Demo: [sourcebrowser.io/Browse/CodeConnect/SourceBrowser.Generator/](http://sourcebrowser.io/Browse/CodeConnect/SourceBrowser.Generator/)
 
 
 _What is it?_
