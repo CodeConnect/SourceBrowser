@@ -35,7 +35,7 @@ namespace SourceBrowser.Generator
 
                 foreach (var part in filePathParts)
                 {
-                    if (!folderRoot.Children.ContainsKey(part))
+                    if (!currentPosition.Children.ContainsKey(part))
                     {
                         var folder = new FolderItem(part);
                         currentPosition.Children[part] = folder;
