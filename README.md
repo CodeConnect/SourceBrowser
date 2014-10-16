@@ -14,6 +14,10 @@ _Why?_
 
 It's much easier to browse open source and online projects when you can traverse the project easily. GitHub is great, but it's a huge pain in the ass to navigate projects on here.
 
-_Can I help?_
+_I found a bug. How do I tell you?_
 
-Yes! There remains a lot of work to be done. We'd love help. The project is still in its infancy, and we're not yet committed to any of the design decisions we've made.
+Post it on our [Issues](https://github.com/CodeConnect/SourceBrowser.Generator/issues) page.
+
+_I'd like a new feature. How do I tell you?_
+
+Post it on our [Uservoice](http://sourcebrowser.uservoice.com).
