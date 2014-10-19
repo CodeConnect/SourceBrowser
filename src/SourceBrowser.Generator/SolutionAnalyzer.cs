@@ -54,7 +54,7 @@ namespace SourceBrowser.Generator
                 Directory.CreateDirectory(_saveDirectory);
             }
 
-            foreach (var doc in _solution.Projects.SelectMany(n=>n.Documents))
+            foreach (var doc in _solution.Projects.SelectMany(n => n.Documents))
             {
                 preProcessDocument(doc);
             }
@@ -63,12 +63,12 @@ namespace SourceBrowser.Generator
             var solutionInfo = this.GenerateFolderStructureAsJson();
             string solutionInfoPath = Path.Combine(_saveDirectory, solutionInfoFileName);
 
-            using (StreamWriter stream = new StreamWriter(solutionInfoPath, append:false))
+            using (StreamWriter stream = new StreamWriter(solutionInfoPath, append: false))
             {
                 stream.Write(solutionInfo);
             }
 
-            foreach (var doc in _solution.Projects.SelectMany(n=>n.Documents))
+            foreach (var doc in _solution.Projects.SelectMany(n => n.Documents))
             {
                 //Generate info
                 string url = doc.GetRelativeFilePath();
@@ -84,7 +84,7 @@ namespace SourceBrowser.Generator
                 var jsonDocInfo = JsonConvert.SerializeObject(docInfo);
 
                 //Save it
-                using (var sw = new StreamWriter(fullPath, append:false))
+                using (var sw = new StreamWriter(fullPath, append: false))
                 {
                     sw.Write(jsonDocInfo);
                 }
