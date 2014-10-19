@@ -28,7 +28,7 @@ namespace SourceBrowser.Generator
             path += "\\";
             return path;
         }
-        
+
         /// <summary>
         /// Retrieves the document's path relative to the root of the project
         /// </summary>

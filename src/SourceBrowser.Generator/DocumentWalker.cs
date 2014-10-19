@@ -94,7 +94,7 @@ namespace SourceBrowser.Generator
             {
                 str = ProcessKeyword(token);
             }
-            else if(token.CSharpKind() == SyntaxKind.IdentifierToken)
+            else if (token.CSharpKind() == SyntaxKind.IdentifierToken)
             {
                 str = ProcessIdentifier(token);
             }
@@ -154,7 +154,7 @@ namespace SourceBrowser.Generator
                 //otherwise, just color it 
                 html += "<span style='color:#2B91AF'>" + HttpUtility.HtmlEncode(token.ToString()) + "</span>";
             }
-            
+
             return html;
         }
 
@@ -209,14 +209,14 @@ namespace SourceBrowser.Generator
 
             return HttpUtility.HtmlEncode(token.ToString());
         }
-        
+
         public string ProcessIdentifier(SyntaxToken token)
         {
             //Check if this token is part of a declaration
             var parentSymbol = _model.GetDeclaredSymbol(token.Parent);
             if (parentSymbol != null)
                 return ProcessDeclaration(token, parentSymbol);
-           
+
             //Find the symbol this token references
             var symbolInfo = _model.GetSymbolInfo(token.Parent);
 

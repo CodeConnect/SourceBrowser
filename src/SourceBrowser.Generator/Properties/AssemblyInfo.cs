@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("SourceBrowser")]
+[assembly: AssemblyTitle("SourceBrowser.Generator")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("SourceBrowser")]
+[assembly: AssemblyProduct("SourceBrowser.Generator")]
 [assembly: AssemblyCopyright("Copyright ©  2014")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("bd65dc4a-8fc9-4a0e-8e24-410ac628f9d6")]
+[assembly: Guid("9fd2eff3-8ee4-472c-a203-c6c3c6002969")]
 
 // Version information for an assembly consists of the following four values:
 //
