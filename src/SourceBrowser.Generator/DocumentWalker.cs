@@ -18,6 +18,7 @@ namespace SourceBrowser.Generator
         string _html = String.Empty;
         Dictionary<string, string> _typeLookup;
         private SemanticModel _model;
+        private ReferencesourceLinkProvider refsourceLinkProvider = new ReferencesourceLinkProvider();
         private StringBuilder _stringBuilder = new StringBuilder();
         private int _numLines = 0;
         public string FilePath { get; set; }
@@ -37,6 +38,7 @@ namespace SourceBrowser.Generator
 
             DocInfo.FileName = FilePath;
             DocInfo.NumberOfLines = document.GetTextAsync().Result.Lines.Count;
+            refsourceLinkProvider.Init().Wait();
         }
 
         public override void VisitLeadingTrivia(SyntaxToken token)
@@ -149,6 +151,16 @@ namespace SourceBrowser.Generator
                 html += "</a>";
                 html += "</span>";
             }
+            else if (refsourceLinkProvider.Assemblies.Contains(symbol.ContainingAssembly.Identity.Name))
+            {
+                html = "<span>";
+                html += "<a style='color:black' href=";
+                html += refsourceLinkProvider.GetLink(symbol);
+                html += ">";
+                html += HttpUtility.HtmlEncode(token.ToString());
+                html += "</a>";
+                html += "</span>";
+            }
             else
             {
                 //otherwise, just color it 
@@ -171,6 +183,16 @@ namespace SourceBrowser.Generator
                 html = "<span>";
                 html += "<a style='color:black' href=";
                 html += relativePath;
+                html += ">";
+                html += HttpUtility.HtmlEncode(token.ToString());
+                html += "</a>";
+                html += "</span>";
+            }
+            else if (refsourceLinkProvider.Assemblies.Contains(symbol.ContainingAssembly.Identity.Name))
+            {
+                html = "<span>";
+                html += "<a style='color:black' href=";
+                html += refsourceLinkProvider.GetLink(symbol);
                 html += ">";
                 html += HttpUtility.HtmlEncode(token.ToString());
                 html += "</a>";
