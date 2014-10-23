@@ -1,11 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30110.0
+VisualStudioVersion = 12.0.30324.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SourceBrowser.Generator", "SourceBrowser.Generator\SourceBrowser.Generator.csproj", "{C91050BD-5010-4EBD-A6AE-52CCA7C2553D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SourceBrowser.Generator.TestConsole", "SourceBrowser.Generator.TestConsole\SourceBrowser.Generator.TestConsole.csproj", "{0690F94E-83CC-464C-9E29-37F26227265B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SourceBrowser.Samples", "SourceBrowser.Samples\SourceBrowser.Samples.csproj", "{13934549-7DB7-424F-AA2C-D3C33684858B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +17,10 @@ Global
 		{C91050BD-5010-4EBD-A6AE-52CCA7C2553D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C91050BD-5010-4EBD-A6AE-52CCA7C2553D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C91050BD-5010-4EBD-A6AE-52CCA7C2553D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0690F94E-83CC-464C-9E29-37F26227265B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0690F94E-83CC-464C-9E29-37F26227265B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0690F94E-83CC-464C-9E29-37F26227265B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0690F94E-83CC-464C-9E29-37F26227265B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{13934549-7DB7-424F-AA2C-D3C33684858B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{13934549-7DB7-424F-AA2C-D3C33684858B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{13934549-7DB7-424F-AA2C-D3C33684858B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{13934549-7DB7-424F-AA2C-D3C33684858B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

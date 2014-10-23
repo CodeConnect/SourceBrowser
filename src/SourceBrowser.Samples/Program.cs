@@ -2,7 +2,7 @@
 using System.IO;
 using SourceBrowser.Generator;
 
-namespace SourceBrowser.Generator.TestConsole
+namespace SourceBrowser.Samples
 {
     class Program
     {
@@ -27,6 +27,7 @@ namespace SourceBrowser.Generator.TestConsole
             string absoluteSolutionPath = Path.Combine(userProfilePath, solutionPath);
             string absoluteSaveDirectory = Path.Combine(userProfilePath, saveDirectory);
 
+            // Open and analyze the solution.
             try
             {
                 Console.Write("Opening " + absoluteSolutionPath);
@@ -46,9 +47,7 @@ namespace SourceBrowser.Generator.TestConsole
                 Console.WriteLine("Error:");
                 Console.WriteLine(ex.ToString());
             }
-            Console.WriteLine();
-            Console.WriteLine("Press any key to exit.");
-            Console.ReadKey();
+
         }
     }
 }
