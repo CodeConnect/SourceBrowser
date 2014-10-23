@@ -35,13 +35,30 @@ namespace SourceBrowser.Generator
 
         private void _workspace_WorkspaceFailed(object sender, WorkspaceDiagnosticEventArgs e)
         {
-            var path = System.Web.Hosting.HostingEnvironment.MapPath("/WorkspaceLogs/");
-            if (!Directory.Exists(path))
-                Directory.CreateDirectory(path);
-            var logPath = path + "log.txt";
-            using (var sw = new StreamWriter(logPath))
+            try
             {
-                sw.Write(e);
+                var logDirectory = System.Web.Hosting.HostingEnvironment.MapPath("/WorkspaceLogs/");
+                if (logDirectory == null)
+                {
+                    // If we are not running within a web server, logDirectory will be null.
+                    // Whoever invoked this SolutionAnalyze will handle this issue.
+                    var wrapperException = new Exception();
+                    wrapperException.Data["Diagnostic"] = e.Diagnostic;
+                    throw wrapperException;
+                }
+
+                if (!Directory.Exists(logDirectory))
+                    Directory.CreateDirectory(logDirectory);
+                var logPath = logDirectory + "log.txt";
+                using (var sw = new StreamWriter(logPath))
+                {
+                    sw.Write(e);
+                }
+            }
+            catch
+            {
+                // All issues with logging are rethrown.
+                throw;
             }
         }
 
