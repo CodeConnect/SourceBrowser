@@ -64,7 +64,7 @@ namespace SourceBrowser.Generator
                 trivia.CSharpKind() == SyntaxKind.SingleLineDocumentationCommentTrivia)
             {
                 htmlTrivia += "<span style='color:green'>";
-                htmlTrivia += HttpUtility.HtmlEncode(trivia.ToString());
+                htmlTrivia += HttpUtility.HtmlEncode(trivia.ToFullString());
                 htmlTrivia += "</span>";
             }
             else if (trivia.CSharpKind() == SyntaxKind.RegionDirectiveTrivia ||
