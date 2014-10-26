@@ -38,7 +38,7 @@ namespace SourceBrowser.Samples
                 Console.Write("Analyzing and saving into " + absoluteSaveDirectory);
                 Console.WriteLine("...");
 
-                solutionAnalyzer.AnalyzeAndSave(saveDirectory);
+                solutionAnalyzer.AnalyzeAndSave(absoluteSaveDirectory);
 
                 Console.WriteLine("Job successful!");
             }
