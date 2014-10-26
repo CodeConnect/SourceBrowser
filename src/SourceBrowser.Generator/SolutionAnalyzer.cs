@@ -13,6 +13,7 @@ using Microsoft.CodeAnalysis.CSharp;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 using System.Reflection;
+using SourceBrowser.Generator.Extensions;
 
 namespace SourceBrowser.Generator
 {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.CodeAnalysis;
 
-namespace SourceBrowser.Generator
+namespace SourceBrowser.Generator.Extensions
 {
     /// <summary>
     /// A number of extension methods for dealing with the relative path of the

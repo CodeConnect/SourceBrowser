@@ -7,6 +7,7 @@ using System.Web;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using SourceBrowser.Generator.Extensions;
 
 namespace SourceBrowser.Generator
 {

@@ -85,7 +85,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DocumentExtensions.cs" />
+    <Compile Include="Extensions\DocumentExtensions.cs" />
     <Compile Include="DocumentInfo.cs" />
     <Compile Include="DocumentWalker.cs" />
     <Compile Include="FileSystemInfo.cs" />
@@ -103,6 +103,9 @@
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Model\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
