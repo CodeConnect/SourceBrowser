@@ -12,8 +12,8 @@ namespace SourceBrowser.Samples
             string userProfilePath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
 
             // For developers that set test variables in code:
-            string solutionPath = @"";
-            string saveDirectory = @"";
+            string solutionPath = @"Documents\GitHub\Kiwi\TestSolution\TestSolution.sln";
+            string saveDirectory = @"test";
 
             // For developers that provide test variables in arguments:
             if (args.Length == 2)

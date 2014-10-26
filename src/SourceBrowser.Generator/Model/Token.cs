@@ -16,5 +16,10 @@ namespace SourceBrowser.Generator.Model
         public string Value { get; set; }
 
         public IEnumerable<ILink> Links { get; set; }
+
+        public Token()
+        {
+            Links = new List<ILink>();
+        }
     }
 }
