@@ -7,6 +7,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.CodeAnalysis;
+using SourceBrowser.Generator.Extensions;
 
 namespace SourceBrowser.Generator
 {
@@ -44,25 +45,7 @@ namespace SourceBrowser.Generator
 
         public string GetLink(ISymbol symbol)
         {
-            return baseUrl + "/" + symbol.ContainingAssembly.Name + "/a.html#" + Utilities.GetHash(GetDocumentationCommentId(symbol));
-
+            return baseUrl + "/" + symbol.ContainingAssembly.Name + "/a.html#" + Utilities.GetHash(symbol.GetSymbolId());
         }
-        private static string GetDocumentationCommentId(ISymbol symbol)
-        {
-            string result = null;
-            if (!symbol.IsDefinition)
-            {
-                symbol = symbol.OriginalDefinition;
-            }
-
-            result = symbol.GetDocumentationCommentId();
-
-            result = result.Replace("#ctor", "ctor");
-
-            return result;
-        }
-
-
-		
     }
 }
