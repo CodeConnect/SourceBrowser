@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SourceBrowser.Generator.Model
 {
-    public class Document : IProjectItem
+    public class DocumentModel : IProjectItem
     {
         public IProjectItem Parent { get; set; }
 
@@ -14,7 +14,7 @@ namespace SourceBrowser.Generator.Model
 
         public string Name { get; set; }
 
-        public Document(IProjectItem parent)
+        public DocumentModel(IProjectItem parent)
         {
             Parent = parent;
         }
