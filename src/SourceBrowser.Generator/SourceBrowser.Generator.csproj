@@ -92,7 +92,12 @@
     <Compile Include="FolderAnalyzer.cs" />
     <Compile Include="Hacks\DependencyHacks.cs" />
     <Compile Include="Model\Document.cs" />
+    <Compile Include="Model\Folder.cs" />
     <Compile Include="Model\IProjectItem.cs" />
+    <Compile Include="Model\ILink.cs" />
+    <Compile Include="Model\SymbolLink.cs" />
+    <Compile Include="Model\Token.cs" />
+    <Compile Include="Model\UrlLink.cs" />
     <Compile Include="Model\WorkspaceModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReferencesourceLinkProvider.cs" />

@@ -15,6 +15,6 @@ namespace SourceBrowser.Generator.Model
 
         public string Value { get; set; }
 
-        public IEnumerable<Link> Links { get; set; }
+        public IEnumerable<ILink> Links { get; set; }
     }
 }

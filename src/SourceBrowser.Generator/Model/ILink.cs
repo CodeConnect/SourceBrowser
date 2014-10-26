@@ -12,6 +12,6 @@ namespace SourceBrowser.Generator.Model
         /// Regardless of the type of link, it must be representable as a single string.
         /// </summary>
         /// <returns></returns>
-        public string GetLink();
+        string GetLink();
     }
 }
