@@ -8,6 +8,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using SourceBrowser.Generator.Extensions;
+using SourceBrowser.Generator.Model;
 
 namespace SourceBrowser.Generator
 {
@@ -16,8 +17,6 @@ namespace SourceBrowser.Generator
     /// </summary>
     public class DocumentWalker : CSharpSyntaxWalker
     {
-        string _html = String.Empty;
-        Dictionary<string, string> _typeLookup;
         private SemanticModel _model;
         private ReferencesourceLinkProvider _refsourceLinkProvider;
         private StringBuilder _stringBuilder = new StringBuilder();
@@ -34,9 +33,8 @@ namespace SourceBrowser.Generator
         public DocumentWalker(SemanticModel model, Document document, ReferencesourceLinkProvider refSourceLinkProvider, Dictionary<string, string> typeLookup) : base(SyntaxWalkerDepth.Trivia)
         {
             _model = document.GetSemanticModelAsync().Result;
-            _typeLookup = typeLookup;
+            _refsourceLinkProvider = refSourceLinkProvider;
             FilePath = document.GetRelativeFilePath();
-
             DocInfo.FileName = FilePath;
             DocInfo.NumberOfLines = document.GetTextAsync().Result.Lines.Count;
             _refsourceLinkProvider = refSourceLinkProvider;
@@ -84,7 +82,6 @@ namespace SourceBrowser.Generator
                 htmlTrivia += HttpUtility.HtmlEncode(trivia.ToString());
             }
 
-            _stringBuilder.Append(htmlTrivia);
             base.VisitTrivia(trivia);
         }
 
@@ -106,7 +103,6 @@ namespace SourceBrowser.Generator
                 str = HttpUtility.HtmlEncode(token.ToString());
             }
 
-            _stringBuilder.Append(str);
             this.VisitTrailingTrivia(token);
         }
 
@@ -138,9 +134,9 @@ namespace SourceBrowser.Generator
             //Type usage
             string fullName = symbol.ToString();
             string html = String.Empty;
-            string referencedURL;
+            string referencedURL = "";
             //Check if we can link to this type
-            if (_typeLookup.TryGetValue(fullName, out referencedURL))
+            //if (_typeLookup.TryGetValue(fullName, out referencedURL))
             {
                 var relativePath = Utilities.MakeRelativePath(this.FilePath, referencedURL);
 
@@ -152,7 +148,7 @@ namespace SourceBrowser.Generator
                 html += "</a>";
                 html += "</span>";
             }
-            else if (_refsourceLinkProvider.Assemblies.Contains(symbol.ContainingAssembly.Identity.Name))
+            //else if (refsourceLinkProvider.Assemblies.Contains(symbol.ContainingAssembly.Identity.Name))
             {
                 html = "<span>";
                 html += "<a style='color:black' href=";
@@ -162,7 +158,7 @@ namespace SourceBrowser.Generator
                 html += "</a>";
                 html += "</span>";
             }
-            else
+            //else
             {
                 //otherwise, just color it 
                 html += "<span style='color:#2B91AF'>" + HttpUtility.HtmlEncode(token.ToString()) + "</span>";
@@ -175,9 +171,9 @@ namespace SourceBrowser.Generator
         {
             string fullName = symbol.ToString();
             string html = string.Empty;
-            string referencedURL;
+            string referencedURL = "";
             //Check to see if we can link to this method
-            if (_typeLookup.TryGetValue(fullName, out referencedURL))
+            //if (_typeLookup.TryGetValue(fullName, out referencedURL))
             {
                 var relativePath = Utilities.MakeRelativePath(this.FilePath, referencedURL);
 
@@ -189,7 +185,7 @@ namespace SourceBrowser.Generator
                 html += "</a>";
                 html += "</span>";
             }
-            else if (_refsourceLinkProvider.Assemblies.Contains(symbol.ContainingAssembly.Identity.Name))
+            //else if (refsourceLinkProvider.Assemblies.Contains(symbol.ContainingAssembly.Identity.Name))
             {
                 html = "<span>";
                 html += "<a style='color:black' href=";
@@ -199,7 +195,7 @@ namespace SourceBrowser.Generator
                 html += "</a>";
                 html += "</span>";
             }
-            else
+            //else
             {
                 //otherwise, just color it 
                 html += "<span>" + HttpUtility.HtmlEncode(token.ToString()) + "</span>";

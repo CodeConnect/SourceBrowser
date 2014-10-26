@@ -22,6 +22,7 @@ namespace SourceBrowser.Generator
         MSBuildWorkspace _workspace;
         Solution _solution;
         SolutionFolderAnalyzer _folderAnalyzer;
+        private ReferencesourceLinkProvider _refsourceLinkProvider = new ReferencesourceLinkProvider();
         string _saveDirectory = string.Empty;
         Dictionary<string, string> _typeLookup = new Dictionary<string, string>();
         private ReferencesourceLinkProvider _refsourceLinkProvider = new ReferencesourceLinkProvider();
@@ -33,6 +34,8 @@ namespace SourceBrowser.Generator
             _workspace.WorkspaceFailed += _workspace_WorkspaceFailed;
             _solution = _workspace.OpenSolutionAsync(solutionPath).Result;
             _folderAnalyzer = new SolutionFolderAnalyzer(_solution);
+
+            _refsourceLinkProvider.Init().Wait();
         }
 
         private void _workspace_WorkspaceFailed(object sender, WorkspaceDiagnosticEventArgs e)
@@ -173,8 +176,7 @@ namespace SourceBrowser.Generator
             var docWalker = new DocumentWalker(model, document, _refsourceLinkProvider, _typeLookup);
             docWalker.Visit(root);
 
-            var docInfo = docWalker.GetDocumentInfo();
-            return docInfo;
+            return default(DocumentInfo);
         }
     }
 }
