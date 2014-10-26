@@ -10,12 +10,15 @@ namespace SourceBrowser.Generator.Extensions
     public static class SymbolExtensions
     {
 
+        /// <summary>
+        /// Returns the SymbolId for a symbol. SymbolId is very closely 
+        /// related to DocumentationCommentId, with some minor changes.
+        /// </summary>
         public static string GetSymbolId(this ISymbol symbol)
         {
             string documentationCommentId = String.Empty;
             symbol = symbol.OriginalDefinition;
             documentationCommentId = symbol.GetDocumentationCommentId();
-
             documentationCommentId = documentationCommentId.Replace("#ctor", "ctor");
 
             return documentationCommentId;
