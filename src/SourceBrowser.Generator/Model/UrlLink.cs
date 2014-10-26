@@ -10,9 +10,12 @@ namespace SourceBrowser.Generator.Model
     {
         public string Url { get; set; }
 
-        public string GetLink()
+        public string Link
         {
-            return Url;
+            get
+            {
+                return Url;
+            }
         }
     }
 }

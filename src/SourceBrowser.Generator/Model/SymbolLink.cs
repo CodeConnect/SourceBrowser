@@ -11,10 +11,13 @@ namespace SourceBrowser.Generator.Model
     {
         public ISymbol ReferencedSymbol { get; set; }
 
-        public string GetLink()
+        public string Link
         {
             //TODO:
-            throw new NotImplementedException();
+            get
+            {
+                throw new NotImplementedException();
+            }
         }
     }
 }
