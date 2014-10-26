@@ -12,6 +12,8 @@ namespace SourceBrowser.Generator.Model
 
         public IEnumerable<IProjectItem> Children { get; set; }
 
+        public string Name { get; set; }
+
         public Document(IProjectItem parent)
         {
             Parent = parent;
