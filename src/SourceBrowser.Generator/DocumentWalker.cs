@@ -92,7 +92,7 @@ namespace SourceBrowser.Generator
 
             if (token.IsKeyword())
             {
-                str = ProcessKeyword(token);
+                var tokenModel = ProcessKeyword(token);
             }
             else if (token.CSharpKind() == SyntaxKind.IdentifierToken)
             {
@@ -106,10 +106,12 @@ namespace SourceBrowser.Generator
             this.VisitTrailingTrivia(token);
         }
 
-        public string ProcessKeyword(SyntaxToken token)
+        public Token ProcessKeyword(SyntaxToken token)
         {
-            string str = "<span style='color:blue'>" + HttpUtility.HtmlEncode(token.ToString()) + "</span>";
-            return str;
+            var tokenModel = new Token();
+            tokenModel.FullName = token.CSharpKind().ToString();
+            tokenModel.Value = token.ToString();
+            return tokenModel;
         }
 
         /// <summary>
