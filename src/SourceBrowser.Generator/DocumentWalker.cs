@@ -100,17 +100,34 @@ namespace SourceBrowser.Generator
             }
             else
             {
-                str = HttpUtility.HtmlEncode(token.ToString());
+                //This covers all semantically useless tokens such as punctuation
+                var tokenModel = ProcessOtherToken(token);
             }
 
             this.VisitTrailingTrivia(token);
         }
 
+        /// <summary>
+        /// Creates a Token based on a SyntaxToken for non-keywords and non-identifiers.
+        /// </summary>
+        private Token ProcessOtherToken(SyntaxToken token)
+        {
+            var tokenModel = new Token();
+            tokenModel.FullName = token.CSharpKind().ToString();
+            tokenModel.Value = token.ToString();
+            tokenModel.Type = "Other";
+            return tokenModel;
+        }
+
+        /// <summary>
+        /// Creates a Token based on a SyntaxToken for a Keyword.
+        /// </summary>
         public Token ProcessKeyword(SyntaxToken token)
         {
             var tokenModel = new Token();
             tokenModel.FullName = token.CSharpKind().ToString();
             tokenModel.Value = token.ToString();
+            tokenModel.Type = "Keyword";
             return tokenModel;
         }
 
@@ -173,29 +190,15 @@ namespace SourceBrowser.Generator
         {
             string fullName = symbol.ToString();
             string html = string.Empty;
-            string referencedURL = "";
             //Check to see if we can link to this method
             //if (_typeLookup.TryGetValue(fullName, out referencedURL))
             {
-                var relativePath = Utilities.MakeRelativePath(this.FilePath, referencedURL);
-
-                html = "<span>";
-                html += "<a style='color:black' href=";
-                html += relativePath;
-                html += ">";
                 html += HttpUtility.HtmlEncode(token.ToString());
-                html += "</a>";
-                html += "</span>";
             }
             //else if (refsourceLinkProvider.Assemblies.Contains(symbol.ContainingAssembly.Identity.Name))
             {
-                html = "<span>";
-                html += "<a style='color:black' href=";
                 html += _refsourceLinkProvider.GetLink(symbol);
-                html += ">";
                 html += HttpUtility.HtmlEncode(token.ToString());
-                html += "</a>";
-                html += "</span>";
             }
             //else
             {
@@ -235,6 +238,7 @@ namespace SourceBrowser.Generator
         {
             //Check if this token is part of a declaration
             var parentSymbol = _model.GetDeclaredSymbol(token.Parent);
+
             if (parentSymbol != null)
                 return ProcessDeclaration(token, parentSymbol);
 
