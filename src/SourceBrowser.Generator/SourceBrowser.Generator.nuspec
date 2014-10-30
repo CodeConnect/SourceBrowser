@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>$id$</id>
+    <version>$version$</version>
+    <title>SourceBrowser - Generator</title>
+    <authors>CodeConnect</authors>
+    <owners>JoshVarty, AmadeusW, yannisgu</owners>
+    <licenseUrl>https://github.com/CodeConnect/SourceBrowser</licenseUrl>
+    <projectUrl>https://github.com/CodeConnect/SourceBrowser</projectUrl>
+    <iconUrl>https://avatars1.githubusercontent.com/u/9244729?v=2&amp;s=200</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>SourceBrowser - Generator</description>
+    <copyright>Copyright 2014</copyright>
+  </metadata>
+</package>
