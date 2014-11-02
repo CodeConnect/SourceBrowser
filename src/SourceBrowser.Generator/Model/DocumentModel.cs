@@ -12,6 +12,8 @@ namespace SourceBrowser.Generator.Model
 
         public ICollection<IProjectItem> Children { get; set; }
 
+        public ICollection<Token> Tokens { get; set; }
+
         public string Name { get; set; }
 
         public DocumentModel(IProjectItem parent)

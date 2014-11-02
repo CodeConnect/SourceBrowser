@@ -15,7 +15,7 @@ namespace SourceBrowser.Generator.Model
         public FolderModel(IProjectItem parent)
         {
             Parent = parent;
-            Children = new ICollection<IProjectItem>();
+            Children = new List<IProjectItem>();
         }
     }
 }
