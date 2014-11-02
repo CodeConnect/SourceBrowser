@@ -17,6 +17,7 @@ namespace SourceBrowser.Generator.Model
         public DocumentModel(IProjectItem parent)
         {
             Parent = parent;
+            Children = new List<IProjectItem>();
         }
     }
 }

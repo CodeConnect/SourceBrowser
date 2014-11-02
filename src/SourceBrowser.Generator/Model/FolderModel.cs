@@ -8,13 +8,14 @@ namespace SourceBrowser.Generator.Model
 {
     public class FolderModel : IProjectItem
     {
-        public IEnumerable<IProjectItem> Children { get; set; }
+        public ICollection<IProjectItem> Children { get; set; }
 
         public IProjectItem Parent { get; private set; }
 
         public FolderModel(IProjectItem parent)
         {
             Parent = parent;
+            Children = new ICollection<IProjectItem>();
         }
     }
 }
