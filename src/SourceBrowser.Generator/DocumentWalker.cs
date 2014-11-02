@@ -51,7 +51,7 @@ namespace SourceBrowser.Generator
             }
             else if (token.CSharpKind() == SyntaxKind.IdentifierToken)
             {
-                str = ProcessIdentifier(token);
+                tokenModel = ProcessIdentifier(token);
             }
             else
             {
@@ -64,13 +64,14 @@ namespace SourceBrowser.Generator
             tokenModel.TrailingTrivia = ProcessTrivia(token.TrailingTrivia);
         }
 
-        private IEnumerable<Trivia> ProcessTrivia(SyntaxTriviaList triviaList)
+        private ICollection<Trivia> ProcessTrivia(SyntaxTriviaList triviaList)
         {
             var triviaModelList = triviaList.Select(n => new Trivia()
             {
                 Type = n.CSharpKind().ToString(),
                 Value = n.ToFullString()
-            });
+            }).ToList();
+
             return triviaModelList;
         }
 
@@ -102,122 +103,70 @@ namespace SourceBrowser.Generator
         /// Given a syntax token identifier that represents a declaration,
         /// generate and return the proper HTML for this symbol.
         /// </summary>
-        public string ProcessDeclaration(SyntaxToken token, ISymbol parentSymbol)
+        public Token ProcessDeclarationToken(SyntaxToken token, ISymbol parentSymbol)
         {
+            var tokenModel = new Token();
             string html = String.Empty;
             if (parentSymbol != null && parentSymbol is INamedTypeSymbol)
             {
-                //Type Declaration
-                html = "<span style='color:#2B91AF'>" + HttpUtility.HtmlEncode(token.ToString()) + "</span>";
-                return html;
+                //This is a type declaration. We'll assume it doesn't really 
+                //link to anything for now.
+                tokenModel.FullName = parentSymbol.ToString();
+                tokenModel.Type = token.CSharpKind().ToString();
+                tokenModel.Value = token.ToString();
             }
-            //This isn't a type declaration
-            return HttpUtility.HtmlEncode(token.ToString());
+            else
+            {
+                //This isn't a type declaration
+                tokenModel.Value = token.ToString();
+            }
+            return tokenModel;
         }
-
-        public string ProcessTypeUsage(SyntaxToken token, ISymbol symbol)
-        {
-            //Type usage
-            string fullName = symbol.ToString();
-            string html = String.Empty;
-            string referencedURL = "";
-            //Check if we can link to this type
-            //if (_typeLookup.TryGetValue(fullName, out referencedURL))
-            {
-                var relativePath = Utilities.MakeRelativePath(this.FilePath, referencedURL);
-
-                html = "<span style='color:#2B91AF'>";
-                html += "<a href=";
-                html += relativePath;
-                html += ">";
-                html += HttpUtility.HtmlEncode(token.ToString());
-                html += "</a>";
-                html += "</span>";
-            }
-            //else if (refsourceLinkProvider.Assemblies.Contains(symbol.ContainingAssembly.Identity.Name))
-            {
-                html = "<span>";
-                html += "<a style='color:black' href=";
-                html += _refsourceLinkProvider.GetLink(symbol);
-                html += ">";
-                html += HttpUtility.HtmlEncode(token.ToString());
-                html += "</a>";
-                html += "</span>";
-            }
-            //else
-            {
-                //otherwise, just color it 
-                html += "<span style='color:#2B91AF'>" + HttpUtility.HtmlEncode(token.ToString()) + "</span>";
-            }
-
-            return html;
-        }
-
-        public string ProcessMemberUsage(SyntaxToken token, ISymbol symbol)
-        {
-            string fullName = symbol.ToString();
-            string html = string.Empty;
-            //Check to see if we can link to this method
-            //if (_typeLookup.TryGetValue(fullName, out referencedURL))
-            {
-                html += HttpUtility.HtmlEncode(token.ToString());
-            }
-            //else if (refsourceLinkProvider.Assemblies.Contains(symbol.ContainingAssembly.Identity.Name))
-            {
-                html += _refsourceLinkProvider.GetLink(symbol);
-                html += HttpUtility.HtmlEncode(token.ToString());
-            }
-            //else
-            {
-                //otherwise, just color it 
-                html += "<span>" + HttpUtility.HtmlEncode(token.ToString()) + "</span>";
-            }
-
-            return html;
-        }
-
 
         /// <summary>
         /// Given a syntax token identifier that represents a symbol's usage
         /// generate and return the proper HTML for this symbol
         /// </summary>
-        public string ProcessSymbolUsage(SyntaxToken token, ISymbol symbol)
+        public Token ProcessSymbolUsage(SyntaxToken token, ISymbol symbol)
         {
-            if (symbol is INamedTypeSymbol)
+            var tokenModel = new Token();
+            tokenModel.FullName = symbol.ToString();
+            tokenModel.Value = token.ToString();
+            tokenModel.Type = token.CSharpContextualKind().ToString();
+            
+            //If we can find the declaration, we'll link it ourselves
+            if (symbol.DeclaringSyntaxReferences.Any())
             {
-                return ProcessTypeUsage(token, symbol);
+                var localLink = new SymbolLink();
+                localLink.ReferencedSymbolName = symbol.ToString();
+                tokenModel.Links.Add(localLink);
+            }
+            //Otherwise, we try to link to the .Net Reference source
+            else if (_refsourceLinkProvider.Assemblies.Contains(symbol.ContainingAssembly.Identity.Name))
+            {
+                var referenceLink = new UrlLink();
+                referenceLink.Url = _refsourceLinkProvider.GetLink(symbol);
+                tokenModel.Links.Add(referenceLink);
             }
 
-            if (symbol is IMethodSymbol)
-            {
-                return ProcessMemberUsage(token, symbol);
-            }
-
-            if (symbol is IPropertySymbol)
-            {
-                return ProcessMemberUsage(token, symbol);
-            }
-
-            return HttpUtility.HtmlEncode(token.ToString());
+            return tokenModel;
         }
 
-        public string ProcessIdentifier(SyntaxToken token)
+        public Token ProcessIdentifier(SyntaxToken token)
         {
             //Check if this token is part of a declaration
             var parentSymbol = _model.GetDeclaredSymbol(token.Parent);
-
             if (parentSymbol != null)
-                return ProcessDeclaration(token, parentSymbol);
+                return ProcessDeclarationToken(token, parentSymbol);
 
             //Find the symbol this token references
             var symbolInfo = _model.GetSymbolInfo(token.Parent);
-
             if (symbolInfo.Symbol != null)
-            {
                 return ProcessSymbolUsage(token, symbolInfo.Symbol);
-            }
 
-            return HttpUtility.HtmlEncode(token.ToString());
+            //Otherwise it references something we don't
+            //have semantic information on...
+            return ProcessOtherToken(token);
         }
     }
 }
