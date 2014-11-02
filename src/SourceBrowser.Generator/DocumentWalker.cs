@@ -40,59 +40,14 @@ namespace SourceBrowser.Generator
             _refsourceLinkProvider = refSourceLinkProvider;
         }
 
-        public override void VisitLeadingTrivia(SyntaxToken token)
-        {
-            foreach (var tr in token.LeadingTrivia)
-            {
-                this.VisitTrivia(tr);
-            }
-        }
-
-        public override void VisitTrailingTrivia(SyntaxToken token)
-        {
-            foreach (var tr in token.TrailingTrivia)
-            {
-                this.VisitTrivia(tr);
-            }
-        }
-
-        public override void VisitTrivia(SyntaxTrivia trivia)
-        {
-            string htmlTrivia = String.Empty;
-            if (trivia.CSharpKind() == SyntaxKind.SingleLineCommentTrivia ||
-                trivia.CSharpKind() == SyntaxKind.MultiLineCommentTrivia ||
-                trivia.CSharpKind() == SyntaxKind.MultiLineDocumentationCommentTrivia ||
-                trivia.CSharpKind() == SyntaxKind.SingleLineDocumentationCommentTrivia)
-            {
-                htmlTrivia += "<span style='color:green'>";
-                htmlTrivia += HttpUtility.HtmlEncode(trivia.ToFullString());
-                htmlTrivia += "</span>";
-            }
-            else if (trivia.CSharpKind() == SyntaxKind.RegionDirectiveTrivia ||
-                     trivia.CSharpKind() == SyntaxKind.EndRegionDirectiveTrivia)
-            {
-                htmlTrivia += "<span style='color:blue'>";
-                // We don't visit insides of region directives,
-                // so we need to use ToFullString() to get the new line and whitespace
-                htmlTrivia += HttpUtility.HtmlEncode(trivia.ToFullString());
-                htmlTrivia += "</span>";
-            }
-            else
-            {
-                htmlTrivia += HttpUtility.HtmlEncode(trivia.ToString());
-            }
-
-            base.VisitTrivia(trivia);
-        }
-
         public override void VisitToken(SyntaxToken token)
         {
-            this.VisitLeadingTrivia(token);
             string str = String.Empty;
+            Token tokenModel = null;
 
             if (token.IsKeyword())
             {
-                var tokenModel = ProcessKeyword(token);
+                tokenModel = ProcessKeyword(token);
             }
             else if (token.CSharpKind() == SyntaxKind.IdentifierToken)
             {
@@ -101,10 +56,22 @@ namespace SourceBrowser.Generator
             else
             {
                 //This covers all semantically useless tokens such as punctuation
-                var tokenModel = ProcessOtherToken(token);
+                tokenModel = ProcessOtherToken(token);
             }
 
-            this.VisitTrailingTrivia(token);
+            //Add trivia to the token
+            tokenModel.LeadingTrivia = ProcessTrivia(token.LeadingTrivia);
+            tokenModel.TrailingTrivia = ProcessTrivia(token.TrailingTrivia);
+        }
+
+        private IEnumerable<Trivia> ProcessTrivia(SyntaxTriviaList triviaList)
+        {
+            var triviaModelList = triviaList.Select(n => new Trivia()
+            {
+                Type = n.CSharpKind().ToString(),
+                Value = n.ToFullString()
+            });
+            return triviaModelList;
         }
 
         /// <summary>
