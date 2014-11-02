@@ -10,7 +10,7 @@ namespace SourceBrowser.Generator.Model
     {
         public IProjectItem Parent { get; set; }
 
-        public IEnumerable<IProjectItem> Children { get; set; }
+        public ICollection<IProjectItem> Children { get; set; }
 
         public string Name { get; set; }
 

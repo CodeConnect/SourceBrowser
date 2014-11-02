@@ -13,13 +13,13 @@ namespace SourceBrowser.Generator.Model
         //TODO: Change to enum.
         public string Type { get; set; }
 
-        public IEnumerable<Trivia> LeadingTrivia { get; set; }
+        public ICollection<Trivia> LeadingTrivia { get; set; }
 
         public string Value { get; set; }
 
-        public IEnumerable<Trivia> TrailingTrivia { get; set; }
+        public ICollection<Trivia> TrailingTrivia { get; set; }
 
-        public IEnumerable<ILink> Links { get; set; }
+        public ICollection<ILink> Links { get; set; }
 
         public Token()
         {

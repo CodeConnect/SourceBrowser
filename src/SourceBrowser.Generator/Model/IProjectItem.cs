@@ -13,6 +13,6 @@ namespace SourceBrowser.Generator.Model
     {
         IProjectItem Parent { get; }
 
-        IEnumerable<IProjectItem> Children { get; }
+        ICollection<IProjectItem> Children { get; }
     }
 }

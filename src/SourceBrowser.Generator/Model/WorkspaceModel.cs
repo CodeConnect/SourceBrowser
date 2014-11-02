@@ -11,6 +11,6 @@ namespace SourceBrowser.Generator.Model
     /// </summary>
     public class WorkspaceModel
     {
-        IEnumerable<IProjectItem> Children { get; set; }
+        ICollection<IProjectItem> Children { get; set; }
     }
 }
