@@ -19,24 +19,15 @@ namespace SourceBrowser.Generator
     {
         private SemanticModel _model;
         private ReferencesourceLinkProvider _refsourceLinkProvider;
-        private StringBuilder _stringBuilder = new StringBuilder();
-        private int _numLines = 0;
+        public DocumentModel DocumentModel { get; private set; }
         public string FilePath { get; set; }
 
-        private DocumentInfo DocInfo;
-        public DocumentInfo GetDocumentInfo()
-        {
-            DocInfo.HtmlContent = _stringBuilder.ToString();
-            return DocInfo;
-        }
-
-        public DocumentWalker(SemanticModel model, Document document, ReferencesourceLinkProvider refSourceLinkProvider, Dictionary<string, string> typeLookup) : base(SyntaxWalkerDepth.Trivia)
+        public DocumentWalker(IProjectItem parent, Document document, ReferencesourceLinkProvider refSourceLinkProvider): base(SyntaxWalkerDepth.Trivia)
         {
             _model = document.GetSemanticModelAsync().Result;
             _refsourceLinkProvider = refSourceLinkProvider;
+            DocumentModel = new DocumentModel(parent);
             FilePath = document.GetRelativeFilePath();
-            DocInfo.FileName = FilePath;
-            DocInfo.NumberOfLines = document.GetTextAsync().Result.Lines.Count;
             _refsourceLinkProvider = refSourceLinkProvider;
         }
 
@@ -62,6 +53,8 @@ namespace SourceBrowser.Generator
             //Add trivia to the token
             tokenModel.LeadingTrivia = ProcessTrivia(token.LeadingTrivia);
             tokenModel.TrailingTrivia = ProcessTrivia(token.TrailingTrivia);
+
+            DocumentModel.Tokens.Add(tokenModel);
         }
 
         private ICollection<Trivia> ProcessTrivia(SyntaxTriviaList triviaList)
