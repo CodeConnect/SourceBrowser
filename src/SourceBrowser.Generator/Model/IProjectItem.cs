@@ -12,6 +12,8 @@ namespace SourceBrowser.Generator.Model
     public interface IProjectItem
     {
         IProjectItem Parent { get; }
+        
+        string Name { get; }
 
         ICollection<IProjectItem> Children { get; }
     }

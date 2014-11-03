@@ -12,10 +12,12 @@ namespace SourceBrowser.Generator.Model
 
         public IProjectItem Parent { get; private set; }
 
+        public string Name { get; set; }
+
         public FolderModel(IProjectItem parent)
         {
             Parent = parent;
-            Children = new List<IProjectItem>();
+            Children = new List<IProjectItem>();    
         }
     }
 }
