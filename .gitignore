@@ -21,7 +21,6 @@ PublishProfiles/*
 [Dd]ebugPublic/
 [Rr]elease/
 x64/
-build/
 bld/
 [Bb]in/
 [Oo]bj/
@@ -186,3 +185,7 @@ FakesAssemblies/
 
 # Roslyn
 *.sln.ide
+
+build/paket.exe
+tools
+*.nupkg
