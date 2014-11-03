@@ -14,6 +14,7 @@ using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 using System.Reflection;
 using SourceBrowser.Generator.Extensions;
+using SourceBrowser.Generator.Model;
 
 namespace SourceBrowser.Generator
 {
@@ -21,11 +22,10 @@ namespace SourceBrowser.Generator
     {
         MSBuildWorkspace _workspace;
         Solution _solution;
+        WorkspaceModel _workspaceModel;
         SolutionFolderAnalyzer _folderAnalyzer;
         private ReferencesourceLinkProvider _refsourceLinkProvider = new ReferencesourceLinkProvider();
         string _saveDirectory = string.Empty;
-        Dictionary<string, string> _typeLookup = new Dictionary<string, string>();
-        private ReferencesourceLinkProvider _refsourceLinkProvider = new ReferencesourceLinkProvider();
         const string solutionInfoFileName = "solutionInfo.json";
 
         public SolutionAnalayzer(string solutionPath)
@@ -34,7 +34,6 @@ namespace SourceBrowser.Generator
             _workspace.WorkspaceFailed += _workspace_WorkspaceFailed;
             _solution = _workspace.OpenSolutionAsync(solutionPath).Result;
             _folderAnalyzer = new SolutionFolderAnalyzer(_solution);
-
             _refsourceLinkProvider.Init().Wait();
         }
 
@@ -74,11 +73,6 @@ namespace SourceBrowser.Generator
             if (!Directory.Exists(_saveDirectory))
             {
                 Directory.CreateDirectory(_saveDirectory);
-            }
-
-            foreach (var doc in _solution.Projects.SelectMany(n => n.Documents))
-            {
-                preProcessDocument(doc);
             }
 
             //Generate solution/folder info
@@ -122,59 +116,12 @@ namespace SourceBrowser.Generator
             string json = JsonConvert.SerializeObject(root, Formatting.Indented);
             return json;
         }
-        private void preProcessDocument(Document document)
-        {
-            string docName = document.GetRelativeFilePath();
-            var model = document.GetSemanticModelAsync().Result;
-            var compilation = model.Compilation;
-            var root = document.GetSyntaxRootAsync().Result;
-
-            var typeDeclarations = root.DescendantNodes()
-                .OfType<MemberDeclarationSyntax>();
-
-            var projectName = document.Project.Name;
-
-            foreach (var declaration in typeDeclarations)
-            {
-                if (declaration is FieldDeclarationSyntax)
-                {
-                    var fieldDeclaration = (FieldDeclarationSyntax)declaration;
-                    foreach (var variableDeclartion in fieldDeclaration.Declaration.Variables)
-                    {
-                        processDeclarationSyntax(document, variableDeclartion);
-                    }
-                }
-                else
-                {
-                    processDeclarationSyntax(document, declaration);
-                }
-            }
-        }
-
-        private void processDeclarationSyntax(Document document, SyntaxNode syntax)
-        {
-            var root = document.GetSyntaxRootAsync().Result;
-            var model = document.GetSemanticModelAsync().Result;
-            var symbol = model.GetDeclaredSymbol(syntax);
-
-            if (symbol == null)
-            {
-                // Ignore this.
-                return;
-            }
-
-            string fullName = symbol.ToString();
-            var lineNum = root.SyntaxTree.GetLineSpan(syntax.Span).StartLinePosition.Line + 1;
-            string pathToType = document.GetRelativeFilePath() + "#" + lineNum;
-            _typeLookup[fullName] = pathToType;
-        }
 
         private DocumentInfo buildDocumentInfo(Document document)
         {
-            var root = document.GetSyntaxRootAsync().Result;
-            var model = document.GetSemanticModelAsync().Result;
-            var docWalker = new DocumentWalker(model, document, _refsourceLinkProvider, _typeLookup);
-            docWalker.Visit(root);
+            //var root = document.GetSyntaxRootAsync().Result;
+            //var docWalker = new DocumentWalker(document, _refsourceLinkProvider);
+            //docWalker.Visit(root);
 
             return default(DocumentInfo);
         }
