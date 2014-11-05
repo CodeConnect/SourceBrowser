@@ -16,4 +16,5 @@ artifacts:
 
 environment:
   NUGET_APIKEY:
-    secure: VSjE99jnuR+cp3tbjyRxs9wZdZz2B7AShz0/c8tq43oUGUl0SJ5jXFzv7VyZyS3b
+    secure: eCwaphHAp/cyOVc/LxigXppNaFjC3WMFSW07rjFNuonyNg2t9pvi9cCZivqxYZBm
+
