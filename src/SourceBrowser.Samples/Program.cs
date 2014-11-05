@@ -12,8 +12,8 @@ namespace SourceBrowser.Samples
             string userProfilePath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
 
             // For developers that set test variables in code:
-            string solutionPath = @"Documents\GitHub\Kiwi\TestSolution\TestSolution.sln";
-            string saveDirectory = @"Documents\";
+            string solutionPath = @"";
+            string saveDirectory = @"";
 
             // For developers that provide test variables in arguments:
             if (args.Length == 2)
@@ -37,9 +37,8 @@ namespace SourceBrowser.Samples
 
                 Console.Write("Analyzing and saving into " + absoluteSaveDirectory);
                 Console.WriteLine("...");
-                
 
-                solutionAnalyzer.AnalyzeAndSave(absoluteSaveDirectory);
+                solutionAnalyzer.AnalyzeAndSave(saveDirectory);
 
                 Console.WriteLine("Job successful!");
             }

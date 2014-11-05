@@ -26,7 +26,7 @@ namespace SourceBrowser.Generator
         {
             _model = document.GetSemanticModelAsync().Result;
             _refsourceLinkProvider = refSourceLinkProvider;
-            DocumentModel = new DocumentModel(parent, document.Name);
+            DocumentModel = new DocumentModel(parent);
             FilePath = document.GetRelativeFilePath();
             _refsourceLinkProvider = refSourceLinkProvider;
         }
@@ -135,7 +135,7 @@ namespace SourceBrowser.Generator
                 tokenModel.Links.Add(localLink);
             }
             //Otherwise, we try to link to the .Net Reference source
-            else if (_refsourceLinkProvider.Assemblies.Contains(symbol.ContainingAssembly?.Identity?.Name))
+            else if (_refsourceLinkProvider.Assemblies.Contains(symbol.ContainingAssembly.Identity.Name))
             {
                 var referenceLink = new UrlLink();
                 referenceLink.Url = _refsourceLinkProvider.GetLink(symbol);

@@ -89,34 +89,34 @@ namespace SourceBrowser.Generator
 
             foreach (var doc in _solution.Projects.SelectMany(n => n.Documents))
             {
-                var documentModel = buildDocumentModel(doc);
-            }
-        }
+                //Generate info
+                string url = doc.GetRelativeFilePath();
+                string folderPath = Path.Combine(_saveDirectory, doc.GetContainingFolderPath());
+                string fullPath = Path.Combine(_saveDirectory, url);
+                var docInfo = buildDocumentInfo(doc);
 
-        private DocumentModel buildDocumentModel(Document document)
-        {
-            var root = document.GetSyntaxRootAsync().Result;
-            var containingFolder = findDocumentParent(document);
-            var docWalker = new DocumentWalker(containingFolder, document, _refsourceLinkProvider);
-            docWalker.Visit(root);
-
-            return docWalker.DocumentModel;
-        }
-
-        private IProjectItem findDocumentParent(Document document)
-        {
-            IProjectItem currentNode = _workspaceModel;
-
-            foreach(var folder in document.Folders)
-            {
-                var childFolder = currentNode.Children.Where(n => n.Name == folder).SingleOrDefault();
-                if(childFolder == null)
+                if (!Directory.Exists(folderPath))
                 {
-                    childFolder = new FolderModel(currentNode);
+                    DirectoryInfo di = Directory.CreateDirectory(folderPath);
                 }
-                currentNode = childFolder;
+
+                var jsonDocInfo = JsonConvert.SerializeObject(docInfo);
+
+                //Save it
+                using (var sw = new StreamWriter(fullPath, append: false))
+                {
+                    sw.Write(jsonDocInfo);
+                }
             }
-            return currentNode;
+        }
+
+        private DocumentModel buildDocumentInfo(Document document)
+        {
+            //var root = document.GetSyntaxRootAsync().Result;
+            //var docWalker = new DocumentWalker(document, _refsourceLinkProvider);
+            //docWalker.Visit(root);
+
+            return null;
         }
 
         /// <summary>
@@ -129,13 +129,5 @@ namespace SourceBrowser.Generator
             return json;
         }
 
-        private DocumentModel buildDocumentInfo(Document document)
-        {
-            //var root = document.GetSyntaxRootAsync().Result;
-            //var docWalker = new DocumentWalker(document, _refsourceLinkProvider);
-            //docWalker.Visit(root);
-
-            return null;
-        }
     }
 }
