@@ -34,6 +34,9 @@ namespace SourceBrowser.Generator
             _workspace.WorkspaceFailed += _workspace_WorkspaceFailed;
             _solution = _workspace.OpenSolutionAsync(solutionPath).Result;
             _folderAnalyzer = new SolutionFolderAnalyzer(_solution);
+            string solutionName = Path.GetFileName(solutionPath);
+            _workspaceModel = new WorkspaceModel(solutionName);
+
             _refsourceLinkProvider.Init().Wait();
         }
 
@@ -86,25 +89,34 @@ namespace SourceBrowser.Generator
 
             foreach (var doc in _solution.Projects.SelectMany(n => n.Documents))
             {
-                //Generate info
-                string url = doc.GetRelativeFilePath();
-                string folderPath = Path.Combine(_saveDirectory, doc.GetContainingFolderPath());
-                string fullPath = Path.Combine(_saveDirectory, url);
-                var docInfo = buildDocumentInfo(doc);
-
-                if (!Directory.Exists(folderPath))
-                {
-                    DirectoryInfo di = Directory.CreateDirectory(folderPath);
-                }
-
-                var jsonDocInfo = JsonConvert.SerializeObject(docInfo);
-
-                //Save it
-                using (var sw = new StreamWriter(fullPath, append: false))
-                {
-                    sw.Write(jsonDocInfo);
-                }
+                var documentModel = buildDocumentModel(doc);
             }
+        }
+
+        private DocumentModel buildDocumentModel(Document document)
+        {
+            var root = document.GetSyntaxRootAsync().Result;
+            var containingFolder = findDocumentParent(document);
+            var docWalker = new DocumentWalker(containingFolder, document, _refsourceLinkProvider);
+            docWalker.Visit(root);
+
+            return docWalker.DocumentModel;
+        }
+
+        private IProjectItem findDocumentParent(Document document)
+        {
+            IProjectItem currentNode = _workspaceModel;
+
+            foreach(var folder in document.Folders)
+            {
+                var childFolder = currentNode.Children.Where(n => n.Name == folder).SingleOrDefault();
+                if(childFolder == null)
+                {
+                    childFolder = new FolderModel(currentNode);
+                }
+                currentNode = childFolder;
+            }
+            return currentNode;
         }
 
         /// <summary>
