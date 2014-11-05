@@ -90,7 +90,7 @@ namespace SourceBrowser.Generator
                 string url = doc.GetRelativeFilePath();
                 string folderPath = Path.Combine(_saveDirectory, doc.GetContainingFolderPath());
                 string fullPath = Path.Combine(_saveDirectory, url);
-                DocumentInfo docInfo = buildDocumentInfo(doc);
+                var docInfo = buildDocumentInfo(doc);
 
                 if (!Directory.Exists(folderPath))
                 {
@@ -117,13 +117,13 @@ namespace SourceBrowser.Generator
             return json;
         }
 
-        private DocumentInfo buildDocumentInfo(Document document)
+        private DocumentModel buildDocumentInfo(Document document)
         {
             //var root = document.GetSyntaxRootAsync().Result;
             //var docWalker = new DocumentWalker(document, _refsourceLinkProvider);
             //docWalker.Visit(root);
 
-            return default(DocumentInfo);
+            return null;
         }
     }
 }
