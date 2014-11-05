@@ -16,10 +16,12 @@ namespace SourceBrowser.Generator.Model
 
         public string Name { get; set; }
 
-        public DocumentModel(IProjectItem parent)
+        public DocumentModel(IProjectItem parent, string name)
         {
             Parent = parent;
+            Name = name;
             Children = new List<IProjectItem>();
+            Tokens = new List<Token>();
         }
     }
 }
