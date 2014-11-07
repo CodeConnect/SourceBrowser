@@ -90,6 +90,7 @@
     <Compile Include="DocumentWalker.cs" />
     <Compile Include="FileSystemInfo.cs" />
     <Compile Include="FolderAnalyzer.cs" />
+    <Compile Include="Hacks\DependencyHacks.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReferencesourceLinkProvider.cs" />
     <Compile Include="SolutionAnalyzer.cs" />
