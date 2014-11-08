@@ -14,7 +14,8 @@ GithubStaging/*
 */GithubStaging/*
 PublishProfiles/*
 */PublishProfiles/*
-
+WorkspaceLogs/*
+*/WorkspaceLogs/*
 
 # Build results
 [Dd]ebug/

@@ -1,0 +1,67 @@
+﻿@model SourceBrowser.Site.Models.GithubFileStructure
+@using SourceBrowser.Site.Extensions
+
+@{
+    ViewBag.Title = "LookupFile";
+}
+
+<div class="container body-content">
+    <div class="container-fluid" id="mainContainer">
+        <div class="row">
+            <!--Bread crumb-->
+            <header class="col-xs-12">
+                <p>
+                    <nav class="breadcrumbs mini">
+                        <ul>
+                            <li>
+                            </li>
+                            <li>
+                            </li>
+                        </ul>
+                    </nav>
+                </p>
+            </header>
+        </div>
+        <!--/Bread crumb-->
+
+        <div class="row">
+            <!--Display the tree view.-->
+            <aside class="col-xs-4" id="browser">
+                <section>
+                    <ul id="browserTree" class="treeview" data-role="treeview">
+                        @Html.Raw(Model.SolutionInfo.GetHtmlTreeView(Model.RelativePath, filePath: "/Browse/" + Model.RelativeRootPath + '/'))
+                    </ul>
+                </section>
+            </aside>
+        
+            <!-- Main Content-->
+            <article class="col-xs-8" id="main" style="overflow-x:scroll">
+                <section>
+
+                    <table cellpadding="0" cellspacing="0">
+                        <tbody>
+                            <tr>
+                                <td valign="top" style="min-width:65px">
+@*BE CAREFUL WITH PRE TAGS: Comments within them will affect the resulting markup...
+This is intentionally left aligned and formatted weird.
+as it's in a <pre> tag.*@
+                                    <pre id="line-numbers">
+@for (int i = 1; i < Model.NumberOfLines; i++){<a href="#@i" name="@i">@i</a>
+}</pre>
+                                </td>
+                                <td valign="top">
+                                    @if (!String.IsNullOrEmpty(Model.SourceCode))
+                                    {
+                                        <pre class="source_code">@Html.Raw(Model.SourceCode)</pre>
+                                    }
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+            </article>
+        </div>
+    </div>
+</div>
+
+

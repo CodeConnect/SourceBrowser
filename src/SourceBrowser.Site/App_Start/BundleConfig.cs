@@ -9,7 +9,11 @@ namespace SourceBrowser.Site
         public static void RegisterBundles(BundleCollection bundles)
         {
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
-                        "~/Scripts/jquery-{version}.js"));
+                        "~/Scripts/jquery-2.1.1.js",
+                        "~/Scripts/jquery.widget.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/sourcebrowser").Include(
+                        "~/Scripts/treeViewHelpers.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
                         "~/Scripts/jquery.validate*"));
@@ -21,10 +25,18 @@ namespace SourceBrowser.Site
 
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
                       "~/Scripts/bootstrap.js",
-                      "~/Scripts/respond.js"));
+                      "~/Scripts/respond.js",
+                      "~/js/metro.min.js"));
+
+            //Metro UI files
+            //bundles.Add(new ScriptBundle("~/bundles/metro").Include(
+            //    "~/js/metro.min.js"));
+
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
+                      "~/css/metro-bootstrap.css",
+                      "~/css/metro-bootstrap-responsive.css",
                       "~/Content/site.css"));
 
             // Set EnableOptimizations to false for debugging. For more information,
