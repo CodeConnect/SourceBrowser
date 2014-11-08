@@ -1,0 +1,53 @@
+﻿@model SourceBrowser.Site.Models.GithubUserStructure
+@using SourceBrowser.Site.Extensions
+
+@{
+    ViewBag.Title = "LookupUser";
+}
+
+<div class="container body-content">
+    <div class="container-fluid" id="mainContainer">
+        <div class="row">
+            <!--Bread crumb-->
+            <header class="col-xs-12">
+                <p>
+                    <nav class="breadcrumbs mini">
+                        <ul>
+                            <li>
+                            </li>
+                            <li>
+                            </li>
+                        </ul>
+                    </nav>
+                </p>
+            </header>
+        </div>
+        <!--/Bread crumb-->
+
+        <div class="row">
+            <aside class="col-xs-4" id="browser">
+                <section>
+
+                </section>
+            </aside>
+
+            <!-- Main Content-->
+            <article class="col-xs-8" id="main">
+                <section>
+
+                    <h3>Browsing @Model.Username's repositories.</h3>
+
+                    <p>Pick one:</p>
+                    <ul>
+                        @foreach (var repo in Model.Repos)
+                        {
+                            <li><a href="/Browse/@Model.Username/@repo/" target="_self">@repo</a></li>
+                        }
+                    </ul>
+                    
+                    <p>Or <a href="//github.com/@Model.Username/?tab=repositories" target="_blank">view @Model.Username's repositories on github.</a></p>
+                </section>
+            </article>
+        </div>
+    </div>
+</div>

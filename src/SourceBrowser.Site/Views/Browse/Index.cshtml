@@ -1,0 +1,29 @@
+﻿
+@{
+    ViewBag.Title = "Browse Repositories";
+}
+
+<div class="container body-content">
+   @if (ViewBag.Users.Count == 0)
+   {
+    <div style="margin:65px 0px 65px 0px" class="text-center">
+        <h2>
+            Oops! There are no repositories to browse. :(<h2>
+                <h4>Try uploading one of your own from Github!</h4>
+    </div>
+   }
+   else
+   {
+
+    <div style="margin:65px 0px 65px 0px">
+        <h2>Browse existing repos:</h2>
+        <ul>
+            @foreach (string userName in ViewBag.Users)
+            {
+                <a href="~/Browse/@userName"><li>@userName</li></a>
+            }
+        </ul>
+    </div>
+   }
+</div>
+

@@ -1,0 +1,599 @@
+#tile {
+    .small-size {
+        .square(@tileSizeSmall);
+        margin: 0 (@tileMargin / 2) (@tileMargin / 2) 0;
+    }
+    .meduim-size {
+        .square(@tileSizeMeduim);
+        margin: 0 @tileMargin @tileMargin 0;
+    }
+    .large-size {
+        .square(@tileSizeLarge);
+        margin: 0 (@tileMargin * 1.5) (@tileMargin * 1.5) 0;
+    }
+}
+
+.tile-area {
+    position: relative;
+    padding: 120px 80px 0 80px;
+    overflow: hidden;
+}
+
+.tile-area {
+    .tile-area-title {
+        position: fixed;
+        top: 20px;
+        left: 80px;
+    }
+
+    .user-id {
+        position: fixed;
+        right: 40px;
+        top: 40px;
+        display: inline-block;
+        padding: 8px;
+        background-color: transparent;
+        width: auto;
+        //min-width: 162px;
+        color: @white;
+        cursor: default;
+
+        .user-id-image {
+            width: 40px;
+            height: 40px;
+            float: right;
+            margin-left: 10px;
+            color: inherit;
+            background-color: #464646;
+            text-align: center;
+            vertical-align: middle;
+
+            img, [class*="icon-"] {
+                color: inherit;
+                font-size: 16pt;
+                line-height: 16pt;
+                width: 100%;
+                height: 100%;
+                text-align: center;
+                vertical-align: middle;
+            }
+
+            [class*="icon-"] {
+                padding: 10px;
+            }
+        }
+
+        .user-id-name {
+            float: right;
+            text-align: right;
+            margin: 0;
+            padding: 0;
+
+            .first-name, .last-name {
+                display: block;
+                color: inherit;
+                #font > .segoe-light;
+                line-height: 12pt;
+            }
+            .first-name {
+                font-size: 20pt;
+                line-height: 20pt;
+            }
+            .last-name {
+                font-size: 12pt;
+            }
+        }
+
+        &:hover {
+            background-color: #404040;
+        }
+    }
+}
+
+.tile-area (@background) {
+    min-width: 100%;
+    height: 100%;
+    background-color: @background !important;
+
+    .tile {
+        outline-color: lighten(@background, 10%) !important;
+    }
+    .clearfix;
+}
+
+.tile-area-dark {.tile-area(@dark)}
+.tile-area-darkBrown {.tile-area(@darkBrown)}
+.tile-area-darkCrimson {.tile-area(@darkCrimson)}
+.tile-area-darkViolet {.tile-area(@darkViolet)}
+.tile-area-darkMagenta {.tile-area(@darkMagenta)}
+.tile-area-darkCyan {.tile-area(@darkCyan)}
+.tile-area-darkCobalt {.tile-area(@darkCobalt)}
+.tile-area-darkTeal {.tile-area(@darkTeal)}
+.tile-area-darkEmerald {.tile-area(@darkEmerald)}
+.tile-area-darkGreen {.tile-area(@darkGreen)}
+.tile-area-darkOrange {.tile-area(@darkOrange)}
+.tile-area-darkRed {.tile-area(@darkRed)}
+.tile-area-darkPink {.tile-area(@darkPink)}
+.tile-area-darkIndigo {.tile-area(@darkIndigo)}
+.tile-area-darkBlue {.tile-area(@darkBlue)}
+.tile-area-lightBlue {.tile-area(@lightBlue)}
+.tile-area-lightTeal {.tile-area(@lightTeal)}
+.tile-area-lightOlive {.tile-area(@lightOlive)}
+.tile-area-lightOrange {.tile-area(@lightOrange)}
+.tile-area-lightPink {.tile-area(@lightPink)}
+.tile-area-grayed {.tile-area(@grayed)}
+
+.tile-group {
+    margin-right: @tileGroupMargin;
+    min-width: @tileGroupSize;
+    width: auto;
+    float: left;
+    display: block;
+    padding-top: 40px;
+    position: relative;
+
+    &.one {
+        width: @tileGroupSize;
+    }
+
+    &.two, &.double {
+        width: @tileGroupDoubleSize;
+    }
+    &.three, &.triple {
+        width: @tileGroupTripleSize;
+    }
+    &.four, &.quadro {
+        width: @tileGroupQuadroSize;
+    }
+    &.five {
+        width: @tileGroupDoubleSize + @tileGroupTripleSize;
+    }
+    &.six {
+        width: @tileGroupTripleSize * 2;
+    }
+    &.seven {
+        width: @tileGroupTripleSize * 2 + @tileGroupSize;
+    }
+
+    &:first-child {
+        margin-left: 80px;
+    }
+}
+
+.tile-group {
+    color: @white;
+    .tile-group-title {
+        #font > .segoe-light;
+        font-size: 18px;
+        line-height: 20px;
+        position: absolute;
+        top: 10px;
+        left: 0;
+        color: inherit;
+    }
+}
+
+.tile {
+    position: relative;
+    overflow: hidden;
+    display: block;
+    float: left;
+    margin: 0 @tileMargin @tileMargin 0;
+    padding: 0;
+    cursor: pointer;
+    background-color: @grayLighter;
+    box-shadow: inset 0px 0px 1px #FFFFCC;
+
+    &:hover {
+        outline: @grayLight solid @tileOutlineSize;
+    }
+    &:active {
+        outline: 0;
+    }
+
+    &.no-outline {
+        outline-color: transparent;
+    }
+
+}
+
+.tile {
+    #tile > .meduim-size;
+
+    &.half {
+        width: @tileHalfSize;
+        height: @tileHalfSize;
+    }
+    &.double {
+        width: @tileDoubleSize;
+    }
+    &.double-vertical {
+        height: @tileDoubleSize;
+    }
+    &.triple {
+        width: @tileTripleSize;
+    }
+    &.triple-vertical {
+        height: @tileTripleSize;
+    }
+    &.quadro {
+        width: @tileQuadroSize;
+    }
+    &.quadro-vertical {
+        height: @tileQuadroSize;
+    }
+}
+
+.tile {
+    &.selected {
+        #element > .selected;
+    }
+}
+
+// Tile Content
+.tile {
+    .tile-content {
+        width: 100%;
+        height: 100%;
+        padding: 0;
+        margin: 0;
+        display: block;
+        position: absolute;
+        left: 0;
+        top: 0;
+        overflow: hidden;
+
+        &.padded {
+            padding: @subunitSize * 2;
+        }
+
+        &.image {
+            width: 100%;
+            min-height: 100%;
+            max-height: 100%;
+        }
+
+        &.icon {
+            [class*="icon-"], img {
+                line-height: @tileIconSize;
+                height: @tileIconSize;
+                width: @tileIconSize;
+                font-size: @tileIconSizeFont;
+                color: @white;
+                text-align: center;
+                position: absolute;
+                left: 50%;
+                top: 50%;
+                margin-top: -@tileIconSize/2;
+                margin-left: -@tileIconSize/2;
+            }
+        }
+
+        &.image-set {
+            img {
+                margin: 0;
+                padding: 0;
+                width: 25% !important;
+                height: 50%;
+                float: left;
+                border: 1px #1e1e1e solid;
+            }
+
+            img:first-child {
+                width: 50% !important;
+                float: left;
+                height: 100%;
+            }
+        }
+    }
+
+    .tile-content {
+        display: none;
+
+        &:first-child {
+            display: block;
+        }
+    }
+}
+
+// Tile Brand
+.tile {
+    .brand, .tile-status {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        min-height: 29px;
+        margin: 0;
+        .clearfix;
+
+        &.opacity {
+            opacity: .7;
+        }
+
+        .name, .label, .text {
+            display: block;
+            font-size: 10pt;
+            margin: 5px 20px 2px 5px;
+            background: transparent;
+            color: @white;
+        }
+
+        .text {
+            margin: 4px 5px;
+            font-size: 8pt;
+            line-height: 10pt;
+        }
+
+        .badge {
+            position: absolute;
+            bottom: 0;
+            right: 10px;
+            width: 29px;
+            height: 29px;
+            text-align: center;
+            color: @white;
+            padding: 5px;
+            margin: 0;
+            vertical-align: middle !important;
+            display: block;
+            font-size: 10pt;
+
+            &.activity {
+                background: @tile-badge-activity-image 50% no-repeat;
+            }
+            &.alert {
+                background: @tile-badge-alert-image 50% no-repeat;
+            }
+            &.available {
+                background: @tile-badge-available-image 50% no-repeat;
+            }
+            &.unavailable {
+                background: @tile-badge-unavailable-image 50% no-repeat;
+            }
+            &.away {
+                background: @tile-badge-away-image 50% no-repeat;
+            }
+            &.busy {
+                background: @tile-badge-busy-image 50% no-repeat;
+            }
+            &.newMessage {
+                background: @tile-badge-newMessage-image 50% no-repeat;
+            }
+            &.paused {
+                background: @tile-badge-paused-image 50% no-repeat;
+            }
+            &.playing {
+                background: @tile-badge-playing-image 50% no-repeat;
+            }
+            &.error {
+                background: @tile-badge-error-image 50% no-repeat;
+            }
+            &.attention {
+                background: @tile-badge-attention-image 50% no-repeat;
+            }
+        }
+    }
+}
+
+.tile {
+    &.parts {
+        & > ul {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+
+            & > li {
+                display: block;
+                float: left;
+                height: @tilePart;
+                width: @tilePart;
+                margin: 0;
+            }
+        }
+
+        & > .part {
+            display: block;
+            float: left;
+            height: @tilePart;
+            width: @tilePart;
+            margin: 0;
+        }
+    }
+}
+
+.tile {
+    &.half {
+        .tile-content.icon {
+            [class*="icon-"], img {
+                line-height: @tileIconSize/1.5;
+                height: @tileIconSize/1.5;
+                width: @tileIconSize/1.5;
+                font-size: @tileIconSizeFont/1.5;
+                color: @white;
+                text-align: center;
+                position: absolute;
+                left: 50%;
+                top: 50%;
+                margin-top: -@tileIconSize/3;
+                margin-left: -@tileIconSize/3;
+            }
+        }
+    }
+}
+
+// Typography
+.tile {
+    font-family: @segoeFontFamily;
+    * {
+        font-family: @segoeFontFamily;
+    }
+}
+
+.tile {
+    &.scale {
+        .scale(0.98);
+    }
+}
+
+[draggable] {
+    cursor: default;
+}
+
+.tile {
+    .no-user-select;
+}
+
+.tile {
+    .tile-content {
+        &.email {
+            color: @white;
+            padding: 10px;
+
+            .email-image {
+                width: 64px;
+                height: 64px;
+                float: left;
+                img {
+                    width: 100%;
+                    height: 100%;
+                }
+            }
+            .email-data {
+                display: block;
+                color: inherit;
+                margin-left: 70px;
+                width: auto;
+                overflow: hidden;
+
+                .email-data-title, .email-data-subtitle, .email-data-text {
+                    color: inherit;
+                    display: block;
+                }
+
+                .email-data-title {
+                    font-size: 14pt;
+                }
+                .email-data-subtitle {
+                    font-size: 11pt;
+                }
+                .email-data-text {
+                    font-size: 10pt;
+                    .text-ellipsis;
+                }
+            }
+        }
+    }
+}
+
+
+@rotate: 0.138372rad;
+
+[class*=tile-transform-] {
+    -webkit-transition: all 0.22s;
+    transition: all 0.22s;
+}
+
+.transY(@perspective: 500px, @rot: @rotate){
+    -webkit-transform: perspective( @perspective ) rotateY( @rot );
+    -moz-transform: perspective( @perspective ) rotateY( @rot );
+    -ms-transform: perspective( @perspective ) rotateY( @rot );
+    -o-transform: perspective( @perspective ) rotateY( @rot );
+    transform: perspective( @perspective ) rotateY( @rot );
+}
+
+.transX(@perspective: 500px, @rot: @rotate){
+    -webkit-transform: perspective( @perspective ) rotateX( @rot );
+    -moz-transform: perspective( @perspective ) rotateX( @rot );
+    -ms-transform: perspective( @perspective ) rotateX( @rot );
+    -o-transform: perspective( @perspective ) rotateX( @rot );
+    transform: perspective( @perspective ) rotateX( @rot );
+}
+
+// right
+.tile-transform-right {
+    .transformOrigin(left 50%);
+    .transY(500px, @rotate);
+}
+
+.tile.double.tile-transform-right {
+    .transY(500px, @rotate/2);
+}
+
+.tile.triple.tile-transform-right {
+    .transY(500px, @rotate/3);
+}
+
+.tile.quadro.tile-transform-right {
+    .transY(500px, @rotate/4);
+}
+
+.tile.half.tile-transform-right {
+    .transY(500px, @rotate*2);
+}
+
+// left
+.tile-transform-left {
+    .transformOrigin(right 50%);
+    .transY(500px, -@rotate);
+}
+
+.tile.double.tile-transform-left {
+    .transY(500px, -@rotate/2);
+}
+
+.tile.triple.tile-transform-left {
+    .transY(500px, -@rotate/3);
+}
+
+.tile.quadro.tile-transform-left {
+    .transY(500px, -@rotate/4);
+}
+
+.tile.half.tile-transform-left {
+    .transY(500px, -@rotate*2);
+}
+
+// top
+.tile-transform-top {
+    .transformOrigin(50% bottom);
+    .transX(500px, @rotate);
+}
+
+.tile.double.tile-transform-top {
+    .transX(500px, @rotate/2);
+}
+
+.tile.triple.tile-transform-top {
+    .transX(500px, @rotate/3);
+}
+
+.tile.quadro.tile-transform-top {
+    .transX(500px, @rotate/4);
+}
+
+.tile.half.tile-transform-top {
+    .transX(500px, @rotate*2);
+}
+
+// bottom
+.tile-transform-bottom {
+    .transformOrigin(50% top);
+    .transX(500px, -@rotate);
+}
+
+.tile.double.tile-transform-bottom {
+    .transX(500px, -@rotate/2);
+}
+
+.tile.triple.tile-transform-bottom {
+    .transX(500px, -@rotate/3);
+}
+
+.tile.quadro.tile-transform-bottom {
+    .transX(500px, -@rotate/4);
+}
+
+.tile.half.tile-transform-bottom {
+    .transX(500px, -@rotate*2);
+}

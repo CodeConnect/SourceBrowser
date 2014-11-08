@@ -1,44 +1,50 @@
 ﻿<!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - My ASP.NET Application</title>
+    <title>@ViewBag.Title - Source Browser</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
-
 </head>
-<body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                @Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
-            </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                    <li>@Html.ActionLink("About", "About", "Home")</li>
-                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+
+<body class="metro">
+    <header class="bg-dark" data-load="header.html">
+        <div class="navigation-bar dark">
+            <div class="navigation-bar-content container">
+                @* Left aligned items: *@
+                <a href="/" class="element"><span class="icon-grid-view"></span> SOURCE BROWSER <sup>0.1</sup></a>
+                <span class="element-divider"></span>
+
+                <a class="element1 pull-menu" href="#"></a>
+                <ul class="element-menu">
+                    <li>
+                        @Html.ActionLink("Browse", "", "Browse")
+                    </li>
+                    <li>
+                        @Html.ActionLink("Upload", "", "Upload")
+                    </li>
                 </ul>
-                @Html.Partial("_LoginPartial")
+
+                @* Right aligned items: *@
+                <a title="GitHub" href="https://github.com/CodeConnect/SourceBrowser.Generator" class="element place-right">View on GitHub</a>
             </div>
         </div>
-    </div>
+    </header>
+    
+    @RenderBody()
+    
     <div class="container body-content">
-        @RenderBody()
         <hr />
         <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+            <p>&copy; @DateTime.Now.Year - <a href="http://codeconnect.io">Code Connect</a></p>
         </footer>
     </div>
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/sourcebrowser")
     @RenderSection("scripts", required: false)
 </body>
 </html>

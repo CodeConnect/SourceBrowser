@@ -1,0 +1,54 @@
+﻿@model SourceBrowser.Site.Models.GithubRepoStructure
+@using SourceBrowser.Site.Extensions
+
+@{
+    ViewBag.Title = "LookupRepo";
+}
+
+<div class="container body-content">
+    <div class="container-fluid" id="mainContainer">
+        <div class="row">
+            <!--Bread crumb-->
+            <header class="col-xs-12">
+                <p>
+                    <nav class="breadcrumbs mini">
+                        <ul>
+                            <li>
+                            </li>
+                            <li>
+                            </li>
+                        </ul>
+                    </nav>
+                </p>
+            </header>
+        </div>
+        <!--/Bread crumb-->
+
+        <div class="row">
+            <aside class="col-xs-4" id="browser">
+                <section>
+                    <ul id="browserTree" class="treeview" data-role="treeview">
+                        @*Html.Raw(Model.GetHtmlTreeView(Model.LookupPath, pathSoFar: "/Browse/" + Model.UserName + '/'))*@
+                    </ul>
+                </section>
+            </aside>
+
+            <!-- Main Content-->
+            <article class="col-xs-8" id="main">
+                <section>
+                    <h3>Browsing @Model.ParentUser.Username's repository @Model.Name.</h3>
+
+                    <p>There are multiple solutions in this repository. Pick one you would like to explore:</p>
+                    <ul>
+                        @foreach (var solution in Model.Solutions)
+                        {
+                            <li><a href="/Browse/@Model.ParentUser.Username/@Model.Name/@solution/" target="_self">@solution</a></li>
+                        }
+                    </ul>
+
+                    <p>Or <a href="//github.com/@Model.ParentUser.Username/@Model.Name/" target="_blank">view @Model.Name on github.</a></p>
+                </section>
+            </article>
+        </div>
+    </div>
+</div>

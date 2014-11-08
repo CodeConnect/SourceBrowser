@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SourceBrowser.Samples", "So
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SourceBrowser.Site", "SourceBrowser.Site\SourceBrowser.Site.csproj", "{0C4DCC9D-6CF2-4A8F-B947-8EC90C59AF09}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SourceBrowser.SolutionRetriever", "SourceBrowser.SolutionRetriever\SourceBrowser.SolutionRetriever.csproj", "{F90B7983-D137-4C89-B668-A6082BE39303}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{0C4DCC9D-6CF2-4A8F-B947-8EC90C59AF09}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0C4DCC9D-6CF2-4A8F-B947-8EC90C59AF09}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0C4DCC9D-6CF2-4A8F-B947-8EC90C59AF09}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F90B7983-D137-4C89-B668-A6082BE39303}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F90B7983-D137-4C89-B668-A6082BE39303}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F90B7983-D137-4C89-B668-A6082BE39303}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F90B7983-D137-4C89-B668-A6082BE39303}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -2,30 +2,40 @@
     ViewBag.Title = "Home Page";
 }
 
-<div class="jumbotron">
-    <h1>ASP.NET</h1>
-    <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
-    <p><a href="http://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
+<div class="jumbotron sb-jumbotron">
+    <div class="container">
+        <h1>Source Browser</h1>
+        <p class="lead">Turn any C# GitHub Repository into a set of static HTML files.</p>
+        <p>
+            @Html.ActionLink("Upload Your Repo", "", "Upload", new { }, new { @class = "button large primary fg-white"  })
+            @Html.ActionLink("See sample", "", "Browse//CodeConnect//SourceBrowser.Generator", new { }, new { @class = "button large success fg-white" })
+        </p>
+    </div>
 </div>
 
-<div class="row">
-    <div class="col-md-4">
-        <h2>Getting started</h2>
-        <p>
-            ASP.NET MVC gives you a powerful, patterns-based way to build dynamic websites that
-            enables a clean separation of concerns and gives you full control over markup
-            for enjoyable, agile development.
-        </p>
-        <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Get more libraries</h2>
-        <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>
-        <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301866">Learn more &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Web Hosting</h2>
-        <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
-        <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
+<div class="container body-content">
+    <div class="row">
+        <div class="col-md-4">
+            <h2>What?</h2>
+            <p>
+                Source Browser takes C# files and turns them into
+                statically linked HTML files.
+            </p>
+            <p>@Html.ActionLink("Browse projects", "", "Browse", new { }, new { @class = "btn btn-default" })</p>
+        </div>
+        <div class="col-md-4">
+            <h2>Why?</h2>
+            <p>
+                Source Browser makes it easy to browse third party libraries 
+                and explore unfamiliar code online.
+            </p>
+        </div>
+        <div class="col-md-4">
+            <h2>Contribute!</h2>
+            <p>
+            Source Browser is open source on <a href="https://github.com/CodeConnect/SourceBrowser.Generator">Github.</a>
+            We're accepting pull requests and would love your contributions.</p>
+            <p><a class="btn btn-default" href="https://github.com/CodeConnect/SourceBrowser.Generator">Contribute&raquo;</a></p>
+        </div>
     </div>
 </div>

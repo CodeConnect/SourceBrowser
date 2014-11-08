@@ -1,0 +1,75 @@
+img {
+    max-width: 100%;
+
+    &.rounded, &.cycle, &.polaroid {
+        background-color: @white;
+        .border;
+    }
+
+    &.rounded {
+        border-radius: 10px;
+    }
+    &.cycle {
+        border-radius: 50%;
+    }
+    &.polaroid {
+        padding: @subunitSize * 2;
+    }
+}
+
+.image-container {
+    position: relative;
+    padding: 0;
+    background-color: @grayDark;
+    width: 240px;
+    overflow: hidden;
+
+    &.full-size {
+        width: 100%;
+    }
+
+    img {
+        margin: 0;
+        width: 100%;
+        height: auto;
+    }
+
+    & > .overlay, & > .overlay-fluid  {
+        position: absolute;
+        width: 100%;
+        height: 55px;
+        overflow: hidden;
+        background-color: #1e1e1e;
+        padding: 5px 10px;
+        opacity: .8;
+        bottom: 0;
+        font-size: 8pt;
+        color: #fff;
+    }
+
+    & > .overlay-fluid {
+        bottom: -55px;
+        font-size: 8pt;
+        color: #fff;
+    }
+
+    &:hover {
+        .overlay-fluid {
+            -webkit-transform: translate(0, -55px);
+            -ms-transform: translate(0, -55px);
+            -o-transform: translate(0, -55px);
+            -moz-transform: translate(0, -55px);
+            transform: translate(0, -55px);
+
+            -webkit-transition: all @overlay-speed ease;
+            -moz-transition: all @overlay-speed ease;
+            -o-transition: all @overlay-speed ease;
+            -ms-transition: all @overlay-speed ease;
+            transition: all @overlay-speed ease;
+        }
+    }
+
+    &.selected {
+        #element > .selected;
+    }
+}

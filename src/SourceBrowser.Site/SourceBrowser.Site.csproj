@@ -159,37 +159,203 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\BrowseController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\UploadController.cs" />
+    <Compile Include="Extensions\JsonExtensions.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\GithubFileStructure.cs" />
+    <Compile Include="Models\GithubRepoStructure.cs" />
+    <Compile Include="Models\GithubSolutionStructure.cs" />
+    <Compile Include="Models\GithubUserStructure.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\SourceFileViewModel.cs" />
+    <Compile Include="Models\SourceFolderViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repositories\BrowserRepository.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\accordion.css" />
+    <Content Include="Content\all.css" />
+    <Content Include="Content\autocomplete.css" />
+    <Content Include="Content\base.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\button.css" />
+    <Content Include="Content\core.css" />
+    <Content Include="Content\datepicker.css" />
+    <Content Include="Content\dialog.css" />
+    <Content Include="Content\draggable.css" />
+    <Content Include="Content\menu.css" />
+    <Content Include="Content\progressbar.css" />
+    <Content Include="Content\resizable.css" />
+    <Content Include="Content\selectable.css" />
+    <Content Include="Content\selectmenu.css" />
+    <Content Include="Content\slider.css" />
+    <Content Include="Content\sortable.css" />
+    <Content Include="Content\spinner.css" />
+    <Content Include="Content\tabs.css" />
+    <Content Include="Content\theme.css" />
+    <Content Include="Content\themes\base\accordion.css" />
+    <Content Include="Content\themes\base\all.css" />
+    <Content Include="Content\themes\base\autocomplete.css" />
+    <Content Include="Content\themes\base\base.css" />
+    <Content Include="Content\themes\base\button.css" />
+    <Content Include="Content\themes\base\core.css" />
+    <Content Include="Content\themes\base\datepicker.css" />
+    <Content Include="Content\themes\base\dialog.css" />
+    <Content Include="Content\themes\base\draggable.css" />
+    <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
+    <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_55_fbf9ee_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_65_ffffff_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_75_dadada_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_75_e6e6e6_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_95_fef1ec_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_highlight-soft_75_cccccc_1x100.png" />
+    <Content Include="Content\themes\base\images\ui-icons_222222_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_2e83ff_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_454545_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_888888_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_cd0a0a_256x240.png" />
+    <Content Include="Content\themes\base\menu.css" />
+    <Content Include="Content\themes\base\progressbar.css" />
+    <Content Include="Content\themes\base\resizable.css" />
+    <Content Include="Content\themes\base\selectable.css" />
+    <Content Include="Content\themes\base\selectmenu.css" />
+    <Content Include="Content\themes\base\slider.css" />
+    <Content Include="Content\themes\base\sortable.css" />
+    <Content Include="Content\themes\base\spinner.css" />
+    <Content Include="Content\themes\base\tabs.css" />
+    <Content Include="Content\themes\base\theme.css" />
+    <Content Include="Content\themes\base\tooltip.css" />
+    <Content Include="Content\tooltip.css" />
+    <Content Include="css\iconFont.min.css" />
+    <Content Include="css\metro-bootstrap-responsive.css" />
+    <Content Include="css\metro-bootstrap-responsive.min.css" />
+    <Content Include="css\metro-bootstrap.css" />
+    <Content Include="css\metro-bootstrap.min.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="fonts\iconFont.dev.svg" />
+    <Content Include="fonts\iconFont.svg" />
+    <Content Include="fonts\metroSysIcons.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="js\metro.min.js" />
+    <Content Include="js\metro\metro-accordion.js" />
+    <Content Include="js\metro\metro-button-set.js" />
+    <Content Include="js\metro\metro-calendar.js" />
+    <Content Include="js\metro\metro-carousel.js" />
+    <Content Include="js\metro\metro-core.js" />
+    <Content Include="js\metro\metro-countdown.js" />
+    <Content Include="js\metro\metro-date-format.js" />
+    <Content Include="js\metro\metro-datepicker.js" />
+    <Content Include="js\metro\metro-dialog.js" />
+    <Content Include="js\metro\metro-drag-tile.js" />
+    <Content Include="js\metro\metro-dropdown.js" />
+    <Content Include="js\metro\metro-fluentmenu.js" />
+    <Content Include="js\metro\metro-global.js" />
+    <Content Include="js\metro\metro-hint.js" />
+    <Content Include="js\metro\metro-initiator.js" />
+    <Content Include="js\metro\metro-input-control.js" />
+    <Content Include="js\metro\metro-listview.js" />
+    <Content Include="js\metro\metro-live-tile.js" />
+    <Content Include="js\metro\metro-loader.js" />
+    <Content Include="js\metro\metro-locale.js" />
+    <Content Include="js\metro\metro-notify.js" />
+    <Content Include="js\metro\metro-panel.js" />
+    <Content Include="js\metro\metro-plugin-template.js" />
+    <Content Include="js\metro\metro-progressbar.js" />
+    <Content Include="js\metro\metro-pull.js" />
+    <Content Include="js\metro\metro-rating.js" />
+    <Content Include="js\metro\metro-scroll.js" />
+    <Content Include="js\metro\metro-slider.js" />
+    <Content Include="js\metro\metro-stepper.js" />
+    <Content Include="js\metro\metro-streamer.js" />
+    <Content Include="js\metro\metro-tab-control.js" />
+    <Content Include="js\metro\metro-table.js" />
+    <Content Include="js\metro\metro-tile-transform.js" />
+    <Content Include="js\metro\metro-times.js" />
+    <Content Include="js\metro\metro-touch-handler.js" />
+    <Content Include="js\metro\metro-treeview.js" />
+    <Content Include="js\metro\metro-wizard.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
-    <None Include="Scripts\jquery-1.10.2.intellisense.js" />
-    <Content Include="Scripts\jquery-1.10.2.js" />
-    <Content Include="Scripts\jquery-1.10.2.min.js" />
+    <Content Include="fonts\iconFont.eot" />
+    <Content Include="fonts\iconFont.json" />
+    <Content Include="fonts\iconFont.ttf" />
+    <Content Include="fonts\iconFont.woff" />
+    <Content Include="fonts\metroSysIcons.ttf" />
+    <Content Include="fonts\metroSysIcons.woff" />
+    <Content Include="less\accordion.less" />
+    <Content Include="less\balloon.less" />
+    <Content Include="less\breadcrumbs.less" />
+    <Content Include="less\buttons.less" />
+    <Content Include="less\calendar.less" />
+    <Content Include="less\carousel.less" />
+    <Content Include="less\colors.less" />
+    <Content Include="less\countdown.less" />
+    <Content Include="less\dataTables.less" />
+    <Content Include="less\fluent-menu.less" />
+    <Content Include="less\forms.less" />
+    <Content Include="less\funcs.less" />
+    <Content Include="less\grid.less" />
+    <Content Include="less\hint.less" />
+    <Content Include="less\iconFont-content.less" />
+    <Content Include="less\iconFont.less" />
+    <Content Include="less\icons.less" />
+    <Content Include="less\images.less" />
+    <Content Include="less\layout.less" />
+    <Content Include="less\lists.less" />
+    <Content Include="less\menus.less" />
+    <Content Include="less\metro-bootstrap-responsive.less" />
+    <Content Include="less\metro-bootstrap.less" />
+    <Content Include="less\misc.less" />
+    <Content Include="less\navigation-bar.less" />
+    <Content Include="less\notice.less" />
+    <Content Include="less\notify.less" />
+    <Content Include="less\pagination.less" />
+    <Content Include="less\panels.less" />
+    <Content Include="less\progress-bar.less" />
+    <Content Include="less\rating.less" />
+    <Content Include="less\reset.less" />
+    <Content Include="less\scroll.less" />
+    <Content Include="less\sidebar.less" />
+    <Content Include="less\slider.less" />
+    <Content Include="less\stepper.less" />
+    <Content Include="less\streamer.less" />
+    <Content Include="less\tab-control.less" />
+    <Content Include="less\tables.less" />
+    <Content Include="less\tiles.less" />
+    <Content Include="less\transform.less" />
+    <Content Include="less\treeview.less" />
+    <Content Include="less\typography.less" />
+    <Content Include="less\utils.less" />
+    <Content Include="less\variables.less" />
+    <Content Include="less\window.less" />
+    <Content Include="less\wizard.less" />
+    <Content Include="Scripts\jquery-2.1.1.min.map" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <None Include="Scripts\jquery-2.1.1.intellisense.js" />
+    <Content Include="Scripts\jquery-2.1.1.js" />
+    <Content Include="Scripts\jquery-2.1.1.min.js" />
+    <Content Include="Scripts\jquery-ui-1.11.1.js" />
+    <Content Include="Scripts\jquery-ui.min-1.11.1.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\jquery.widget.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
+    <Content Include="Scripts\treeViewHelpers.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
@@ -205,7 +371,6 @@
     <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Scripts\jquery-1.10.2.min.map" />
     <Content Include="Views\Account\_ChangePasswordPartial.cshtml" />
     <Content Include="Views\Account\_ExternalLoginsListPartial.cshtml" />
     <Content Include="Views\Account\_RemoveAccountPartial.cshtml" />
@@ -229,6 +394,15 @@
     <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
+    <Content Include="Views\Account\Manage.cshtml" />
+    <Content Include="Views\Browse\Index.cshtml" />
+    <Content Include="Views\Browse\InvalidPath.cshtml" />
+    <Content Include="Views\Browse\LookupError.cshtml" />
+    <Content Include="Views\Browse\LookupFile.cshtml" />
+    <Content Include="Views\Browse\LookupFolder.cshtml" />
+    <Content Include="Views\Browse\LookupRepo.cshtml" />
+    <Content Include="Views\Browse\LookupUser.cshtml" />
+    <Content Include="Views\Upload\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -239,6 +413,16 @@
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="packages.config" />
     <None Include="Project_Readme.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SourceBrowser.Generator\SourceBrowser.Generator.csproj">
+      <Project>{c91050bd-5010-4ebd-a6ae-52cca7c2553d}</Project>
+      <Name>SourceBrowser.Generator</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SourceBrowser.SolutionRetriever\SourceBrowser.SolutionRetriever.csproj">
+      <Project>{f90b7983-d137-4c89-b668-a6082be39303}</Project>
+      <Name>SourceBrowser.SolutionRetriever</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -258,7 +442,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>57805</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:57805/</IISUrl>
+          <IISUrl>http://localhost:57806/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

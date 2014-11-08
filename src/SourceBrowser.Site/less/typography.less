@@ -1,0 +1,382 @@
+// Font is used to replace Cambria Font
+@font-face {
+    font-family: "PT Serif Caption";
+    font-style: normal;
+    font-weight: 400;
+    src: local("Cambria"), local("PT Serif Caption"), local("PTSerif-Caption"), url(https://themes.googleusercontent.com/static/fonts/ptserifcaption/v4/7xkFOeTxxO1GMC1suOUYWWhBabBbEjGd1iRmpyoZukE.woff) format('woff');
+}
+
+// Font is used to replace Segoe UI Font
+
+// Replace Segoe UI Light
+@font-face {
+    font-family: "Open Sans Light";
+    font-style: normal;
+    font-weight: 300;
+    src: local("Segoe UI Light"), local("Open Sans Light"), local("OpenSans-Light"), url(https://themes.googleusercontent.com/static/fonts/opensans/v6/DXI1ORHCpsQm3Vp6mXoaTZ1r3JsPcQLi8jytr04NNhU.woff) format('woff');
+}
+
+// Replace Segoe UI
+@font-face {
+    font-family: "Open Sans";
+    font-style: normal;
+    font-weight: 400;
+    src: local("Segoe UI"), local("Open Sans"), local("OpenSans"), url(https://themes.googleusercontent.com/static/fonts/opensans/v6/K88pR3goAWT7BTt32Z01mz8E0i7KZn-EPnyo3HZu7kw.woff) format('woff');
+}
+
+// Replace Segoe UI Bold
+@font-face {
+    font-family: "Open Sans Bold";
+    font-style: normal;
+    font-weight: 700;
+    src: local("Segoe UI Bold"), local("Open Sans Bold"), local("OpenSans-Bold"), url(https://themes.googleusercontent.com/static/fonts/opensans/v6/k3k702ZOKiLJc3WVjuplzJ1r3JsPcQLi8jytr04NNhU.woff) format('woff');
+}
+
+.text-rest-state       {color: rgba(0, 0, 0, 1.0);}
+.text-rest2-state      {color: rgba(0, 0, 0, 0.6);}
+.text-hover-state      {color: rgba(0, 0, 0, 0.8);}
+.text-pressed-state    {color: rgba(0, 0, 0, 0.4);}
+
+#font {
+    .light {
+        font-weight: 300;
+    }
+
+    .normal {
+        font-weight: normal;
+        font-style: normal;
+    }
+
+    .bold {
+        font-weight: bold;
+    }
+
+    .italic {
+        font-style: italic;
+    }
+
+    .segoe {
+        font-family: @segoeFontFamily;
+    }
+
+    .segoe-bold {
+        font-family: @segoeBoldFontFamily;
+    }
+
+    .segoe-light {
+        font-family: @segoeLightFontFamily;
+    }
+
+    .cambria {
+        font-family: @cambriaFontFamily;
+    }
+
+    .mono {
+        font-family: @monoFontFamily;
+    }
+
+    .serif {
+        font-family: @serifFontFamily;
+    }
+
+    .sans {
+        font-family: @sansFontFamily;
+    }
+}
+
+
+.header, .subheader {
+    #font > .segoe-light;
+    #font > .light;
+    .text-rest-state;
+    letter-spacing: 0.00em;
+}
+
+.header {
+    .font-height(4.8rem);
+}
+
+.subheader {
+    .font-height(2.5rem);
+    letter-spacing: 0.01em;
+}
+
+.subheader-secondary {
+    .subheader;
+    .text-rest2-state;
+    .font-height(2.2rem);
+    //font-weight: bold;
+}
+
+.item-title {
+    #font > .segoe-bold;
+    #font > .bold;
+    .text-rest-state;
+    .font-height(1.6rem);
+    letter-spacing: 0.02em;
+}
+
+.item-title-secondary {
+    .item-title;
+    .text-rest2-state;
+    .font-height(1.4rem);
+}
+
+.navigation {
+    #font > .segoe;
+    #font > .normal;
+    .text-rest2-state;
+    .font-height(1.2rem);
+    letter-spacing: 0.02em;
+}
+
+.body-text {
+    #font > .segoe;
+    #font > .normal;
+    .text-rest-state;
+    font-size: 11pt;
+    line-height: 15pt;
+    letter-spacing: 0.02em;
+}
+
+.code-text {
+    .body-text;
+    #font > .mono;
+}
+
+.tertiary-text {
+    #font > .segoe;
+    .text-rest-state;
+    .font-size(1.3rem);
+    .line-height(1.5rem);
+    font-weight: normal !important;
+}
+
+.tertiary-text-secondary {
+    .tertiary-text;
+    .text-rest2-state;
+}
+
+.readable-text {
+    #font > .cambria;
+    #font > .normal;
+    .font-size(1.8rem);
+    .line-height(2rem);
+}
+
+.menu-title {
+    .subheader;
+    //font-size: 30pt;
+    .font-size(4.0rem);
+}
+
+.menu-item {
+    .subheader-secondary;
+    //font-size: 14pt;
+    .font-size(2.2rem);
+}
+
+.menu-item-secondary {
+    .item-title;
+    #font > .normal;
+    .line-height(1.4rem);
+}
+
+h1, h2, h3, h4, h5, h6 {
+    padding: 0;
+    margin: 10px 0;
+}
+
+h1 { .header;}
+h2 { .subheader }
+h3 { .subheader-secondary; font-weight: bold; }
+h4 { .item-title }
+h5 { .item-title-secondary }
+h6 { .body-text; #font > .bold; font-size: 9pt;}
+
+h1 small { font-size: @baseFontSize * 1.75; }
+h2 small { font-size: @baseFontSize * 1.25; }
+h3 small { font-size: @baseFontSize; }
+h4 small { font-size: @baseFontSize; }
+
+a, .link {
+    color: @linkColor;
+    &:hover {
+        color: @linkColorHover;
+    }
+    &:focus, &:active {
+        color: @linkColorActive;
+    }
+}
+
+div, span, p {
+    #font > .segoe;
+    #font > .normal;
+}
+
+p {
+    margin: 0 0 @baseLineHeight / 2;
+    .body-text;
+}
+
+small {}
+strong {
+    #font > .segoe-bold;
+    #font > .bold;
+}
+em {}
+
+.text-muted {color: @grayLight !important;}
+.text-info {color: @cyan !important;}
+.text-alert {color: @red !important;}
+.text-warning {color: @orange !important;}
+.text-success {color: @green !important;}
+
+abbr {
+    text-decoration: none;
+    border-bottom: 1px @grayLight dotted;
+    cursor: help;
+}
+
+address {
+    #font > .segoe;
+    #font > .normal;
+    margin-bottom: 7pt;
+}
+
+blockquote {
+    margin: 0;
+    padding: 0;
+    border-left: 4px @grayLight solid;
+    padding-left: @unitSize / 2;
+
+    small {
+        color: @grayLight;
+
+        &:before {
+            content: "\2014 \00A0";
+        }
+    }
+
+    &.place-right {
+        border: 0;
+        border-right: 4px @grayLight solid;
+        padding-right: @unitSize / 2;
+        .text-right;
+
+        small {
+            &:before {
+                content: "";
+            }
+            &:after {
+                content: " \00A0 \2014";
+            }
+        }
+    }
+}
+
+.unstyled {
+    padding-left: 0;
+    list-style: none;
+    li {
+        & ul, & ol {
+            list-style: none;
+            padding-left: 25px;
+        }
+    }
+}
+
+.inline {
+    list-style: none;
+    li {
+        display: inline-block;
+        padding-left: 5px;
+        padding-right: 5px;
+    }
+}
+
+ul, ol {
+    margin-left: 5px;
+    padding-left: 15px;
+    .body-text;
+
+    li {
+        line-height: 20px;
+
+        & ul, & ol {
+            padding-left: 25px;
+        }
+    }
+}
+
+ol.styled {
+    counter-reset:li;
+    margin-left:0;
+    padding-left:0;
+    .readable-text;
+}
+ol.styled > li {
+    position:relative;
+    margin:0 0 6px 2em;
+    padding:4px 12px;
+    list-style:none;
+}
+ol.styled > li:before {
+    content:counter(li);
+    counter-increment:li;
+    position:absolute;
+    top:-2px;
+    left: -2em;
+    box-sizing:border-box;
+    width: 2em;
+    margin-right:8px;
+    padding:4px;
+    color:#fff;
+    background:#666;
+    font-weight:bold;
+    font-family:"Helvetica Neue", Arial, sans-serif;
+    text-align:center;
+}
+
+ol.styled.rounded > li:before {
+    border-radius: 100%;
+}
+
+dl {
+
+    dt, dd {
+        line-height: 20px;
+    }
+
+    dt {
+        #font > .segoe-bold;
+    }
+
+    dd {
+        margin-left: 15px;
+    }
+
+    &.horizontal {
+        dt {
+            float: left;
+            width: 160px;
+            overflow: hidden;
+            clear: left;
+            text-align: right;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        dd {
+            margin-left: 180px;
+        }
+    }
+}
+
+.prettyprint {
+    * {
+        .code-text;
+        font-size: .9em !important;
+        line-height: 10pt;
+    }
+}

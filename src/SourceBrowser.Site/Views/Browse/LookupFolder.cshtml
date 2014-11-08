@@ -1,0 +1,46 @@
+﻿@model SourceBrowser.Site.Models.GithubSolutionStructure
+@using SourceBrowser.Site.Extensions
+
+@{
+    ViewBag.Title = "LookupFolder";
+}
+
+<div class="container body-content">
+    <div class="container-fluid" id="mainContainer">
+        <div class="row">
+            <!--Bread crumb-->
+            <header class="col-xs-12">
+                <p>
+                    <nav class="breadcrumbs mini">
+                        <ul>
+                            <li>
+                            </li>
+                            <li>
+                            </li>
+                        </ul>
+                    </nav>
+                </p>
+            </header>
+        </div>
+        <!--/Bread crumb-->
+
+        <div class="row">
+            <aside class="col-xs-4" id="browser">
+                <section>
+                    <ul id="browserTree" class="treeview" data-role="treeview">
+                        @Html.Raw(Model.SolutionInfo.GetHtmlTreeView(Model.RelativePath, filePath: "/Browse/" + Model.RelativeRootPath + '/'))
+                    </ul>
+                </section>
+            </aside>
+
+            <!-- Main Content-->
+            <article class="col-xs-8" id="main">
+                <section>
+                    <h3>Browsing @Model.ParentRepo.ParentUser.Username's repository @Model.ParentRepo.Name.</h3>
+                    <p>Use the menu on the left to pick a file within a repository.</p>
+                    <p><a href="//github.com/@Model.ParentRepo.ParentUser.Username/@Model.ParentRepo.Name/" target="_blank">View @Model.ParentRepo.Name on github.</a></p>
+                </section>
+            </article>
+        </div>
+    </div>
+</div>

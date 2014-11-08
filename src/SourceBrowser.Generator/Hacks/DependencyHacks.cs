@@ -14,7 +14,7 @@ namespace SourceBrowser.Generator.Hacks
     /// to be present in /bin.
     /// 
     /// We tried adding the necessary DLLs directly to the projects that depend on
-    /// SourceBrowser.Generator (ie. SourceBrowserSite) but this causes problems with
+    /// SourceBrowser.Generator (ie. SourceBrowser.Site) but this causes problems with
     /// the MSBuildWorkspace. (It caused 28 LoaderExceptions for us)
     /// 
     /// The workaround seems to be to reference types within the DLLs we want 
