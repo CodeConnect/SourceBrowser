@@ -18,7 +18,7 @@ namespace SourceBrowser.Generator
         string _html = String.Empty;
         Dictionary<string, string> _typeLookup;
         private SemanticModel _model;
-        private ReferencesourceLinkProvider refsourceLinkProvider = new ReferencesourceLinkProvider();
+        private ReferencesourceLinkProvider _refsourceLinkProvider;
         private StringBuilder _stringBuilder = new StringBuilder();
         private int _numLines = 0;
         public string FilePath { get; set; }
@@ -30,7 +30,7 @@ namespace SourceBrowser.Generator
             return DocInfo;
         }
 
-        public DocumentWalker(SemanticModel model, Document document, Dictionary<string, string> typeLookup) : base(SyntaxWalkerDepth.Trivia)
+        public DocumentWalker(SemanticModel model, Document document, ReferencesourceLinkProvider refSourceLinkProvider, Dictionary<string, string> typeLookup) : base(SyntaxWalkerDepth.Trivia)
         {
             _model = model;
             _typeLookup = typeLookup;
@@ -38,7 +38,7 @@ namespace SourceBrowser.Generator
 
             DocInfo.FileName = FilePath;
             DocInfo.NumberOfLines = document.GetTextAsync().Result.Lines.Count;
-            refsourceLinkProvider.Init().Wait();
+            _refsourceLinkProvider = refSourceLinkProvider;
         }
 
         public override void VisitLeadingTrivia(SyntaxToken token)
@@ -151,11 +151,11 @@ namespace SourceBrowser.Generator
                 html += "</a>";
                 html += "</span>";
             }
-            else if (refsourceLinkProvider.Assemblies.Contains(symbol.ContainingAssembly.Identity.Name))
+            else if (_refsourceLinkProvider.Assemblies.Contains(symbol.ContainingAssembly.Identity.Name))
             {
                 html = "<span>";
                 html += "<a style='color:black' href=";
-                html += refsourceLinkProvider.GetLink(symbol);
+                html += _refsourceLinkProvider.GetLink(symbol);
                 html += ">";
                 html += HttpUtility.HtmlEncode(token.ToString());
                 html += "</a>";
@@ -188,11 +188,11 @@ namespace SourceBrowser.Generator
                 html += "</a>";
                 html += "</span>";
             }
-            else if (refsourceLinkProvider.Assemblies.Contains(symbol.ContainingAssembly.Identity.Name))
+            else if (_refsourceLinkProvider.Assemblies.Contains(symbol.ContainingAssembly.Identity.Name))
             {
                 html = "<span>";
                 html += "<a style='color:black' href=";
-                html += refsourceLinkProvider.GetLink(symbol);
+                html += _refsourceLinkProvider.GetLink(symbol);
                 html += ">";
                 html += HttpUtility.HtmlEncode(token.ToString());
                 html += "</a>";

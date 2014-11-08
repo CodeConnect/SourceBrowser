@@ -23,6 +23,7 @@ namespace SourceBrowser.Generator
         SolutionFolderAnalyzer _folderAnalyzer;
         string _saveDirectory = string.Empty;
         Dictionary<string, string> _typeLookup = new Dictionary<string, string>();
+        private ReferencesourceLinkProvider _refsourceLinkProvider = new ReferencesourceLinkProvider();
         const string solutionInfoFileName = "solutionInfo.json";
 
         public SolutionAnalayzer(string solutionPath)
@@ -168,7 +169,7 @@ namespace SourceBrowser.Generator
         {
             var root = document.GetSyntaxRootAsync().Result;
             var model = document.GetSemanticModelAsync().Result;
-            var docWalker = new DocumentWalker(model, document, _typeLookup);
+            var docWalker = new DocumentWalker(model, document, _refsourceLinkProvider, _typeLookup);
             docWalker.Visit(root);
 
             var docInfo = docWalker.GetDocumentInfo();
