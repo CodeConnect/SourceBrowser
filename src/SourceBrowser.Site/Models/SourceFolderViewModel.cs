@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
-using Newtonsoft.Json.Linq;
-
-namespace SourceBrowser.Site.Models
+﻿namespace SourceBrowser.Site.Models
 {
+    using System.Collections.Generic;
+
+    using Newtonsoft.Json.Linq;
+
     public class SourceFolderViewModel
     {
         public string FolderName { get; set; }
@@ -16,6 +17,5 @@ namespace SourceBrowser.Site.Models
         public JObject FolderInfoRoot { get; set; }
 
         public string RootDirectory { get; set; }
-
     }
 }
