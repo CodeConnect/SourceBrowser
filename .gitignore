@@ -7,14 +7,9 @@
 *.sln.docstates
 *.ide/
 *.ide
-*/SB_Files/*
-SB_Files/*
-
-GithubStaging/*
-*/GithubStaging/*
-PublishProfiles/*
-*/PublishProfiles/*
-
+SB_Files/
+GithubStaging/
+PublishProfiles/
 
 # Build results
 [Dd]ebug/
