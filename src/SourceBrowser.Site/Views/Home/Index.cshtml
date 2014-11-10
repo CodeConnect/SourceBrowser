@@ -1,0 +1,41 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+<div class="jumbotron sb-jumbotron">
+    <div class="container">
+        <h1>Source Browser</h1>
+        <p class="lead">Turn any C# GitHub Repository into a set of static HTML files.</p>
+        <p>
+            @Html.ActionLink("Upload Your Repo", "", "Upload", new { }, new { @class = "button large primary fg-white"  })
+            @Html.ActionLink("See sample", "", "Browse//CodeConnect//SourceBrowser.Generator", new { }, new { @class = "button large success fg-white" })
+        </p>
+    </div>
+</div>
+
+<div class="container body-content">
+    <div class="row">
+        <div class="col-md-4">
+            <h2>What?</h2>
+            <p>
+                Source Browser takes C# files and turns them into
+                statically linked HTML files.
+            </p>
+            <p>@Html.ActionLink("Browse projects", "", "Browse", new { }, new { @class = "btn btn-default" })</p>
+        </div>
+        <div class="col-md-4">
+            <h2>Why?</h2>
+            <p>
+                Source Browser makes it easy to browse third party libraries 
+                and explore unfamiliar code online.
+            </p>
+        </div>
+        <div class="col-md-4">
+            <h2>Contribute!</h2>
+            <p>
+            Source Browser is open source on <a href="https://github.com/CodeConnect/SourceBrowser.Generator">Github.</a>
+            We're accepting pull requests and would love your contributions.</p>
+            <p><a class="btn btn-default" href="https://github.com/CodeConnect/SourceBrowser.Generator">Contribute&raquo;</a></p>
+        </div>
+    </div>
+</div>

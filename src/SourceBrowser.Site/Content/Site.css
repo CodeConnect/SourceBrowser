@@ -1,0 +1,41 @@
+﻿line-numbers
+{
+    margin:20px;
+}
+
+.source_code span
+{
+    font-family:monospace;
+}
+
+/* Set padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* Set width on the form input elements since they're 100% wide by default */
+input,
+select,
+textarea {
+    max-width: 280px;
+}
+
+.sb-jumbotron
+{
+    background-color: #7f34a9;
+}
+
+.sb-jumbotron .lead
+{
+    color: #fdf;
+    font-size: large;
+    margin-top: 2em;
+    margin-bottom: 2em;
+}
+
+.sb-jumbotron h1
+{
+    color: #fff;
+    font-weight: normal;
+}
