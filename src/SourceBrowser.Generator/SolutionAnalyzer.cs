@@ -23,7 +23,6 @@ namespace SourceBrowser.Generator
         MSBuildWorkspace _workspace;
         Solution _solution;
         WorkspaceModel _workspaceModel;
-        SolutionFolderAnalyzer _folderAnalyzer;
         private ReferencesourceLinkProvider _refsourceLinkProvider = new ReferencesourceLinkProvider();
         string _saveDirectory = string.Empty;
         const string solutionInfoFileName = "solutionInfo.json";
@@ -76,15 +75,6 @@ namespace SourceBrowser.Generator
                 Directory.CreateDirectory(_saveDirectory);
             }
 
-            //Generate solution/folder info
-            var solutionInfo = this.GenerateFolderStructureAsJson();
-            string solutionInfoPath = Path.Combine(_saveDirectory, solutionInfoFileName);
-
-            using (StreamWriter stream = new StreamWriter(solutionInfoPath, append: false))
-            {
-                stream.Write(solutionInfo);
-            }
-
             foreach (var doc in _solution.Projects.SelectMany(n => n.Documents))
             {
                 //Generate info
@@ -116,16 +106,5 @@ namespace SourceBrowser.Generator
             }
             return currentNode;
         }
-
-        /// <summary>
-        /// Returns the folder structure for the solution being analyzed.
-        /// </summary>
-        public string GenerateFolderStructureAsJson()
-        {
-            var root = _folderAnalyzer.AnalzeSolutionStructure();
-            string json = JsonConvert.SerializeObject(root, Formatting.Indented);
-            return json;
-        }
-
     }
 }

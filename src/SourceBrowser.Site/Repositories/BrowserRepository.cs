@@ -172,7 +172,7 @@
             return viewModel;
         }
 
-        internal static GithubFileStructure SetUpFileStructure(DocumentInfo docInfo, string userName, string repoName, string solutionName, string pathRemainder)
+        internal static GithubFileStructure SetUpFileStructure(string userName, string repoName, string solutionName, string pathRemainder)
         {
             string solutionInfoPath;
             var solutionInfo = GetSolutionInfo(userName, repoName, solutionName, out solutionInfoPath);
@@ -183,8 +183,8 @@
                 Directory = GetRelativeDirectory(pathRemainder),
                 RelativePath = CreatePath(userName, repoName, solutionName, GetRelativeDirectory(pathRemainder)), // Used to expand nodes leading to this file
                 RelativeRootPath = CreatePath(userName, repoName, solutionName), // Points to the root of the treeview
-                SourceCode = docInfo.HtmlContent,
-                NumberOfLines = docInfo.NumberOfLines,
+                //SourceCode = docInfo.HtmlContent,
+                //NumberOfLines = docInfo.NumberOfLines,
                 SolutionInfo = solutionInfo
             };
 
@@ -246,19 +246,6 @@
                 return baseDirectory;
             }
             return null;
-        }
-
-        public static DocumentInfo FindFile(string path)
-        {
-            var fullPath = Path.Combine(StaticHtmlAbsolutePath, path);
-            DocumentInfo docInfo;
-            using (var sr = new StreamReader(fullPath))
-            {
-                string rawJson = sr.ReadToEnd();
-                docInfo = JsonConvert.DeserializeObject<DocumentInfo>(rawJson);
-            }
-
-            return docInfo;
         }
 
         public static List<string> FindFiles(string path)

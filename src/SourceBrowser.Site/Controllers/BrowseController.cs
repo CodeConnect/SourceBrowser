@@ -25,8 +25,7 @@
 
                 if (!string.IsNullOrEmpty(fileName))
                 {
-                    var docInfo = BrowserRepository.FindFile(id);
-                    var viewModel = BrowserRepository.SetUpFileStructure(docInfo, githubUser, githubRepo, solutionName, fileName);
+                    var viewModel = BrowserRepository.SetUpFileStructure(githubUser, githubRepo, solutionName, fileName);
                     return View("LookupFile", viewModel);
                 }
             }

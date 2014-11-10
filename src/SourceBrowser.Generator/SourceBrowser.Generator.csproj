@@ -88,11 +88,7 @@
     <Compile Include="Extensions\DocumentExtensions.cs" />
     <Compile Include="DocumentWalker.cs" />
     <Compile Include="Extensions\SymbolExtensions.cs" />
-    <Compile Include="FileSystemInfo.cs" />
-    <Compile Include="FolderAnalyzer.cs" />
     <Compile Include="Hacks\DependencyHacks.cs" />
-    <Compile Include="Model\Document.cs" />
-    <Compile Include="Model\Folder.cs" />
     <Compile Include="Model\DocumentModel.cs" />
     <Compile Include="Model\FolderModel.cs" />
     <Compile Include="Model\IProjectItem.cs" />
