@@ -2,6 +2,7 @@
 using Owin;
 
 [assembly: OwinStartupAttribute(typeof(SourceBrowser.Site.Startup))]
+
 namespace SourceBrowser.Site
 {
     public partial class Startup

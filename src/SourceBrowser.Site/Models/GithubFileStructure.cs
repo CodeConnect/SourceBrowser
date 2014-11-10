@@ -1,26 +1,32 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using Newtonsoft.Json.Linq;
-
-namespace SourceBrowser.Site.Models
+﻿namespace SourceBrowser.Site.Models
 {
+    using System;
+
+    using Newtonsoft.Json.Linq;
+
     public class GithubFileStructure
     {
-        public string FileName;
-        public string Directory;
-        public string RelativePath;
-        public string RelativeRootPath;
-        public string SourceCode;
-        public int NumberOfLines;
-        public JObject SolutionInfo; // folderInfoRoot
+        public string FileName { get; set; }
+
+        public string Directory { get; set; }
+
+        public string RelativePath { get; set; }
+
+        public string RelativeRootPath { get; set; }
+
+        public string SourceCode { get; set; }
+
+        public int NumberOfLines { get; set; }
+
+        public JObject SolutionInfo { get; set; } 
 
         public override string ToString()
         {
-            return String.Format("{0} in {1}", new object[]
-                {
-                    FileName,
+            return string.Format(
+                "{0} in {1}",
+                new object[]
+                    {
+                        FileName,
                     Directory
                 });
         }

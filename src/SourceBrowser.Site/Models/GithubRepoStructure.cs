@@ -1,25 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
-namespace SourceBrowser.Site.Models
+﻿namespace SourceBrowser.Site.Models
 {
+    using System.Collections.Generic;
+
     public class GithubRepoStructure
     {
-        public string Name;
-        public IList<string> Solutions;
-        public GithubUserStructure ParentUser;
+        public string Name { get; set; }
+
+        public IList<string> Solutions { get; set; }
+
+        public GithubUserStructure ParentUser { get; set; }
 
         public override string ToString()
         {
-            return String.Format("{0}'s repository {1} with {2} solution{3}", new object[]
-                {
-                    ParentUser.Username,
-                    Name, 
-                    Solutions.Count, 
-                    Solutions.Count == 1 ? "" : "s"
-                });
+            return string.Format(
+                "{0}'s repository {1} with {2} solution{3}",
+                ParentUser.Username,
+                Name,
+                Solutions.Count,
+                Solutions.Count == 1 ? "" : "s");
         }
     }
 }
