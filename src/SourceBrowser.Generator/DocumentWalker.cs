@@ -33,7 +33,7 @@ namespace SourceBrowser.Generator
 
         public DocumentWalker(SemanticModel model, Document document, ReferencesourceLinkProvider refSourceLinkProvider, Dictionary<string, string> typeLookup) : base(SyntaxWalkerDepth.Trivia)
         {
-            _model = model;
+            _model = document.GetSemanticModelAsync().Result;
             _typeLookup = typeLookup;
             FilePath = document.GetRelativeFilePath();
 
