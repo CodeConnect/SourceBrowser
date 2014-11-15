@@ -16,10 +16,13 @@ namespace SourceBrowser.Generator.Model
 
         public string Name { get; set; }
 
-        public DocumentModel(IProjectItem parent, string name)
+        public string ContainingPath { get; set; }
+
+        public DocumentModel(IProjectItem parent, string name, string containingPath)
         {
             Parent = parent;
             Name = name;
+            ContainingPath = containingPath;
             Children = new List<IProjectItem>();
             Tokens = new List<Token>();
         }

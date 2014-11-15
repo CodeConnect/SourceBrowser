@@ -26,7 +26,8 @@ namespace SourceBrowser.Generator
         {
             _model = document.GetSemanticModelAsync().Result;
             _refsourceLinkProvider = refSourceLinkProvider;
-            DocumentModel = new DocumentModel(parent, document.Name);
+            string containingPath = string.Join("/", document.Folders);
+            DocumentModel = new DocumentModel(parent, document.Name, containingPath);
             FilePath = document.GetRelativeFilePath();
             _refsourceLinkProvider = refSourceLinkProvider;
         }
