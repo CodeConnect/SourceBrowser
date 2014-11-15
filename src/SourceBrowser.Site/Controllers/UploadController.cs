@@ -48,7 +48,7 @@
                 var solutionName = path.Substring(filenamePosition);
                 var solutionPath = repoPath + solutionName; // don't use Path.Combine because solutionName contains "\"
                 var sourceGenerator = new Generator.SolutionAnalayzer(path);
-                sourceGenerator.AnalyzeAndSave(solutionPath);
+                sourceGenerator.BuildWorkspaceModel(solutionPath);
             }
 
             return RedirectToAction("LookupFolder", "Browse", new { id = retriever.UserName + "/" + retriever.RepoName });

@@ -22,7 +22,6 @@ namespace SourceBrowser.Generator
     {
         MSBuildWorkspace _workspace;
         Solution _solution;
-        WorkspaceModel _workspaceModel;
         private ReferencesourceLinkProvider _refsourceLinkProvider = new ReferencesourceLinkProvider();
         string _saveDirectory = string.Empty;
 
@@ -31,8 +30,6 @@ namespace SourceBrowser.Generator
             _workspace = MSBuildWorkspace.Create();
             _workspace.WorkspaceFailed += _workspace_WorkspaceFailed;
             _solution = _workspace.OpenSolutionAsync(solutionPath).Result;
-            string solutionName = Path.GetFileName(solutionPath);
-            _workspaceModel = new WorkspaceModel(solutionName);
             _refsourceLinkProvider.Init().Wait();
         }
 
@@ -65,30 +62,34 @@ namespace SourceBrowser.Generator
             }
         }
 
-        public void AnalyzeAndSave(string saveDirectory)
+        public WorkspaceModel BuildWorkspaceModel(string saveDirectory)
         {
+            string solutionName = Path.GetFileName(_solution.FilePath);
+            WorkspaceModel workspaceModel = new WorkspaceModel(solutionName);
+            //Build document model for every file.
             foreach (var doc in _solution.Projects.SelectMany(n => n.Documents))
             {
-                //Generate info
-                var documentModel = buildDocumentModel(doc);
+                buildDocumentModel(workspaceModel, doc);
             }
+
+            return workspaceModel;
         }
 
-        private DocumentModel buildDocumentModel(Document document)
+        private void buildDocumentModel(WorkspaceModel workspaceModel, Document document)
         {
-            var root = document.GetSyntaxRootAsync().Result;
-            var containingFolder = findDocumentParent(document);
+            var syntaxRoot = document.GetSyntaxRootAsync().Result;
+            var containingFolder = findDocumentParent(workspaceModel, document);
             var docWalker = new DocumentWalker(containingFolder, document, _refsourceLinkProvider);
-            docWalker.Visit(root);
-
+            docWalker.Visit(syntaxRoot);
+            
+            //Save it
             var documentModel = docWalker.DocumentModel;
             containingFolder.Children.Add(documentModel);
-            return docWalker.DocumentModel;
         }
 
-        private IProjectItem findDocumentParent(Document document)
+        private IProjectItem findDocumentParent(WorkspaceModel workspaceModel, Document document)
         {
-            IProjectItem currentNode = _workspaceModel;
+            IProjectItem currentNode = workspaceModel;
             foreach (var folder in document.Folders)
             {
                 var childFolder = currentNode.Children.Where(n => n.Name == folder).SingleOrDefault();
