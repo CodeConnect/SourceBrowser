@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using SourceBrowser.Generator;
+using SourceBrowser.Generator.Transformers;
 
 namespace SourceBrowser.Samples
 {
@@ -38,7 +39,9 @@ namespace SourceBrowser.Samples
                 Console.Write("Analyzing and saving into " + absoluteSaveDirectory);
                 Console.WriteLine("...");
 
-                solutionAnalyzer.AnalyzeAndSave(saveDirectory);
+                var workspaceModel = solutionAnalyzer.BuildWorkspaceModel(saveDirectory);
+                var htmlTransformer = new HtmlTransformer(workspaceModel, absoluteSaveDirectory);
+                htmlTransformer.Visit(workspaceModel);
 
                 Console.WriteLine("Job successful!");
             }

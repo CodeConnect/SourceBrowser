@@ -101,6 +101,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReferencesourceLinkProvider.cs" />
     <Compile Include="SolutionAnalyzer.cs" />
+    <Compile Include="Transformers\AbstractWorkspaceVisitor.cs" />
+    <Compile Include="Transformers\HtmlTransformer.cs" />
     <Compile Include="Utilities.cs" />
   </ItemGroup>
   <ItemGroup>
