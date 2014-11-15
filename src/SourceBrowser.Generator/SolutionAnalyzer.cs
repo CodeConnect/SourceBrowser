@@ -25,7 +25,6 @@ namespace SourceBrowser.Generator
         WorkspaceModel _workspaceModel;
         private ReferencesourceLinkProvider _refsourceLinkProvider = new ReferencesourceLinkProvider();
         string _saveDirectory = string.Empty;
-        const string solutionInfoFileName = "solutionInfo.json";
 
         public SolutionAnalayzer(string solutionPath)
         {
@@ -68,13 +67,6 @@ namespace SourceBrowser.Generator
 
         public void AnalyzeAndSave(string saveDirectory)
         {
-            _saveDirectory = saveDirectory;
-
-            if (!Directory.Exists(_saveDirectory))
-            {
-                Directory.CreateDirectory(_saveDirectory);
-            }
-
             foreach (var doc in _solution.Projects.SelectMany(n => n.Documents))
             {
                 //Generate info
@@ -89,6 +81,8 @@ namespace SourceBrowser.Generator
             var docWalker = new DocumentWalker(containingFolder, document, _refsourceLinkProvider);
             docWalker.Visit(root);
 
+            var documentModel = docWalker.DocumentModel;
+            containingFolder.Children.Add(documentModel);
             return docWalker.DocumentModel;
         }
 
@@ -100,7 +94,8 @@ namespace SourceBrowser.Generator
                 var childFolder = currentNode.Children.Where(n => n.Name == folder).SingleOrDefault();
                 if (childFolder == null)
                 {
-                    childFolder = new FolderModel(currentNode);
+                    childFolder = new FolderModel(currentNode, folder);
+                    currentNode.Children.Add(childFolder);
                 }
                 currentNode = childFolder;
             }
