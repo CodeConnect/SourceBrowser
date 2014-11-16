@@ -1,6 +1,7 @@
 ﻿namespace SourceBrowser.Site.Models
 {
     using SourceBrowser.SolutionRetriever;
+    using System;
     using System.Collections.Generic;
 
     [Serializable]
