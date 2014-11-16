@@ -63,7 +63,7 @@
                 }
                 if (!string.IsNullOrEmpty(githubUser))
                 {
-                    var viewModel = BrowserRepository.SetUpUserStructure(githubUser);
+                    var viewModel = BrowserRepository.GetUserStructure(githubUser);
                     return this.View("LookupUser", viewModel);
                 }
                 return this.View("LookupError");

@@ -10,6 +10,8 @@
 
     using SourceBrowser.Generator;
     using SourceBrowser.Site.Models;
+    using SourceBrowser.Site.Utilities;
+    using SourceBrowser.SolutionRetriever;
 
     internal static class BrowserRepository
     {
@@ -83,23 +85,45 @@
         /// <returns>
         /// All Github users.
         /// </returns>
-        public static List<string> GetAllGithubUsers()
+        public static List<GithubUserStructure> GetAllGithubUsers()
         {
-            // If, for some reason the directory doesn't exist, just return an empty list
+            // If, for some reason, we have no data at all, just return an empty list
             if (!Directory.Exists(StaticHtmlAbsolutePath))
             {
-                return new List<string>();
+                return new List<GithubUserStructure>();
             }
 
             // Otherwise, find them all
             var directories = Directory.GetDirectories(StaticHtmlAbsolutePath);
-            var userNames = new List<string>(directories.Length);
-            userNames.AddRange(directories.Select(Path.GetFileName));
-            return userNames;
+            var users = new List<GithubUserStructure>(directories.Length);
+            foreach (var directoryName in directories)
+            {
+                var userName = Path.GetFileName(directoryName);
+                users.Add(GetUserStructure(userName));
+            }
+            return users;
         }
 
         /// <summary>
-        /// Returns a structure containing information on user's github repositories available at Source Browser
+        /// Returns a structure containing information on user's github repositories available at Source Browser.
+        /// If the structure does not exist, creates it.
+        /// </summary>
+        /// <param name="userName"></param>
+        /// <returns></returns>
+        internal static GithubUserStructure GetUserStructure(string userName)
+        {
+            var userDataFile = Path.Combine(StaticHtmlAbsolutePath, userName, "user.data");
+            if (!File.Exists(userDataFile))
+            {
+                var userData = SetUpUserStructure(userName);
+                FileUtilities.SerializeData(userData, userDataFile);
+                return userData;
+            }
+            return FileUtilities.DeserializeData<GithubUserStructure>(userDataFile);
+        }
+    
+        /// <summary>
+        /// Creates a structure containing information on user's github repositories available at Source Browser.
         /// </summary>
         /// <param name="userName">The username.</param>
         /// <returns>The github structure.</returns>
@@ -120,15 +144,42 @@
                 repoNames = new List<string>();
             }
 
-            var viewModel = new GithubUserStructure()
+            var userData = new GithubUserStructure()
             {
                 Username = userName,
                 Repos = repoNames,
                 Path = repoPath
             };
-            return viewModel;
+            userData.UseLiveData();
+
+            return userData;
         }
 
+        /// <summary>
+        /// Returns a structure containing information on a repository available at Source Browser.
+        /// If the structure does not exist, creates it.
+        /// </summary>
+        /// <param name="userName"></param>
+        /// <param name="repoName"></param>
+        /// <returns></returns>
+        internal static GithubRepoStructure GetRepoStructure(string userName, string repoName)
+        {
+            var repoDataFile = Path.Combine(StaticHtmlAbsolutePath, userName, repoName, "repo.data");
+            if (!File.Exists(repoDataFile))
+            {
+                var repoData = SetUpRepoStructure(userName, repoName);
+                FileUtilities.SerializeData(repoData, repoDataFile);
+                return repoData;
+            }
+            return FileUtilities.DeserializeData<GithubRepoStructure>(repoDataFile);
+        }
+
+        /// <summary>
+        /// Creates a structure containing information on a repository available at Source Browser.
+        /// </summary>
+        /// <param name="userName"></param>
+        /// <param name="repoName"></param>
+        /// <returns></returns>
         internal static GithubRepoStructure SetUpRepoStructure(string userName, string repoName)
         {
             var solutionPath = Path.Combine(StaticHtmlAbsolutePath, userName, repoName);
