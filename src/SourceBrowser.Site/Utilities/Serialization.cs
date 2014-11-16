@@ -5,7 +5,7 @@ using System;
 
 namespace SourceBrowser.Site.Utilities
 {
-    public static class FileOperations
+    public static class FileUtilities
     {
         /// <summary>
         /// Opens the file specified,
