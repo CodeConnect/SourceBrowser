@@ -1,10 +1,10 @@
-﻿
+﻿@using SourceBrowser.Site.Models
 @{
     ViewBag.Title = "Browse Repositories";
 }
 
 <div class="container body-content">
-   @if (ViewBag.Users.Count == 0)
+   @if (ViewBag.Users == null || ViewBag.Users.Count == 0)
    {
     <div style="margin:65px 0px 65px 0px" class="text-center">
         <h2>
@@ -18,9 +18,17 @@
     <div style="margin:65px 0px 65px 0px">
         <h2>Browse existing repos:</h2>
         <ul>
-            @foreach (string userName in ViewBag.Users)
+            @foreach (GithubUserStructure user in ViewBag.Users)
             {
-                <a href="~/Browse/@userName"><li>@userName</li></a>
+                <li class="hideBullet">
+                    <a class="userBadge" href="~/Browse/@user.Username">
+                        <img src="@user.AvatarURL" />
+                        <div class="text">
+                            <h3>@user.FullName</h3>
+                            <p class="minor">github.com/@user.Username</p>
+                        </div>
+                    </a>
+                </li>
             }
         </ul>
     </div>
