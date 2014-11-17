@@ -23,7 +23,7 @@ namespace SourceBrowser.SolutionRetriever
             fullName = user.Name;
         }
 
-        public static void GetRepoInformation(string userName, string repoName, ref int forksCount, ref int starsCount, ref string language, ref string homepage, ref bool isPrivate)
+        public static void GetRepoInformation(string userName, string repoName, ref int forksCount, ref int starsCount, ref string language, ref string homepage, ref bool isPrivate, ref string description)
         {
             var repo = _github.Repository.Get(userName, repoName).Result;
 
@@ -32,6 +32,7 @@ namespace SourceBrowser.SolutionRetriever
             language = repo.Language;
             homepage = repo.Homepage;
             isPrivate = repo.Private;
+            description = repo.Description;
         }
 
     }

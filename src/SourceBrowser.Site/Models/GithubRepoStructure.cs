@@ -13,15 +13,18 @@
 
         public GithubUserStructure ParentUser { get; set; }
 
+        public DateTime UploadTime { get; set; } // todo: populate.
+
         public int forksCount;
         public int starsCount;
         public string language;
         public string homepage;
         public bool isPrivate;
+        public string description;
 
         public void UseLiveData()
         {
-            GitHubInformationRetriever.GetRepoInformation(ParentUser.Username, Name, ref forksCount, ref starsCount, ref language, ref homepage, ref isPrivate);
+            GitHubInformationRetriever.GetRepoInformation(ParentUser.Username, Name, ref forksCount, ref starsCount, ref language, ref homepage, ref isPrivate, ref description);
         }
 
         public override string ToString()
