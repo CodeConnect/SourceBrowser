@@ -42,7 +42,7 @@
                     <ul>
                         @foreach (var solution in Model.Solutions)
                         {
-                            <li><a href="/Browse/@Model.ParentUserName/@Model.Name/@solution/" target="_self">@solution</a></li>
+                            <li class="hide-bullet"><a class="repoBadge" href="/Browse/@Model.ParentUserName/@Model.Name/@solution/" target="_self">@solution</a></li>
                         }
                     </ul>
 
