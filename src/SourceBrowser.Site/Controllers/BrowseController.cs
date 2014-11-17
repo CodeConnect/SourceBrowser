@@ -53,18 +53,26 @@
             {
                 if (!string.IsNullOrEmpty(solutionName))
                 {
-                    var viewModel = BrowserRepository.SetUpSolutionStructure(githubUser, githubRepo, solutionName);
-                    return View("LookupFolder", viewModel);
+                    var solutionData = BrowserRepository.SetUpSolutionStructure(githubUser, githubRepo, solutionName);
+                    return View("LookupFolder", solutionData);
                 }
                 if (!string.IsNullOrEmpty(githubRepo))
                 {
-                    var viewModel = BrowserRepository.GetRepoStructure(githubUser, githubRepo);
-                    return this.View("LookupRepo", viewModel);
+                    var repoData = BrowserRepository.GetRepoStructure(githubUser, githubRepo);
+                    // If there is only one solution in the repo, take the user straight there
+                    if (repoData.Solutions.Count == 1)
+                    {
+                        solutionName = repoData.Solutions[0];
+                        var solutionData = BrowserRepository.SetUpSolutionStructure(githubUser, githubRepo, solutionName);
+                        return View("LookupFolder", solutionData);
+                    }
+                    // Else, allow the user to pick a solution
+                    return this.View("LookupRepo", repoData);
                 }
                 if (!string.IsNullOrEmpty(githubUser))
                 {
-                    var viewModel = BrowserRepository.GetUserStructure(githubUser);
-                    return this.View("LookupUser", viewModel);
+                    var userData = BrowserRepository.GetUserStructure(githubUser);
+                    return this.View("LookupUser", userData);
                 }
                 return this.View("LookupError");
             }
