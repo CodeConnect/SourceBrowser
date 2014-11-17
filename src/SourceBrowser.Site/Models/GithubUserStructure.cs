@@ -10,7 +10,7 @@
     {
         public string Username;
         public string Path;
-        public IList<string> Repos;
+        public IList<GithubRepoStructure> Repos;
 
         public string FullName;
         public string AvatarURL;

@@ -119,7 +119,18 @@
                 FileUtilities.SerializeData(userData, userDataFile);
                 return userData;
             }
-            return FileUtilities.DeserializeData<GithubUserStructure>(userDataFile);
+            try
+            {
+                return FileUtilities.DeserializeData<GithubUserStructure>(userDataFile);
+            }
+            catch
+            {
+                // There was some problem. Recreate the data.
+                var userData = SetUpUserStructure(userName);
+                FileUtilities.SerializeData(userData, userDataFile);
+                return userData;
+            }
+            // TODO: if user.data file is stale, asynchronously update it.
         }
     
         /// <summary>
@@ -131,23 +142,27 @@
         {
             var repoPath = Path.Combine(StaticHtmlAbsolutePath, userName);
 
-            List<string> repoNames;
+            List<GithubRepoStructure> repos;
             if (Directory.Exists(repoPath))
             {
                 var directories = Directory.GetDirectories(repoPath);
-                repoNames = new List<string>(directories.Length);
-                repoNames.AddRange(directories.Select(Path.GetFileName));
+                repos = new List<GithubRepoStructure>(directories.Length);
+                foreach (var directory in directories)
+                {
+                    var repoName = Path.GetFileName(directory);
+                    repos.Add(GetRepoStructure(userName, repoName));
+                }
             }
             else
             {
                 // If, for some reason the directory doesn't exist, just supply an empty list
-                repoNames = new List<string>();
+                repos = new List<GithubRepoStructure>();
             }
 
             var userData = new GithubUserStructure()
             {
                 Username = userName,
-                Repos = repoNames,
+                Repos = repos,
                 Path = repoPath
             };
             userData.UseLiveData();
@@ -172,6 +187,7 @@
                 return repoData;
             }
             return FileUtilities.DeserializeData<GithubRepoStructure>(repoDataFile);
+            // TODO: if repo.data file is stale, asynchronously update it.
         }
 
         /// <summary>
@@ -197,13 +213,15 @@
                 solutionNames = new List<string>();
             }
 
-            var viewModel = new GithubRepoStructure()
+            var repoData = new GithubRepoStructure()
             {
                 Name = repoName,
                 Solutions = solutionNames,
-                ParentUser = SetUpUserStructure(userName)
+                ParentUserName = userName
             };
-            return viewModel;
+            repoData.UseLiveData();
+
+            return repoData;
         }
 
         internal static GithubSolutionStructure SetUpSolutionStructure(string userName, string repoName, string solutionName)

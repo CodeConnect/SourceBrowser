@@ -58,7 +58,7 @@
                 }
                 if (!string.IsNullOrEmpty(githubRepo))
                 {
-                    var viewModel = BrowserRepository.SetUpRepoStructure(githubUser, githubRepo);
+                    var viewModel = BrowserRepository.GetRepoStructure(githubUser, githubRepo);
                     return this.View("LookupRepo", viewModel);
                 }
                 if (!string.IsNullOrEmpty(githubUser))
