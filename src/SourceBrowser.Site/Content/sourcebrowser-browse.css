@@ -2,6 +2,11 @@
     list-style-type: none;
 }
 
+.wrapping-list {
+    display: block;
+    float: left;
+}
+
 .userBadge {
     display: block;
     
@@ -14,10 +19,11 @@ background: -ms-linear-gradient(left,  rgba(255,255,255,1) 0%,rgba(255,255,255,1
 background: linear-gradient(to right,  rgba(255,255,255,1) 0%,rgba(255,255,255,1) 34%,rgba(232,232,232,1) 100%); /* W3C */
 filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#e8e8e8',GradientType=1 ); /* IE6-9 */
 
-    width: 350px;
+    width: 450px;
     height: 100px;
     padding: 10px;
     margin: 10px;
+    overflow: hidden;
 }
 
 .userBadge:hover {
@@ -51,6 +57,13 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', end
     float: left;
     width: auto;
     margin-left: 20px;
+}
+
+.userBadge .clipped-text * {
+    max-width: 330px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
 }
 
 .minor {
