@@ -26,7 +26,7 @@ namespace SourceBrowser.Generator
         {
             _model = document.GetSemanticModelAsync().Result;
             _refsourceLinkProvider = refSourceLinkProvider;
-            string containingPath = string.Join("/", document.Folders);
+            string containingPath = document.GetRelativeFilePath();
             DocumentModel = new DocumentModel(parent, document.Name, containingPath);
             FilePath = document.GetRelativeFilePath();
             _refsourceLinkProvider = refSourceLinkProvider;
@@ -100,19 +100,14 @@ namespace SourceBrowser.Generator
         public Token ProcessDeclarationToken(SyntaxToken token, ISymbol parentSymbol)
         {
             var tokenModel = new Token();
+            tokenModel.Type = token.CSharpKind().ToString();
+            tokenModel.Value = token.ToString();
             string html = String.Empty;
             if (parentSymbol != null && parentSymbol is INamedTypeSymbol)
             {
                 //This is a type declaration. We'll assume it doesn't really 
                 //link to anything for now.
                 tokenModel.FullName = parentSymbol.ToString();
-                tokenModel.Type = token.CSharpKind().ToString();
-                tokenModel.Value = token.ToString();
-            }
-            else
-            {
-                //This isn't a type declaration
-                tokenModel.Value = token.ToString();
             }
             return tokenModel;
         }
