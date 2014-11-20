@@ -53,10 +53,10 @@ namespace SourceBrowser.Site.Utilities
         }
 
         /// <summary>
-        /// Returns true if the file specified exists and was modified within last 60 minutes.
+        /// Returns true if the file specified exists and was modified within last 120 minutes.
         /// </summary>
         /// <param name="filePath">Path to the file</param>
-        /// <returns>true if the file specified exists and was modified within last 60 minutes.</returns>
+        /// <returns>true if the file specified exists and was modified within last 120 minutes.</returns>
         public static bool FileIsFresh(string filePath)
         {
             // If file doesn't exist, it's not "fresh" (it needs to be downloaded)
@@ -66,13 +66,16 @@ namespace SourceBrowser.Site.Utilities
             }
 
             // If file has been modified within last 60 minutes, it is considered "fresh"
-            DateTime freshThreshold = DateTime.Now - TimeSpan.FromMinutes(60);
-            if (File.GetLastWriteTimeUtc(filePath) > freshThreshold.ToUniversalTime())
+            DateTime freshThreshold = DateTime.Now - TimeSpan.FromMinutes(120);
+            var lastWriteTime = File.GetLastWriteTimeUtc(filePath);
+            var thresholdTime = freshThreshold.ToUniversalTime();
+            if (lastWriteTime > thresholdTime)
             {
                 return true;
             }
 
             return false;
         }
+
     }
 }

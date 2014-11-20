@@ -4,7 +4,7 @@
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
-
+    using System.Threading.Tasks;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
 
@@ -130,7 +130,18 @@
                 FileUtilities.SerializeData(userData, userDataFile);
                 return userData;
             }
-            // TODO: if user.data file is stale, asynchronously update it.
+            finally
+            {
+                // if user.data file is stale, asynchronously update it.
+                if (!FileUtilities.FileIsFresh(userDataFile))
+                {
+                    Task.Run(() =>
+                    {
+                        var updatedData = SetUpUserStructure(userName);
+                        FileUtilities.SerializeData(updatedData, userDataFile);
+                    });
+                }
+            }
         }
     
         /// <summary>
@@ -186,8 +197,29 @@
                 FileUtilities.SerializeData(repoData, repoDataFile);
                 return repoData;
             }
-            return FileUtilities.DeserializeData<GithubRepoStructure>(repoDataFile);
-            // TODO: if repo.data file is stale, asynchronously update it.
+            try
+            {
+                return FileUtilities.DeserializeData<GithubRepoStructure>(repoDataFile);
+            }
+            catch
+            {
+                // There was some problem. Recreate the data.
+                var repoData = SetUpRepoStructure(userName, repoName);
+                FileUtilities.SerializeData(repoData, repoDataFile);
+                return repoData;
+            }
+            finally
+            {
+                // if repo.data file is stale, asynchronously update it.
+                if (!FileUtilities.FileIsFresh(repoDataFile))
+                {
+                    Task.Run(() =>
+                    {
+                        var updatedData = SetUpRepoStructure(userName, repoName);
+                        FileUtilities.SerializeData(updatedData, repoDataFile);
+                    });
+                }
+            }
         }
 
         /// <summary>
