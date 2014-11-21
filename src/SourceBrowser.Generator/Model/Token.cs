@@ -10,7 +10,6 @@ namespace SourceBrowser.Generator.Model
     {
         public string FullName { get; set; }
 
-        //TODO: Change to enum.
         public string Type { get; set; }
 
         public ICollection<Trivia> LeadingTrivia { get; set; }
