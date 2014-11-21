@@ -31,20 +31,22 @@ namespace SourceBrowser.Generator.Transformers
             var documentSavePath = Path.Combine(_savePath, documentModel.ContainingPath, documentModel.Name);
             //TODO: Write the HTML to the appropriate path
 
-            StringBuilder sb = new StringBuilder(documentModel.Tokens.Count);
-            var tokenTypes = documentModel.Tokens.Select(n => n.Type).Distinct();
-            var leadingTriviaTypes = documentModel.Tokens.SelectMany(n => n.LeadingTrivia.Select(m => m.Type)).Distinct();
-            var trailingTriviaTypes = documentModel.Tokens.SelectMany(n => n.TrailingTrivia.Select(m => m.Type)).Distinct();
-
-            foreach (var token in documentModel.Tokens)
+            using (var sw = new StreamWriter(documentSavePath))
             {
-                processToken(sb, token);
+                var tokenTypes = documentModel.Tokens.Select(n => n.Type).Distinct();
+                var leadingTriviaTypes = documentModel.Tokens.SelectMany(n => n.LeadingTrivia.Select(m => m.Type)).Distinct();
+                var trailingTriviaTypes = documentModel.Tokens.SelectMany(n => n.TrailingTrivia.Select(m => m.Type)).Distinct();
+
+                foreach (var token in documentModel.Tokens)
+                {
+                    processToken(sw, token);
+                }
             }
 
             base.VisitDocument(documentModel);
         }
 
-        private void processToken(StringBuilder sb, Token token)
+        private void processToken(StreamWriter sb, Token token)
         {
             processTriviaCollection(sb, token.LeadingTrivia);
 
@@ -66,41 +68,40 @@ namespace SourceBrowser.Generator.Transformers
             processTriviaCollection(sb, token.TrailingTrivia);
         }
 
-        private void processIdentifier(StringBuilder sb, Token token)
+        private void processIdentifier(StreamWriter sw, Token token)
         {
-            sb.Append(token.Value);
+            sw.Write(token.Value);
         }
 
-        private void processOther(StringBuilder sb, Token token)
+        private void processOther(StreamWriter sw, Token token)
         {
-            sb.Append(token.Value);
+            sw.Write(token.Value);
         }
 
-        private void processKeyword(StringBuilder sb, Token token)
+        private void processKeyword(StreamWriter sw, Token token)
         {
-            sb.Append(token.Value);
+            sw.Write(token.Value);
         }
 
-
-        private void processTriviaCollection(StringBuilder sb, ICollection<Trivia> triviaCollection)
+        private void processTriviaCollection(StreamWriter sw, ICollection<Trivia> triviaCollection)
         {
             foreach(var trivia in triviaCollection)
             {
-                processTrivia(sb, trivia);
+                processTrivia(sw, trivia);
             }
         }
 
-        private void processTrivia(StringBuilder sb, Trivia trivia)
+        private void processTrivia(StreamWriter sw, Trivia trivia)
         {
             if(trivia.Type.Contains("Comment"))
             {
-                sb.Append("<span class='comment'>");
-                sb.Append(trivia.Value);
-                sb.Append("</span>");
+                sw.Write("<span class='comment'>");
+                sw.Write(trivia.Value);
+                sw.Write("</span>");
             }
             else
             {
-                sb.Append(trivia.Value);
+                sw.Write(trivia.Value);
             }
         }
     }
