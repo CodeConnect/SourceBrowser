@@ -72,7 +72,9 @@ namespace SourceBrowser.Generator.Transformers
 
         private void processIdentifier(StreamWriter sw, Token token)
         {
+            sw.Write("<span class='identifier'>");
             sw.Write(token.Value);
+            sw.Write("</span>");
         }
 
         private void processOther(StreamWriter sw, Token token)
