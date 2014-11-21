@@ -82,7 +82,9 @@ namespace SourceBrowser.Generator.Transformers
 
         private void processKeyword(StreamWriter sw, Token token)
         {
+            sw.Write("<span class='keyword'>");
             sw.Write(token.Value);
+            sw.Write("</span>");
         }
 
         private void processTriviaCollection(StreamWriter sw, ICollection<Trivia> triviaCollection)
