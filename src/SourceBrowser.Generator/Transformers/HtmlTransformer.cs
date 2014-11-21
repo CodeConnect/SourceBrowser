@@ -28,7 +28,9 @@ namespace SourceBrowser.Generator.Transformers
 
         protected override void VisitDocument(DocumentModel documentModel)
         {
-            var documentSavePath = Path.Combine(_savePath, documentModel.ContainingPath, documentModel.Name);
+            var documentSavePath = Path.Combine(_savePath, documentModel.RelativePath);
+
+            Directory.CreateDirectory(Path.GetDirectoryName(documentSavePath));
             //TODO: Write the HTML to the appropriate path
 
             using (var sw = new StreamWriter(documentSavePath))
