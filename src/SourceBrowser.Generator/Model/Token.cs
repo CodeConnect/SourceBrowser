@@ -24,8 +24,11 @@ namespace SourceBrowser.Generator.Model
 
         public bool IsDeclaration { get; set; }
 
-        public Token()
+        public DocumentModel Document { get; set; }
+
+        public Token(DocumentModel document)
         {
+            Document = document;
         }
     }
 }

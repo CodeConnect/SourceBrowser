@@ -74,11 +74,11 @@ namespace SourceBrowser.Generator
         /// </summary>
         private Token ProcessOtherToken(SyntaxToken token)
         {
-            var tokenModel = new Token();
+            var tokenModel = new Token(this.DocumentModel);
             tokenModel.FullName = token.CSharpKind().ToString();
             tokenModel.Value = token.ToString();
             tokenModel.Type = "Other";
-            var x = token.GetLocation();
+    var x = token.GetLocation();
             var lineSpan = x.GetLineSpan();
             tokenModel.LineNumber = token.GetLocation().GetLineSpan().StartLinePosition.Line;
 
@@ -90,7 +90,7 @@ namespace SourceBrowser.Generator
         /// </summary>
         public Token ProcessKeyword(SyntaxToken token)
         {
-            var tokenModel = new Token();
+            var tokenModel = new Token(this.DocumentModel);
             tokenModel.FullName = token.CSharpKind().ToString();
             tokenModel.Value = token.ToString();
             tokenModel.Type = "Keyword";
@@ -104,7 +104,7 @@ namespace SourceBrowser.Generator
         /// </summary>
         public Token ProcessDeclarationToken(SyntaxToken token, ISymbol parentSymbol)
         {
-            var tokenModel = new Token();
+            var tokenModel = new Token(this.DocumentModel);
             tokenModel.Type = token.CSharpKind().ToString();
             tokenModel.Value = token.ToString();
             tokenModel.LineNumber = token.GetLocation().GetLineSpan().StartLinePosition.Line;
@@ -120,7 +120,7 @@ namespace SourceBrowser.Generator
         /// </summary>
         public Token ProcessSymbolUsage(SyntaxToken token, ISymbol symbol)
         {
-            var tokenModel = new Token();
+            var tokenModel = new Token(this.DocumentModel);
             tokenModel.FullName = symbol.ToString();
             tokenModel.Value = token.ToString();
             tokenModel.Type = token.CSharpContextualKind().ToString();
