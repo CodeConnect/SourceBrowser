@@ -131,14 +131,14 @@ namespace SourceBrowser.Generator
             {
                 var localLink = new SymbolLink();
                 localLink.ReferencedSymbolName = symbol.ToString();
-                tokenModel.Links.Add(localLink);
+                tokenModel.Link = localLink;
             }
             //Otherwise, we try to link to the .Net Reference source
             else if (_refsourceLinkProvider.Assemblies.Contains(symbol.ContainingAssembly?.Identity?.Name))
             {
                 var referenceLink = new UrlLink();
                 referenceLink.Url = _refsourceLinkProvider.GetLink(symbol);
-                tokenModel.Links.Add(referenceLink);
+                tokenModel.Link = referenceLink;
             }
 
             return tokenModel;

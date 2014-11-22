@@ -20,13 +20,12 @@ namespace SourceBrowser.Generator.Model
 
         public ICollection<Trivia> TrailingTrivia { get; set; }
 
-        public ICollection<ILink> Links { get; set; }
+        public ILink Link { get; set; }
 
         public bool IsDeclaration { get; set; }
 
         public Token()
         {
-            Links = new List<ILink>();
         }
     }
 }
