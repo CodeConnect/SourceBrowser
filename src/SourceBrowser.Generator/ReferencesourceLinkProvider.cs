@@ -28,10 +28,10 @@ namespace SourceBrowser.Generator
             
         }
 
-        public async  Task Init()
+        public void Init()
         {
             var getReferenceAssemblies = new HttpClient();
-            var referenceAssemblies = await getReferenceAssemblies.GetStringAsync(assembliesUrl);
+            var referenceAssemblies = getReferenceAssemblies.GetStringAsync(assembliesUrl).Result;
             foreach(var line in referenceAssemblies.Split('\n'))
             {
                 var parts = line.Split(';');

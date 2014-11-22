@@ -30,7 +30,7 @@ namespace SourceBrowser.Generator
             _workspace = MSBuildWorkspace.Create();
             _workspace.WorkspaceFailed += _workspace_WorkspaceFailed;
             _solution = _workspace.OpenSolutionAsync(solutionPath).Result;
-            _refsourceLinkProvider.Init().Wait();
+            _refsourceLinkProvider.Init();
         }
 
         private void _workspace_WorkspaceFailed(object sender, WorkspaceDiagnosticEventArgs e)
