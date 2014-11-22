@@ -13,11 +13,11 @@ namespace SourceBrowser.Generator.Transformers
     /// </summary>
     public class HtmlTransformer : AbstractWorkspaceVisitor
     {
-        private WorkspaceModel _root;
         private string _savePath;
-        public HtmlTransformer(WorkspaceModel root, string savePath)
+        private Dictionary<string, Token> _tokenLookup;
+        public HtmlTransformer(Dictionary<string, Token> tokenLookup, string savePath)
         {
-            _root = root;
+            _tokenLookup = tokenLookup;
             _savePath = savePath;
         }
 
@@ -73,8 +73,51 @@ namespace SourceBrowser.Generator.Transformers
         private void processIdentifier(StreamWriter sw, Token token)
         {
             sw.Write("<span class='identifier'>");
-            sw.Write(token.Value);
+            if (token.Link != null)
+            {
+                sw.Write("<a href='");
+
+                var symbolLink = token.Link as SymbolLink;
+                if (symbolLink != null)
+                    processSymbolLink(sw, token);
+
+                var urlLink = token.Link as UrlLink;
+                if (urlLink != null)
+                    processUrlLink(sw, token);
+
+                sw.Write("'>");
+                sw.Write(token.Value);
+                sw.Write("</a>");
+            }
+            else
+            {
+                sw.Write(token.Value);
+            }
             sw.Write("</span>");
+        }
+
+        private void processUrlLink(StreamWriter sw, Token token)
+        {
+            var urlLink = token.Link as UrlLink;
+            var url = urlLink.Url;
+            sw.Write(url);
+        }
+
+        private void processSymbolLink(StreamWriter sw, Token token)
+        {
+            var symbolLink = token.Link as SymbolLink;
+            var name = symbolLink.ReferencedSymbolName;
+            Token referencedToken;
+            if(_tokenLookup.TryGetValue(name, out referencedToken))
+            {
+                var path = referencedToken.Document.RelativePath + "#" + referencedToken.LineNumber.ToString();
+                sw.Write(path);
+            }
+            else
+            {
+                //If we can't find it, just make the link point nowhere.
+                sw.Write('#');
+            }
         }
 
         private void processOther(StreamWriter sw, Token token)
