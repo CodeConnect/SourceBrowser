@@ -78,6 +78,10 @@ namespace SourceBrowser.Generator
             tokenModel.FullName = token.CSharpKind().ToString();
             tokenModel.Value = token.ToString();
             tokenModel.Type = "Other";
+            var x = token.GetLocation();
+            var lineSpan = x.GetLineSpan();
+            tokenModel.LineNumber = token.GetLocation().GetLineSpan().StartLinePosition.Line;
+
             return tokenModel;
         }
 
@@ -90,6 +94,7 @@ namespace SourceBrowser.Generator
             tokenModel.FullName = token.CSharpKind().ToString();
             tokenModel.Value = token.ToString();
             tokenModel.Type = "Keyword";
+            tokenModel.LineNumber = token.GetLocation().GetLineSpan().StartLinePosition.Line;
             return tokenModel;
         }
 
@@ -102,13 +107,10 @@ namespace SourceBrowser.Generator
             var tokenModel = new Token();
             tokenModel.Type = token.CSharpKind().ToString();
             tokenModel.Value = token.ToString();
-            string html = String.Empty;
-            if (parentSymbol != null && parentSymbol is INamedTypeSymbol)
-            {
-                //This is a type declaration. We'll assume it doesn't really 
-                //link to anything for now.
-                tokenModel.FullName = parentSymbol.ToString();
-            }
+            tokenModel.LineNumber = token.GetLocation().GetLineSpan().StartLinePosition.Line;
+            tokenModel.FullName = parentSymbol.ToString();
+            tokenModel.IsDeclaration = true;
+
             return tokenModel;
         }
 
@@ -122,6 +124,7 @@ namespace SourceBrowser.Generator
             tokenModel.FullName = symbol.ToString();
             tokenModel.Value = token.ToString();
             tokenModel.Type = token.CSharpContextualKind().ToString();
+            tokenModel.LineNumber = token.GetLocation().GetLineSpan().StartLinePosition.Line;
             
             //If we can find the declaration, we'll link it ourselves
             if (symbol.DeclaringSyntaxReferences.Any())

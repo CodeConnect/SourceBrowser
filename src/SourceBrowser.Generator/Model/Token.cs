@@ -12,6 +12,8 @@ namespace SourceBrowser.Generator.Model
 
         public string Type { get; set; }
 
+        public int LineNumber { get; set; }
+
         public ICollection<Trivia> LeadingTrivia { get; set; }
 
         public string Value { get; set; }
@@ -19,6 +21,8 @@ namespace SourceBrowser.Generator.Model
         public ICollection<Trivia> TrailingTrivia { get; set; }
 
         public ICollection<ILink> Links { get; set; }
+
+        public bool IsDeclaration { get; set; }
 
         public Token()
         {
