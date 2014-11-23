@@ -1,4 +1,5 @@
-﻿using SourceBrowser.Generator.Model;
+﻿using Newtonsoft.Json.Linq;
+using SourceBrowser.Generator.Model;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -29,6 +30,8 @@ namespace SourceBrowser.Generator.Transformers
         protected override void VisitDocument(DocumentModel documentModel)
         {
             var documentSavePath = Path.Combine(_savePath, documentModel.RelativePath);
+            var metadataSavePath = documentSavePath + ".json";
+            createAndSaveMetadata(documentModel, metadataSavePath);
 
             Directory.CreateDirectory(Path.GetDirectoryName(documentSavePath));
             //TODO: Write the HTML to the appropriate path
@@ -46,6 +49,21 @@ namespace SourceBrowser.Generator.Transformers
             }
 
             base.VisitDocument(documentModel);
+        }
+
+        private void createAndSaveMetadata(DocumentModel documentModel, string metadataPath)
+        {
+            var metadata = new
+            {
+                NumberOfLines = documentModel.NumberOfLines,
+            };
+
+            var json = JObject.FromObject(metadata);
+
+            using (var sw = new StreamWriter(metadataPath))
+            {
+                sw.Write(json);
+            }
         }
 
         private void processToken(StreamWriter sb, Token token)
