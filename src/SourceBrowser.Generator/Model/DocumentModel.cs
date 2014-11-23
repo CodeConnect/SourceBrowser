@@ -25,6 +25,7 @@ namespace SourceBrowser.Generator.Model
             Parent = parent;
             Name = name;
             RelativePath = relativePath;
+            NumberOfLines = NumberOfLines;
             Children = new List<IProjectItem>();
             Tokens = new List<Token>();
         }
