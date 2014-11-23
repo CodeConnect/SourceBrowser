@@ -20,12 +20,12 @@ namespace SourceBrowser.Generator.Model
 
         public int NumberOfLines { get; set; }
 
-        public DocumentModel(IProjectItem parent, string name, string relativePath, int NumberOfLines)
+        public DocumentModel(IProjectItem parent, string name, string relativePath, int numberOfLines)
         {
             Parent = parent;
             Name = name;
             RelativePath = relativePath;
-            NumberOfLines = NumberOfLines;
+            NumberOfLines = numberOfLines;
             Children = new List<IProjectItem>();
             Tokens = new List<Token>();
         }
