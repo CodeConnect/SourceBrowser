@@ -1,5 +1,4 @@
 ﻿@model SourceBrowser.Site.Models.GithubSolutionStructure
-@using SourceBrowser.Site.Extensions
 
 @{
     ViewBag.Title = "LookupFolder";
@@ -28,7 +27,6 @@
             <aside class="col-xs-4" id="browser">
                 <section>
                     <ul id="browserTree" class="treeview" data-role="treeview">
-                        @Html.Raw(Model.SolutionInfo.GetHtmlTreeView(Model.RelativePath, filePath: "/Browse/" + Model.RelativeRootPath + '/'))
                     </ul>
                 </section>
             </aside>
