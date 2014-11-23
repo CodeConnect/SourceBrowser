@@ -18,7 +18,9 @@ namespace SourceBrowser.Generator.Model
 
         public string RelativePath { get; set; }
 
-        public DocumentModel(IProjectItem parent, string name, string relativePath)
+        public int NumberOfLines { get; set; }
+
+        public DocumentModel(IProjectItem parent, string name, string relativePath, int NumberOfLines)
         {
             Parent = parent;
             Name = name;

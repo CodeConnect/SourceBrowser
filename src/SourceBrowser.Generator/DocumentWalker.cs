@@ -27,7 +27,9 @@ namespace SourceBrowser.Generator
             _model = document.GetSemanticModelAsync().Result;
             _refsourceLinkProvider = refSourceLinkProvider;
             string containingPath = document.GetRelativeFilePath();
-            DocumentModel = new DocumentModel(parent, document.Name, containingPath);
+            
+            var numberOfLines = document.GetTextAsync().Result.Lines.Count;
+            DocumentModel = new DocumentModel(parent, document.Name, containingPath, numberOfLines);
             FilePath = document.GetRelativeFilePath();
             _refsourceLinkProvider = refSourceLinkProvider;
         }
