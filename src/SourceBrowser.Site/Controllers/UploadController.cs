@@ -4,6 +4,7 @@
     using System.Web.Mvc;
 
     using SourceBrowser.SolutionRetriever;
+    using SourceBrowser.Generator.Transformers;
 
     public class UploadController : Controller
     {
@@ -48,7 +49,17 @@
                 var solutionName = path.Substring(filenamePosition);
                 var solutionPath = repoPath + solutionName; // don't use Path.Combine because solutionName contains "\"
                 var sourceGenerator = new Generator.SolutionAnalayzer(path);
-                sourceGenerator.BuildWorkspaceModel(solutionPath);
+                //Build the workspace
+                var workspaceModel = sourceGenerator.BuildWorkspaceModel(solutionPath);
+
+                //One pass to lookup all declarations
+                var typeTransformer = new TokenLookupTransformer();
+                typeTransformer.Visit(workspaceModel);
+                var tokenLookup = typeTransformer.TokenLookup;
+
+                //Another pass to generate HTMLs
+                var htmlTransformer = new HtmlTransformer(tokenLookup, repoPath);
+                htmlTransformer.Visit(workspaceModel);
             }
 
             return RedirectToAction("LookupFolder", "Browse", new { id = retriever.UserName + "/" + retriever.RepoName });
