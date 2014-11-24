@@ -17,26 +17,49 @@ namespace SourceBrowser.Site
             routes.AppendTrailingSlash = true;
 
             routes.MapRoute(
+                name: "BrowseUser",
+                url: "browse/{username}",
+                defaults: new
+            {
+                controller = "Browse",
+                action = "LookupUser",
+            }
+            );
+
+           routes.MapRoute(
+                name: "BrowseRepo",
+                url: "browse/{username}/{repository}",
+                defaults: new
+            {
+                controller = "Browse",
+                action = "LookupRepo",
+            }
+            );
+
+            routes.MapRoute(
                 name: "BrowseFile",
-                url: "browse/{*id}",
+                url: "browse/{username}/{repository}/{*path}",
                 defaults: new
             {
                 controller = "Browse",
                 action = "LookupFile",
-                id = UrlParameter.Optional
+
             }
-                ,constraints: new { id = @".*\.cs" }
+                , constraints: new { path = @".*\.cs" }
             );
+
             routes.MapRoute(
-                name: "Browse",
-                url: "browse/{*id}",
+                name: "BrowseFolder",
+                url: "browse/{username}/{repository}/{*path}",
                 defaults: new
             {
                 controller = "Browse",
                 action = "LookupFolder",
-                id = UrlParameter.Optional
             }
             );
+
+
+
 
             routes.MapRoute(
                 name: "Default",

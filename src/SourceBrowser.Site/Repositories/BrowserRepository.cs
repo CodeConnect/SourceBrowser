@@ -19,9 +19,9 @@
         // This string could be really big. We should probably be distributing this
         // from a CDN. However, we're not saving them to a CDN, so we'll have to
         // figure that out first.
-        internal static string GetDocumentHtml(string path)
+        internal static string GetDocumentHtml(string username, string repository, string path)
         {
-            var fullPath = Path.Combine(StaticHtmlAbsolutePath, path);
+            var fullPath = Path.Combine(StaticHtmlAbsolutePath, username, repository, path);
 
             using(var sr = new StreamReader(fullPath))
             {
@@ -30,9 +30,9 @@
             }
         }
 
-        internal static JObject GetMetaData(string path)
+        internal static JObject GetMetaData(string username, string repository, string path)
         {
-            var fullPath = Path.Combine(StaticHtmlAbsolutePath, path);
+            var fullPath = Path.Combine(StaticHtmlAbsolutePath, username, repository, path);
             var metadataPath = fullPath + ".json";
 
             using(var sr = new StreamReader(metadataPath))
@@ -40,68 +40,6 @@
                 var metadata = JObject.Parse(sr.ReadToEnd());
                 return metadata;
             }
-        }
-
-        /// <summary>
-        /// Parses provided string and tries to retrieve:
-        /// github user, repo, solution name, file within solution
-        /// </summary>
-        /// <param name="id">
-        /// The id.
-        /// </param>
-        /// <param name="githubUser">
-        /// The github User.
-        /// </param>
-        /// <param name="githubRepo">
-        /// The github Repo.
-        /// </param>
-        /// <param name="solutionName">
-        /// The solution Name.
-        /// </param>
-        /// <param name="fileName">
-        /// The file Name.
-        /// </param>
-        /// <returns>
-        /// True if the folder info could be found.
-        /// </returns>
-        public static bool GetFolderInfo(string id, out string githubUser, out string githubRepo, out string solutionName, out string fileName)
-        {
-            githubUser = string.Empty;
-            githubRepo = string.Empty;
-            solutionName = string.Empty;
-            fileName = string.Empty;
-            if (string.IsNullOrEmpty(id))
-            {
-                return false;
-            }
-
-            var pathParts = id.Split(new[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
-            if (pathParts.Length == 0)
-            {
-                return false;
-            }
-
-            if (pathParts.Length >= 1)
-            {
-                githubUser = pathParts[0];
-            }
-
-            if (pathParts.Length >= 2)
-            {
-                githubRepo = pathParts[1];
-            }
-
-            if (pathParts.Length >= 3)
-            {
-                solutionName = pathParts[2];
-            }
-
-            if (pathParts.Length >= 4)
-            {
-                fileName = string.Join("/", pathParts.Skip(3));
-            }
-
-            return true;
         }
 
         /// <summary>
@@ -195,65 +133,19 @@
             return viewModel;
         }
 
-        internal static GithubFileStructure SetUpFileStructure(string userName, string repoName, string solutionName, string pathRemainder)
+        internal static GithubFileStructure SetUpFileStructure(string userName, string repoName, string path, string html, int numLines)
         {
             var viewModel = new GithubFileStructure
             {
-                FileName = Path.GetFileName(pathRemainder),
-                Directory = GetRelativeDirectory(pathRemainder),
-                RelativePath = CreatePath(userName, repoName, solutionName, GetRelativeDirectory(pathRemainder)), // Used to expand nodes leading to this file
-                RelativeRootPath = CreatePath(userName, repoName, solutionName), // Points to the root of the treeview
-                //SourceCode = docInfo.HtmlContent,
-                //NumberOfLines = docInfo.NumberOfLines,
+                FileName = Path.GetFileName(path),
+                Directory = GetRelativeDirectory(path),
+                RelativePath = CreatePath(userName, repoName, GetRelativeDirectory(path)), // Used to expand nodes leading to this file
+                RelativeRootPath = CreatePath(userName, repoName, path), // Points to the root of the treeview
+                SourceCode = html,
+                NumberOfLines = numLines
             };
 
             return viewModel;
-        }
-
-
-        internal static void FindPage(string path)
-        {
-            var fullPath = Path.Combine(StaticHtmlAbsolutePath, path);
-
-            if (Directory.Exists(fullPath))
-            {
-                // It's a folder, we want to list the files.
-                var files = FindFiles(fullPath);
-                var folders = FindFolders(fullPath);
-            }
-
-            if (File.Exists(fullPath))
-            {
-                // It's a file, we want to list the file.
-            }
-        }
-
-        public static bool IsFile(string path)
-        {
-            var fullPath = Path.Combine(StaticHtmlAbsolutePath, path);
-            if (File.Exists(fullPath))
-            {
-                return true;
-            }
-
-            return false;
-        }
-
-        public static bool IsFolder(string path)
-        {
-            var fullPath = Path.Combine(StaticHtmlAbsolutePath, path);
-            if (Directory.Exists(fullPath))
-            {
-                return true;
-            }
-            return false;
-        }
-
-        public static string GetRootDirectory(string path)
-        {
-            var splitPath = path.Split(new[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
-            var baseDirectory = splitPath.First();
-            return baseDirectory;
         }
 
         public static string GetRelativeDirectory(string path)

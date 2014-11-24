@@ -10,67 +10,58 @@
         // GET: Browse
         public ActionResult Index()
         {
-            return View();
+            var users = BrowserRepository.GetAllGithubUsers();
+            ViewBag.Users = users;
+            return View("Index");
         }
-
-        public ActionResult LookupFile(string id)
+     
+        public ActionResult LookupUser(string username)
         {
-            if (BrowserRepository.IsFile(id))
+            if (string.IsNullOrEmpty(username))
             {
-                string githubUser;
-                string githubRepo;
-                string solutionName;
-                string fileName;
-                BrowserRepository.GetFolderInfo(id, out githubUser, out githubRepo, out solutionName, out fileName);
-
-                if (!string.IsNullOrEmpty(fileName))
-                {
-                    var viewModel = BrowserRepository.SetUpFileStructure(githubUser, githubRepo, solutionName, fileName);
-                    return View("LookupFile", viewModel);
-                }
-            }
-
-            return View("LookupError");
-        }
-
-        public ActionResult LookupFolder(string id)
-        {
-            if (string.IsNullOrEmpty(id))
-            {
-                var users = BrowserRepository.GetAllGithubUsers();
-                ViewBag.Users = users;
-                return View("Index");
-            }
-
-            string githubUser;
-            string githubRepo;
-            string solutionName;
-            string fileName;
-            BrowserRepository.GetFolderInfo(id, out githubUser, out githubRepo, out solutionName, out fileName);
-
-            try
-            {
-                if (!string.IsNullOrEmpty(solutionName))
-                {
-                    var viewModel = BrowserRepository.SetUpSolutionStructure(githubUser, githubRepo, solutionName);
-                    return View("LookupFolder", viewModel);
-                }
-                if (!string.IsNullOrEmpty(githubRepo))
-                {
-                    var viewModel = BrowserRepository.SetUpRepoStructure(githubUser, githubRepo);
-                    return this.View("LookupRepo", viewModel);
-                }
-                if (!string.IsNullOrEmpty(githubUser))
-                {
-                    var viewModel = BrowserRepository.SetUpUserStructure(githubUser);
-                    return this.View("LookupUser", viewModel);
-                }
                 return this.View("LookupError");
             }
-            catch
+            var viewModel = BrowserRepository.SetUpUserStructure(username);
+            return this.View("LookupUser", viewModel);
+        }
+
+        public ActionResult LookupRepo(string username, string repository)
+        {
+            if (string.IsNullOrEmpty(repository))
+            {
+                return this.View("LookupError");
+            }
+
+            var viewModel = BrowserRepository.SetUpRepoStructure(username, repository);
+            return this.View("LookupRepo", viewModel);
+        }
+
+        public ActionResult LookupFolder(string username, string repository, string path)
+        {
+            if (string.IsNullOrEmpty(path))
+            {
+                return this.View("LookupError");
+            }
+            var viewModel = BrowserRepository.SetUpSolutionStructure(username, repository, path);
+            return View("LookupFolder", viewModel);
+        }
+
+        public ActionResult LookupFile(string username, string repository, string path)
+        {
+            System.Diagnostics.Debug.Write(username);
+            System.Diagnostics.Debug.Write(repository);
+            System.Diagnostics.Debug.Write(path);
+            if (string.IsNullOrEmpty(path))
             {
                 return View("LookupError");
             }
+
+            var metaData = BrowserRepository.GetMetaData(username, repository, path);
+            int numberOfLines = metaData["NumberOfLines"].ToObject<int>();
+            var rawHtml = BrowserRepository.GetDocumentHtml(username, repository, path);
+
+            var viewModel = BrowserRepository.SetUpFileStructure(username, repository, path, rawHtml, numberOfLines);
+            return View("LookupFile", viewModel);
         }
     }
 }
