@@ -12,8 +12,6 @@
 
         public string RelativeRootPath { get; set; }
 
-        public JObject SolutionInfo { get; set; }
-
         public GithubRepoStructure ParentRepo { get; set; }
 
         public override string ToString()

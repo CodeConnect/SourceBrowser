@@ -15,6 +15,33 @@
     {
         private static readonly string StaticHtmlAbsolutePath = System.Web.Hosting.HostingEnvironment.MapPath("~/SB_Files/");
 
+        // TODO: DO NOT LOAD THIS INTO MEMORY.
+        // This string could be really big. We should probably be distributing this
+        // from a CDN. However, we're not saving them to a CDN, so we'll have to
+        // figure that out first.
+        internal static string GetDocumentHtml(string path)
+        {
+            var fullPath = Path.Combine(StaticHtmlAbsolutePath, path);
+
+            using(var sr = new StreamReader(fullPath))
+            {
+                var rawHtml = sr.ReadToEnd();
+                return rawHtml;
+            }
+        }
+
+        internal static JObject GetMetaData(string path)
+        {
+            var fullPath = Path.Combine(StaticHtmlAbsolutePath, path);
+            var metadataPath = fullPath + ".json";
+
+            using(var sr = new StreamReader(metadataPath))
+            {
+                var metadata = JObject.Parse(sr.ReadToEnd());
+                return metadata;
+            }
+        }
+
         /// <summary>
         /// Parses provided string and tries to retrieve:
         /// github user, repo, solution name, file within solution
@@ -157,15 +184,11 @@
 
         internal static GithubSolutionStructure SetUpSolutionStructure(string userName, string repoName, string solutionName)
         {
-            string solutionInfoPath;
-            var solutionInfo = GetSolutionInfo(userName, repoName, solutionName, out solutionInfoPath);
-
-            var viewModel = new GithubSolutionStructure()
+    var viewModel = new GithubSolutionStructure()
             {
                 Name = solutionName,
                 RelativePath = CreatePath(userName, repoName, solutionName),
                 RelativeRootPath = CreatePath(userName, repoName, solutionName),
-                SolutionInfo = solutionInfo,
                 ParentRepo = SetUpRepoStructure(userName, repoName)
             };
 
@@ -174,9 +197,6 @@
 
         internal static GithubFileStructure SetUpFileStructure(string userName, string repoName, string solutionName, string pathRemainder)
         {
-            string solutionInfoPath;
-            var solutionInfo = GetSolutionInfo(userName, repoName, solutionName, out solutionInfoPath);
-
             var viewModel = new GithubFileStructure
             {
                 FileName = Path.GetFileName(pathRemainder),
@@ -185,7 +205,6 @@
                 RelativeRootPath = CreatePath(userName, repoName, solutionName), // Points to the root of the treeview
                 //SourceCode = docInfo.HtmlContent,
                 //NumberOfLines = docInfo.NumberOfLines,
-                SolutionInfo = solutionInfo
             };
 
             return viewModel;
@@ -278,23 +297,7 @@
         }
 
 
-        private static JObject GetSolutionInfo(string userName, string repoName, string solutionName, out string solutionInfoPath)
-        {
-            string absolutePath = Path.Combine(StaticHtmlAbsolutePath, userName, repoName, solutionName);
-            solutionInfoPath = Path.Combine(absolutePath, "solutionInfo.json");
-
-            if (!File.Exists(solutionInfoPath))
-            {
-                return null;
-            }
-
-            using (var sr = new StreamReader(solutionInfoPath))
-            {
-                var rawJson = sr.ReadToEnd();
-                var json = JObject.Parse(rawJson);
-                return json;
-            }
-        }
+                                                                                                                        
 
         private static string CreatePath(string part1, string part2 = null, string part3 = null, string part4 = null)
         {
