@@ -39,8 +39,6 @@ namespace SourceBrowser.Generator.Transformers
             using (var sw = new StreamWriter(documentSavePath))
             {
                 var tokenTypes = documentModel.Tokens.Select(n => n.Type).Distinct();
-                var leadingTriviaTypes = documentModel.Tokens.SelectMany(n => n.LeadingTrivia.Select(m => m.Type)).Distinct();
-                var trailingTriviaTypes = documentModel.Tokens.SelectMany(n => n.TrailingTrivia.Select(m => m.Type)).Distinct();
 
                 foreach (var token in documentModel.Tokens)
                 {
