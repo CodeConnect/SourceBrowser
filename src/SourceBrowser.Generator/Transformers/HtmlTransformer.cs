@@ -126,7 +126,8 @@ namespace SourceBrowser.Generator.Transformers
             Token referencedToken;
             if(_tokenLookup.TryGetValue(name, out referencedToken))
             {
-                var path = referencedToken.Document.RelativePath + "#" + referencedToken.LineNumber.ToString();
+                var relPath = Utilities.MakeRelativePath(token.Document.RelativePath, referencedToken.Document.RelativePath);
+                var path = relPath + "#" + referencedToken.LineNumber.ToString();
                 sw.Write(path);
             }
             else
