@@ -30,10 +30,11 @@ namespace SourceBrowser.Generator.Transformers
         protected override void VisitDocument(DocumentModel documentModel)
         {
             var documentSavePath = Path.Combine(_savePath, documentModel.RelativePath);
+            Directory.CreateDirectory(Path.GetDirectoryName(documentSavePath));
+
             var metadataSavePath = documentSavePath + ".json";
             createAndSaveMetadata(documentModel, metadataSavePath);
 
-            Directory.CreateDirectory(Path.GetDirectoryName(documentSavePath));
             //TODO: Write the HTML to the appropriate path
 
             using (var sw = new StreamWriter(documentSavePath))
