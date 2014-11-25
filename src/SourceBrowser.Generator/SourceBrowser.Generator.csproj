@@ -104,6 +104,7 @@
     <Compile Include="Transformers\AbstractWorkspaceVisitor.cs" />
     <Compile Include="Transformers\HtmlTransformer.cs" />
     <Compile Include="Transformers\TokenLookupTransformer.cs" />
+    <Compile Include="Transformers\TreeViewTransformer.cs" />
     <Compile Include="Utilities.cs" />
   </ItemGroup>
   <ItemGroup>
