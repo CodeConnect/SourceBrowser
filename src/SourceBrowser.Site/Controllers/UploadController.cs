@@ -62,7 +62,7 @@
                 htmlTransformer.Visit(workspaceModel);
             }
 
-            return RedirectToAction("LookupFolder", "Browse", new { id = retriever.UserName + "/" + retriever.RepoName });
+            return Redirect("/Browse/" + retriever.UserName + "/" + retriever.RepoName);
         }
 
         /// <summary>
