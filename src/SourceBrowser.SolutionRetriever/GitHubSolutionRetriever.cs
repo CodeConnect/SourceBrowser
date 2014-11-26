@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Text;
-using Octokit;
 using System.IO;
+using LibGit2Sharp;
 
 namespace SourceBrowser.SolutionRetriever
 {
@@ -12,20 +8,10 @@ namespace SourceBrowser.SolutionRetriever
     {
         private string _url;
         private Guid guid = Guid.NewGuid();
-        //private string _userName = String.Empty;
         public string UserName { get; set; }
-        //private string _repoName = string.Empty;
         public string RepoName { get; set; }
 
-        private string _downloadUrl
-        {
-            get
-            {
-                //TODO: retrieve branches instead of assuming
-                //Master exists
-                return _url + "/archive/master.zip";
-            }
-        }
+        private string _githubUrl;
 
         public GitHubRetriever(string url)
         {
@@ -48,54 +34,44 @@ namespace SourceBrowser.SolutionRetriever
             if (String.IsNullOrWhiteSpace(RepoName))
                 return false;
 
-            var githubClient = new GitHubClient(new ProductHeaderValue("SourceBrowser"));
-            try
-            {
-                var repository = githubClient.Repository.Get(UserName, RepoName).Result;
-            }
-            catch (AggregateException e)
-            {
-                //Assuming the inner exception is a NotFoundException
-                return false;
-            }
-
             return true;
         }
 
         public string RetrieveProject()
         {
             string baseRepositoryPath = System.Web.Hosting.HostingEnvironment.MapPath("~/") + "\\GithubStaging\\";
-            if (!Directory.Exists(baseRepositoryPath))
-                Directory.CreateDirectory(baseRepositoryPath);
 
-            string zipName = guid + ".zip";
-            using (var client = new WebClient())
-            {
-                client.DownloadFile(_downloadUrl, baseRepositoryPath + zipName);
-            }
             string absoluteRepositoryPath = baseRepositoryPath + UserName + '\\' + RepoName;
+
+            // libgit2 requires the target directory to be empty
             if (Directory.Exists(absoluteRepositoryPath))
             {
-                try
-                {
-                    Directory.Delete(absoluteRepositoryPath, recursive: true);
-                }
-                catch
-                {
-                    // Swallow.
-                }
+                DeleteReadOnlyDirectory(absoluteRepositoryPath);
             }
+            Directory.CreateDirectory(absoluteRepositoryPath);
 
-            //unpack the zip
-            System.IO.Compression.ZipFile.ExtractToDirectory(baseRepositoryPath + zipName, absoluteRepositoryPath);
-            deleteZipFile(baseRepositoryPath);
+            Repository.Clone(_url, absoluteRepositoryPath);
             return absoluteRepositoryPath;
         }
 
-        private void deleteZipFile(string baseRepoPath)
+        /// <summary>
+        /// Recursively deletes a directory as well as any subdirectories and files. If the files are read-only, they are flagged as normal and then deleted.
+        /// From http://stackoverflow.com/questions/25549589/programatically-delete-local-repository-with-libgit2sharp
+        /// </summary>
+        /// <param name="directory">The name of the directory to remove.</param>
+        public static void DeleteReadOnlyDirectory(string directory)
         {
-            string zipName = guid + ".zip";
-            System.IO.File.Delete(baseRepoPath + zipName);
+            foreach (var subdirectory in Directory.EnumerateDirectories(directory))
+            {
+                DeleteReadOnlyDirectory(subdirectory);
+            }
+            foreach (var fileName in Directory.EnumerateFiles(directory))
+            {
+                var fileInfo = new FileInfo(fileName);
+                fileInfo.Attributes = FileAttributes.Normal;
+                fileInfo.Delete();
+            }
+            Directory.Delete(directory);
         }
     }
 }

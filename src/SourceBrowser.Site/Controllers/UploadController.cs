@@ -4,6 +4,7 @@
     using System.Web.Mvc;
 
     using SourceBrowser.SolutionRetriever;
+    using System;
 
     public class UploadController : Controller
     {
@@ -24,14 +25,20 @@
             var retriever = new GitHubRetriever(githubUrl);
             if (!retriever.IsValidUrl())
             {
-                // TODO: Return error
-                ViewBag.Error = "Invalid GitHub repository. Please try another";
+                ViewBag.Error = "Make sure that the provided path is valid.";
                 return View("Index");
             }
 
-            string filePath = retriever.RetrieveProject();
-            var organizationPath = System.Web.Hosting.HostingEnvironment.MapPath("~/")  + "SB_Files\\" + retriever.UserName;
-            var repoPath = Path.Combine(organizationPath, retriever.RepoName);
+            string filePath = string.Empty;
+            try
+            {
+                filePath = retriever.RetrieveProject();
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Error = "There was an error downloading this repository.";
+                return View("Index");
+            }
 
             // Generate the source browser files for this solution
             var solutionPaths = GetSolutionPaths(filePath);
@@ -40,6 +47,9 @@
                 ViewBag.Error = "No C# solution was found. Ensure that a valid .sln file exists within your repository.";
                 return View("Index");
             }
+
+            var organizationPath = System.Web.Hosting.HostingEnvironment.MapPath("~/") + "SB_Files\\" + retriever.UserName;
+            var repoPath = Path.Combine(organizationPath, retriever.RepoName);
 
             // TODO: Use parallel for.
             foreach (var path in solutionPaths)
