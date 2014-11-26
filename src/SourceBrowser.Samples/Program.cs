@@ -40,7 +40,12 @@ namespace SourceBrowser.Samples
                 Console.WriteLine("...");
 
                 var workspaceModel = solutionAnalyzer.BuildWorkspaceModel(saveDirectory);
-                var htmlTransformer = new HtmlTransformer(workspaceModel, absoluteSaveDirectory);
+
+                var typeTransformer = new TokenLookupTransformer();
+                typeTransformer.Visit(workspaceModel);
+                var tokenLookup = typeTransformer.TokenLookup;
+
+                var htmlTransformer = new HtmlTransformer(tokenLookup, absoluteSaveDirectory);
                 htmlTransformer.Visit(workspaceModel);
 
                 Console.WriteLine("Job successful!");
