@@ -45,7 +45,15 @@ namespace SourceBrowser.Generator
 
         public string GetLink(ISymbol symbol)
         {
-            return baseUrl + "/" + symbol.ContainingAssembly.Name + "/a.html#" + Utilities.GetHash(symbol.GetSymbolId());
+            var symbolId = symbol.GetSymbolId();
+            if (symbolId != null)
+            {
+                return baseUrl + "/" + symbol.ContainingAssembly.Name + "/a.html#" + Utilities.GetHash(symbolId);
+            }
+            else
+            {
+                return null;
+            }
         }
     }
 }

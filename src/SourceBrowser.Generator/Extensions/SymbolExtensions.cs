@@ -19,6 +19,10 @@ namespace SourceBrowser.Generator.Extensions
             string documentationCommentId = String.Empty;
             symbol = symbol.OriginalDefinition;
             documentationCommentId = symbol.GetDocumentationCommentId();
+            if (documentationCommentId == null)
+            {
+                return null;
+            }
             documentationCommentId = documentationCommentId.Replace("#ctor", "ctor");
 
             return documentationCommentId;
