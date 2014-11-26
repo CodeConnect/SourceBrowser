@@ -48,7 +48,7 @@ namespace SourceBrowser.Samples
                 var htmlTransformer = new HtmlTransformer(tokenLookup, absoluteSaveDirectory);
                 htmlTransformer.Visit(workspaceModel);
 
-                var treeViewTransformer = new TreeViewTransformer(absoluteSaveDirectory);
+                var treeViewTransformer = new TreeViewTransformer(absoluteSaveDirectory, "CodeConnect", "SourceBrowser"); // TODO: provide actual username and repo name
                 treeViewTransformer.Visit(workspaceModel);
 
                 Console.WriteLine("Job successful!");
