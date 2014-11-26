@@ -1,13 +1,26 @@
 ﻿namespace SourceBrowser.Site.Models
 {
+    using Newtonsoft.Json.Linq;
     using System;
     using System.Collections.Generic;
+    using SolutionRetriever;
 
+    [Serializable]
     public class GithubUserStructure
     {
         public string Username;
         public string Path;
-        public IList<string> Repos;
+        public IList<GithubRepoStructure> Repos;
+
+        public string FullName;
+        public string AvatarURL;
+        public string GitHubURL;
+        public string BlogURL;
+
+        public void UseLiveData()
+        {
+            GitHubInformationRetriever.GetUserInformation(Username, ref FullName, ref AvatarURL, ref GitHubURL, ref BlogURL);
+        }
 
         public override string ToString()
         {

@@ -25,9 +25,15 @@
         <!--/Bread crumb-->
 
         <div class="row">
-            <aside class="col-xs-4" id="browser">
-                <section>
-
+            <aside class="col-xs-4" id="userInfo">
+                <section class="userDetail">
+                    <img src="@Model.AvatarURL" />
+                    <h3>@Model.FullName</h3>
+                    <h4>@Model.Username</h4>
+                    @if (!String.IsNullOrEmpty(Model.BlogURL))
+                    {
+                        <p class="minor"><a href="@Model.BlogURL" target="_blank">@Model.BlogURL</a></p>
+                    }
                 </section>
             </aside>
 
@@ -35,17 +41,35 @@
             <article class="col-xs-8" id="main">
                 <section>
 
-                    <h3>Browsing @Model.Username's repositories.</h3>
-
-                    <p>Pick one:</p>
+                    <h2>Browsing @Model.FullName's repositories.</h2>
                     <ul>
                         @foreach (var repo in Model.Repos)
                         {
-                            <li><a href="/Browse/@Model.Username/@repo/" target="_self">@repo</a></li>
+                            <li class="hide-bullet">
+                                <a class="repoBadge" href="/Browse/@Model.Username/@repo.Name/" target="_self">
+                                    <div class="row">
+                                        <div class="col-xs-8">
+                                            <h4>@repo.Name</h4>
+                                        </div>
+                                        <div class="col-xs-4">
+                                            <p class="match-h-margin">
+                                                @repo.language, @repo.starsCount stars, @repo.forksCount forks
+                                            </p>
+                                        </div>
+                                    </div>
+                                    
+                                    <p>@repo.description</p>
+
+                                    @if (!String.IsNullOrEmpty(repo.homepage))
+                                    {
+                                        <p class="minor">@repo.homepage</p>
+                                    }
+                                </a>
+                            </li>
                         }
                     </ul>
                     
-                    <p>Or <a href="//github.com/@Model.Username/?tab=repositories" target="_blank">view @Model.Username's repositories on github.</a></p>
+                    <p>Or <a href="@Model.GitHubURL/?tab=repositories" target="_blank">view all @Model.FullName's repositories on github.</a></p>
                 </section>
             </article>
         </div>
