@@ -80,8 +80,6 @@ namespace SourceBrowser.Generator
             tokenModel.FullName = token.CSharpKind().ToString();
             tokenModel.Value = token.ToString();
             tokenModel.Type = "Other";
-    var x = token.GetLocation();
-            var lineSpan = x.GetLineSpan();
             tokenModel.LineNumber = token.GetLocation().GetLineSpan().StartLinePosition.Line;
 
             return tokenModel;
