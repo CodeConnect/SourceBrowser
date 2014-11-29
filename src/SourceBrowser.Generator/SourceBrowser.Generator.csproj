@@ -89,6 +89,7 @@
     <Compile Include="DocumentWalker.cs" />
     <Compile Include="Extensions\SymbolExtensions.cs" />
     <Compile Include="Hacks\DependencyHacks.cs" />
+    <Compile Include="Model\CSharp\CSharpTokenTypes.cs" />
     <Compile Include="Model\DocumentModel.cs" />
     <Compile Include="Model\FolderModel.cs" />
     <Compile Include="Model\IProjectItem.cs" />

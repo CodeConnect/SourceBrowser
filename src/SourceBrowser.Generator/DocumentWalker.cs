@@ -9,6 +9,7 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using SourceBrowser.Generator.Extensions;
 using SourceBrowser.Generator.Model;
+using SourceBrowser.Generator.Model.CSharp;
 
 namespace SourceBrowser.Generator
 {
@@ -79,7 +80,7 @@ namespace SourceBrowser.Generator
             var tokenModel = new Token(this.DocumentModel);
             tokenModel.FullName = token.CSharpKind().ToString();
             tokenModel.Value = token.ToString();
-            tokenModel.Type = "Other";
+            tokenModel.Type = CSharpTokenTypes.OTHER;
             tokenModel.LineNumber = token.GetLocation().GetLineSpan().StartLinePosition.Line;
 
             return tokenModel;
@@ -93,7 +94,7 @@ namespace SourceBrowser.Generator
             var tokenModel = new Token(this.DocumentModel);
             tokenModel.FullName = token.CSharpKind().ToString();
             tokenModel.Value = token.ToString();
-            tokenModel.Type = "Keyword";
+            tokenModel.Type = CSharpTokenTypes.KEYWORD;
             tokenModel.LineNumber = token.GetLocation().GetLineSpan().StartLinePosition.Line;
             return tokenModel;
         }
@@ -105,7 +106,14 @@ namespace SourceBrowser.Generator
         public Token ProcessDeclarationToken(SyntaxToken token, ISymbol parentSymbol)
         {
             var tokenModel = new Token(this.DocumentModel);
-            tokenModel.Type = token.CSharpKind().ToString();
+            if (parentSymbol is INamedTypeSymbol)
+            {
+                tokenModel.Type = CSharpTokenTypes.TYPE;
+            }
+            else
+            {
+                tokenModel.Type = CSharpTokenTypes.IDENTIFIER;
+            }
             tokenModel.Value = token.ToString();
             tokenModel.LineNumber = token.GetLocation().GetLineSpan().StartLinePosition.Line;
             tokenModel.FullName = parentSymbol.ToString();
@@ -123,7 +131,14 @@ namespace SourceBrowser.Generator
             var tokenModel = new Token(this.DocumentModel);
             tokenModel.FullName = symbol.ToString();
             tokenModel.Value = token.ToString();
-            tokenModel.Type = token.CSharpContextualKind().ToString();
+            if (symbol is INamedTypeSymbol)
+            {
+                tokenModel.Type = CSharpTokenTypes.TYPE;
+            }
+            else
+            {
+                tokenModel.Type = CSharpTokenTypes.IDENTIFIER;
+            }
             tokenModel.LineNumber = token.GetLocation().GetLineSpan().StartLinePosition.Line;
             
             //If we can find the declaration, we'll link it ourselves
