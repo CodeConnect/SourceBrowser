@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace SourceBrowser.Generator.Transformers
 {
@@ -66,33 +67,14 @@ namespace SourceBrowser.Generator.Transformers
             }
         }
 
-        private void processToken(StreamWriter sb, Token token)
+        private void processToken(StreamWriter sw, Token token)
         {
-            processTriviaCollection(sb, token.LeadingTrivia);
+            processTriviaCollection(sw, token.LeadingTrivia);
 
-            switch (token.Type)
-            {
-                case CSharpTokenTypes.KEYWORD:
-                    processKeyword(sb, token);
-                    break;
-                case CSharpTokenTypes.IDENTIFIER:
-                case CSharpTokenTypes.TYPE:
-                    processIdentifier(sb, token);
-                    break;
-                case CSharpTokenTypes.OTHER:
-                    processOther(sb, token);
-                    break;
-                default:
-                    throw new InvalidOperationException("Invalid token type");
-            }
-
-            processTriviaCollection(sb, token.TrailingTrivia);
-        }
-
-        private void processIdentifier(StreamWriter sw, Token token)
-        {
-            sw.Write("<span class='identifier'>");
-            if (token.Link != null)
+            sw.Write("<span class='");
+            sw.Write(HttpUtility.HtmlEncode(token.Type));
+            sw.Write("'>");
+            if(token.Link != null)
             {
                 sw.Write("<a href='");
 
@@ -105,14 +87,17 @@ namespace SourceBrowser.Generator.Transformers
                     processUrlLink(sw, token);
 
                 sw.Write("'>");
-                sw.Write(token.Value);
+                sw.Write(HttpUtility.HtmlEncode(token.Value));
                 sw.Write("</a>");
+
             }
             else
             {
-                sw.Write(token.Value);
+                sw.Write(HttpUtility.HtmlEncode(token.Value));
             }
+
             sw.Write("</span>");
+            processTriviaCollection(sw, token.TrailingTrivia);
         }
 
         private void processUrlLink(StreamWriter sw, Token token)
@@ -140,17 +125,7 @@ namespace SourceBrowser.Generator.Transformers
             }
         }
 
-        private void processOther(StreamWriter sw, Token token)
-        {
-            sw.Write(token.Value);
-        }
 
-        private void processKeyword(StreamWriter sw, Token token)
-        {
-            sw.Write("<span class='keyword'>");
-            sw.Write(token.Value);
-            sw.Write("</span>");
-        }
 
         private void processTriviaCollection(StreamWriter sw, ICollection<Trivia> triviaCollection)
         {
