@@ -3,7 +3,7 @@
     margin:20px;
 }
 
-.source_code span
+.source-code span
 {
     font-family:monospace;
 }
@@ -44,7 +44,15 @@ textarea {
     color:blue;
 }
 
+.Type {
+    color:#2DADED;
+}
+
 .Comment {
     color: #18890D;
+}
+
+.source-code a {
+    color:#333333;
 }
 
