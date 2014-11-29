@@ -4,6 +4,7 @@
     using System.Web.Mvc;
 
     using SourceBrowser.Site.Repositories;
+    using System.IO;
 
     public class BrowseController : Controller
     {
@@ -42,6 +43,8 @@
             {
                 return this.View("LookupError");
             }
+
+            ViewBag.TreeView = loadTreeView(username, repository);
             var viewModel = BrowserRepository.SetUpSolutionStructure(username, repository, path);
             return View("LookupFolder", viewModel);
         }
@@ -60,8 +63,22 @@
             int numberOfLines = metaData["NumberOfLines"].ToObject<int>();
             var rawHtml = BrowserRepository.GetDocumentHtml(username, repository, path);
 
+            ViewBag.TreeView = loadTreeView(username, repository);
             var viewModel = BrowserRepository.SetUpFileStructure(username, repository, path, rawHtml, numberOfLines);
             return View("LookupFile", viewModel);
+        }
+
+        private dynamic loadTreeView(string username, string repository)
+        {
+            var organizationPath = System.Web.Hosting.HostingEnvironment.MapPath("~/") + "SB_Files\\";
+            string treeViewFileName = "treeview.html";
+            var treeViewPath = Path.Combine(organizationPath, username, repository, treeViewFileName);
+
+            var treeViewFile = new StreamReader(treeViewPath);
+            string treeViewString = treeViewFile.ReadToEnd();
+            treeViewFile.Close();
+
+            return treeViewString;
         }
     }
 }
