@@ -60,6 +60,10 @@
                 //Another pass to generate HTMLs
                 var htmlTransformer = new HtmlTransformer(tokenLookup, repoPath);
                 htmlTransformer.Visit(workspaceModel);
+
+                // Generate HTML of the tree view
+                var treeViewTransformer = new TreeViewTransformer(repoPath, retriever.UserName, retriever.RepoName);
+                treeViewTransformer.Visit(workspaceModel);
             }
 
             return Redirect("/Browse/" + retriever.UserName + "/" + retriever.RepoName);
