@@ -17,6 +17,7 @@ namespace SourceBrowser.Generator.Transformers
         private readonly string _userNameAndRepoPrefix;
 
         private const string _treeViewOutputFile = "treeView.html";
+        private int depth = 0;
 
         public TreeViewTransformer(string savePath, string userName, string repoName)
         {
@@ -34,11 +35,15 @@ namespace SourceBrowser.Generator.Transformers
             {
                 _writer = new HtmlTextWriter(stringWriter);
 
-                _writer.AddAttribute(HtmlTextWriterAttribute.Id, getFullId(workspaceModel));
+                _writer.AddAttribute(HtmlTextWriterAttribute.Id, "browserTree");
                 _writer.AddAttribute(HtmlTextWriterAttribute.Class, "treeview");
+                _writer.AddAttribute("data-role", "treeview");
                 _writer.RenderBeginTag(HtmlTextWriterTag.Ul);
 
+
+                depth++;
                 base.VisitWorkspace(workspaceModel);
+                depth--;
 
                 _writer.RenderEndTag();
                 _writer.WriteLine();
@@ -69,7 +74,13 @@ namespace SourceBrowser.Generator.Transformers
 
             // Folder item is not a link. It is merely used to hide/show the underlying UL tag
             _writer.AddAttribute(HtmlTextWriterAttribute.Href, "#");
+            _writer.AddAttribute(HtmlTextWriterAttribute.Style, "margin-left: " + depth * 10 + "px;");
             _writer.RenderBeginTag(HtmlTextWriterTag.A);
+
+            // The expander:
+            _writer.AddAttribute(HtmlTextWriterAttribute.Class, "node-toggle");
+            _writer.RenderBeginTag(HtmlTextWriterTag.Span);
+            _writer.RenderEndTag(); // span
 
             _writer.Write(folderModel.Name);
 
@@ -82,7 +93,9 @@ namespace SourceBrowser.Generator.Transformers
             // The underlying tree branch:
             _writer.RenderBeginTag(HtmlTextWriterTag.Ul);
 
+            depth++;
             base.VisitFolder(folderModel);
+            depth--;
 
             _writer.RenderEndTag(); // ul
             _writer.WriteLine();
@@ -97,6 +110,7 @@ namespace SourceBrowser.Generator.Transformers
             _writer.RenderBeginTag(HtmlTextWriterTag.Li);
 
             _writer.AddAttribute(HtmlTextWriterAttribute.Href, getHyperLink(documentModel));
+            _writer.AddAttribute(HtmlTextWriterAttribute.Style, "margin-left: " + depth * 10 + "px;");
             _writer.RenderBeginTag(HtmlTextWriterTag.A);
 
             _writer.Write(documentModel.Name);
@@ -113,11 +127,19 @@ namespace SourceBrowser.Generator.Transformers
         {
             if (item.Parent != null)
             {
-                return getFullId(item.Parent) + "/" + item.Name;
+                var parentsId = getFullId(item.Parent);
+                if (parentsId == String.Empty)
+                {
+                    return item.Name; // We don't want a slash that follows nothing.
+                }
+                else
+                {
+                    return parentsId + "/" + item.Name;
+                }
             }
             else
             {
-                return item.Name;
+                return String.Empty; // We don't want to include the solution name in the ID
             }
         }
 
