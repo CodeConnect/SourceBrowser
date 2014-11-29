@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 using SourceBrowser.Generator.Model;
+using SourceBrowser.Generator.Model.CSharp;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -71,13 +72,14 @@ namespace SourceBrowser.Generator.Transformers
 
             switch (token.Type)
             {
-                case "Keyword":
+                case CSharpTokenTypes.KEYWORD:
                     processKeyword(sb, token);
                     break;
-                case "IdentifierToken":
+                case CSharpTokenTypes.IDENTIFIER:
+                case CSharpTokenTypes.TYPE:
                     processIdentifier(sb, token);
                     break;
-                case "Other":
+                case CSharpTokenTypes.OTHER:
                     processOther(sb, token);
                     break;
                 default:
