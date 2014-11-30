@@ -44,11 +44,8 @@
             // TODO: Use parallel for.
             foreach (var path in solutionPaths)
             {
-                System.Diagnostics.Debug.WriteLine("path: ", path);
                 var solutionName = Path.GetFileName(path);
                 var solutionPath = Path.Combine(repoPath, solutionName); 
-                System.Diagnostics.Debug.WriteLine("soln path: ", solutionPath);
-
                 var sourceGenerator = new Generator.SolutionAnalayzer(path);
                 //Build the workspace
                 var workspaceModel = sourceGenerator.BuildWorkspaceModel(solutionPath);
