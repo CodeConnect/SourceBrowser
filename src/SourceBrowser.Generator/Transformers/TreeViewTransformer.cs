@@ -32,9 +32,8 @@ namespace SourceBrowser.Generator.Transformers
         protected override void VisitWorkspace(WorkspaceModel workspaceModel)
         {
             using (var stringWriter = new StreamWriter(_savePath, false))
+            using(_writer = new HtmlTextWriter(stringWriter))
             {
-                _writer = new HtmlTextWriter(stringWriter);
-
                 _writer.AddAttribute(HtmlTextWriterAttribute.Id, "browserTree");
                 _writer.AddAttribute(HtmlTextWriterAttribute.Class, "treeview");
                 _writer.AddAttribute("data-role", "treeview");
@@ -46,8 +45,6 @@ namespace SourceBrowser.Generator.Transformers
 
                 _writer.RenderEndTag();
                 _writer.WriteLine();
-
-                _writer.Dispose();
             }
         }
 
