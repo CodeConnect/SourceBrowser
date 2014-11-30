@@ -45,10 +45,11 @@
             foreach (var path in solutionPaths)
             {
                 var solutionName = Path.GetFileName(path);
-                var solutionPath = Path.Combine(repoPath, solutionName); 
+                var modelSavePath = Path.Combine(repoPath, solutionName); 
                 var sourceGenerator = new Generator.SolutionAnalayzer(path);
+
                 //Build the workspace
-                var workspaceModel = sourceGenerator.BuildWorkspaceModel(solutionPath);
+                var workspaceModel = sourceGenerator.BuildWorkspaceModel(modelSavePath);
 
                 //One pass to lookup all declarations
                 var typeTransformer = new TokenLookupTransformer();
