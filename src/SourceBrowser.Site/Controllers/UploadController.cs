@@ -31,8 +31,7 @@
             }
 
             string filePath = retriever.RetrieveProject();
-            var organizationPath = System.Web.Hosting.HostingEnvironment.MapPath("~/")  + "SB_Files\\" + retriever.UserName;
-            var repoPath = Path.Combine(organizationPath, retriever.RepoName);
+            var repoPath = Path.Combine(System.Web.Hosting.HostingEnvironment.MapPath("~/"), "SB_Files", retriever.UserName, retriever.RepoName);
 
             // Generate the source browser files for this solution
             var solutionPaths = GetSolutionPaths(filePath);
