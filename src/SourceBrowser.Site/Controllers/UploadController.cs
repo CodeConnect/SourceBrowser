@@ -45,9 +45,8 @@
             // TODO: Use parallel for.
             foreach (var path in solutionPaths)
             {
-                var filenamePosition = path.LastIndexOf('\\');
-                var solutionName = path.Substring(filenamePosition);
-                var solutionPath = repoPath + solutionName; // don't use Path.Combine because solutionName contains "\"
+                var solutionName = Path.GetFileName(path);
+                var solutionPath = Path.Combine(repoPath, solutionName); 
                 var sourceGenerator = new Generator.SolutionAnalayzer(path);
                 //Build the workspace
                 var workspaceModel = sourceGenerator.BuildWorkspaceModel(solutionPath);
