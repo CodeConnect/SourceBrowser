@@ -59,10 +59,6 @@ namespace SourceBrowser.Generator.Transformers
             }
         }
 
-        protected override void VisitProjectItem(IProjectItem projectItem)
-        {
-            base.VisitProjectItem(projectItem);
-        }
 
         protected override void VisitFolder(FolderModel folderModel)
         {

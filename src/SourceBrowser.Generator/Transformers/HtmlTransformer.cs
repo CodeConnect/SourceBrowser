@@ -23,12 +23,6 @@ namespace SourceBrowser.Generator.Transformers
             _tokenLookup = tokenLookup;
             _savePath = savePath;
         }
-
-        protected override void VisitFolder(FolderModel folderModel)
-        {
-            base.VisitFolder(folderModel);
-        }
-
         protected override void VisitDocument(DocumentModel documentModel)
         {
             var documentSavePath = Path.Combine(_savePath, documentModel.RelativePath);
