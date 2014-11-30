@@ -40,7 +40,6 @@ namespace SourceBrowser.Generator.Transformers
                 _writer.AddAttribute("data-role", "treeview");
                 _writer.RenderBeginTag(HtmlTextWriterTag.Ul);
 
-
                 depth++;
                 base.VisitWorkspace(workspaceModel);
                 depth--;
@@ -48,14 +47,7 @@ namespace SourceBrowser.Generator.Transformers
                 _writer.RenderEndTag();
                 _writer.WriteLine();
 
-                try
-                {
-                    _writer.Dispose();
-                }
-                catch
-                {
-                    throw;
-                }
+                _writer.Dispose();
             }
         }
 
