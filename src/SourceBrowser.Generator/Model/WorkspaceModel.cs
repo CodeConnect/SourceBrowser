@@ -18,6 +18,8 @@ namespace SourceBrowser.Generator.Model
             get; private set;
         }
 
+        public string ContainingPath { get; set; }
+
         //The WorkspaceModel has no parent. It is the top level item.
         public IProjectItem Parent
         {
@@ -27,9 +29,12 @@ namespace SourceBrowser.Generator.Model
             }
         }
 
-        public WorkspaceModel(string name)
+
+
+        public WorkspaceModel(string name, string containingPath)
         {
             Name = name;
+            ContainingPath = containingPath;
             Children = new List<IProjectItem>();
         }
 

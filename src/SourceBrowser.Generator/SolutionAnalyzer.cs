@@ -65,7 +65,8 @@ namespace SourceBrowser.Generator
         public WorkspaceModel BuildWorkspaceModel(string saveDirectory)
         {
             string solutionName = Path.GetFileName(_solution.FilePath);
-            WorkspaceModel workspaceModel = new WorkspaceModel(solutionName);
+            var containingPath = Directory.GetParent(_solution.FilePath).FullName;
+            WorkspaceModel workspaceModel = new WorkspaceModel(solutionName, containingPath);
             //Build document model for every file.
             foreach (var doc in _solution.Projects.SelectMany(n => n.Documents))
             {
@@ -90,14 +91,18 @@ namespace SourceBrowser.Generator
         private IProjectItem findDocumentParent(WorkspaceModel workspaceModel, Document document)
         {
             IProjectItem currentNode = workspaceModel;
+            string pathSoFar = Directory.GetParent(document.Project.FilePath).FullName;
+
             foreach (var folder in document.Folders)
             {
+                pathSoFar = Path.Combine(pathSoFar, folder);
                 var childFolder = currentNode.Children.Where(n => n.Name == folder).SingleOrDefault();
                 if (childFolder == null)
                 {
-                    childFolder = new FolderModel(currentNode, folder);
+                    childFolder = new FolderModel(currentNode, folder, pathSoFar);
                     currentNode.Children.Add(childFolder);
                 }
+                pathSoFar = Path.Combine(pathSoFar, currentNode.Name);
                 currentNode = childFolder;
             }
             return currentNode;

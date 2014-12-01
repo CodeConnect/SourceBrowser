@@ -14,24 +14,34 @@ namespace SourceBrowser.Generator.Model
 
         public string Name { get; set; }
 
-        public FolderModel(IProjectItem parent, string name)
+        public string RelativePath { get; set; }
+
+        public FolderModel(IProjectItem parent, string name, string path)
         {
             Parent = parent;
             Name = name;
+            RelativePath = findRelativePath(path);
             Children = new List<IProjectItem>();    
+        }
+
+        private string findRelativePath(string path)
+        {
+            //Find the root WorkspaceModel
+            IProjectItem currentNode = this;
+            while(currentNode.Parent != null)
+            {
+                currentNode = currentNode.Parent;
+            }
+
+            string rootPath = ((WorkspaceModel)currentNode).ContainingPath;
+            var relativePath = path.Remove(0, rootPath.Length);
+
+            return relativePath;
         }
 
         public string GetPath()
         {
-            IProjectItem currentNode = this;
-            string path = "//" + this.Name;
-            while(!(currentNode.Parent is WorkspaceModel))
-            {
-                path = "//" + currentNode.Parent.Name + path;
-                currentNode = currentNode.Parent;
-            }
-
-            return path;
+            return RelativePath;
         }
     }
 }
