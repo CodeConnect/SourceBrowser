@@ -12,3 +12,32 @@ $(function () {
         }
     );
 });
+
+$(document).ready(function () {
+    var path = window.location.pathname;
+    expandTreeView(path);
+});
+
+function expandTreeView(path) {
+    var parts = path.split("/");
+    var pathToDate = "";
+
+    // Ignore the first three elements from the path:
+    // Browse/UserName/RepoName/Folder1/Folder2/FileName
+    for (var partNumber = 4; partNumber < parts.length; partNumber++)
+    {
+        pathToDate = pathToDate + "/" + parts[partNumber];
+        expandNode(pathToDate);
+    }
+}
+
+function expandNode(path) {
+    //console.log(path);
+    var selector = "li[id*='" + path + "']";
+    //console.log("Looking for " + selector);
+    var node = $(selector);
+    if (node.length) {
+        console.log("Found " + path);
+        node.removeClass("collapsed");
+    }
+}
