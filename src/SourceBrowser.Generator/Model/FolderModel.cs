@@ -14,7 +14,7 @@ namespace SourceBrowser.Generator.Model
 
         public string Name { get; set; }
 
-        public string RelativePath { get; set; }
+        public string RelativePath { get; }
 
         public FolderModel(IProjectItem parent, string name, string path)
         {
@@ -33,15 +33,10 @@ namespace SourceBrowser.Generator.Model
                 currentNode = currentNode.Parent;
             }
 
-            string rootPath = ((WorkspaceModel)currentNode).ContainingPath;
+            string rootPath = ((WorkspaceModel)currentNode).RelativePath;
             var relativePath = path.Remove(0, rootPath.Length);
 
             return relativePath;
-        }
-
-        public string GetPath()
-        {
-            return RelativePath;
         }
     }
 }

@@ -91,7 +91,7 @@ namespace SourceBrowser.Generator
         private IProjectItem findDocumentParent(WorkspaceModel workspaceModel, Document document)
         {
             IProjectItem currentNode = workspaceModel;
-            var rootPath = workspaceModel.ContainingPath;
+            var rootPath = workspaceModel.RelativePath;
             var docPath = Directory.GetParent(document.FilePath).FullName;
             if (!docPath.StartsWith(rootPath))
                 return currentNode;

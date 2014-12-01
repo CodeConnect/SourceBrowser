@@ -16,7 +16,7 @@ namespace SourceBrowser.Generator.Model
 
         public string Name { get; set; }
 
-        public string RelativePath { get; set; }
+        public string RelativePath { get; }
 
         public int NumberOfLines { get; set; }
 
@@ -28,19 +28,6 @@ namespace SourceBrowser.Generator.Model
             NumberOfLines = numberOfLines;
             Children = new List<IProjectItem>();
             Tokens = new List<Token>();
-        }
-
-        public string GetPath()
-        {
-            IProjectItem currentNode = this;
-            string path = "//" + this.Name;
-            while (!(currentNode.Parent is WorkspaceModel))
-            {
-                path = "//" + currentNode.Parent.Name + path;
-                currentNode = currentNode.Parent;
-            }
-
-            return path;
         }
     }
 }

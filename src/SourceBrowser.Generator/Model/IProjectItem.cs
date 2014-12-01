@@ -17,6 +17,6 @@ namespace SourceBrowser.Generator.Model
 
         ICollection<IProjectItem> Children { get; }
 
-        string GetPath();
+        string RelativePath { get; }
     }
 }

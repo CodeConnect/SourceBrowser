@@ -55,7 +55,7 @@ namespace SourceBrowser.Generator.Transformers
             // The clicable element with the folder name:
             _writer.AddAttribute(HtmlTextWriterAttribute.Class, "node collapsed");
             // ID will be used to programmatically show the underlying UL tag by removing "collapsed" class
-            _writer.AddAttribute(HtmlTextWriterAttribute.Id, folderModel.GetPath());
+            _writer.AddAttribute(HtmlTextWriterAttribute.Id, folderModel.RelativePath);
             _writer.RenderBeginTag(HtmlTextWriterTag.Li);
 
             // Folder item is not a link. It is merely used to hide/show the underlying UL tag
