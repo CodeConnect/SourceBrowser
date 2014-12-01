@@ -33,11 +33,16 @@ function expandTreeView(path) {
 
 function expandNode(path) {
     //console.log(path);
-    var selector = "li[id*='" + path + "']";
+    var selector = "li[id='" + path + "']";
     //console.log("Looking for " + selector);
     var node = $(selector);
+    var child = $(selector + " > ul");
     if (node.length) {
-        console.log("Found " + path);
+        console.log("Found node " + path);
         node.removeClass("collapsed");
+    }
+    if (child.length) {
+        console.log("Found child " + path);
+        child.show();
     }
 }
