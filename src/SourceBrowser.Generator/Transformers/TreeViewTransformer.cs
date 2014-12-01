@@ -55,7 +55,10 @@ namespace SourceBrowser.Generator.Transformers
             // The clicable element with the folder name:
             _writer.AddAttribute(HtmlTextWriterAttribute.Class, "node collapsed");
             // ID will be used to programmatically show the underlying UL tag by removing "collapsed" class
-            _writer.AddAttribute(HtmlTextWriterAttribute.Id, folderModel.RelativePath);
+
+            //NOTE: We need to correct the backslashes to forward slashes... Thanks Windows...
+            var urlStylePath = folderModel.RelativePath.Replace('\\','/');
+            _writer.AddAttribute(HtmlTextWriterAttribute.Id, urlStylePath);
             _writer.RenderBeginTag(HtmlTextWriterTag.Li);
 
             // Folder item is not a link. It is merely used to hide/show the underlying UL tag
@@ -95,8 +98,11 @@ namespace SourceBrowser.Generator.Transformers
             _writer.AddAttribute(HtmlTextWriterAttribute.Class, "node collapsed");
             _writer.RenderBeginTag(HtmlTextWriterTag.Li);
 
+            //NOTE: We need to correct the backslashes to forward slashes... Thanks Windows...
+
             string linkPath = Path.Combine(_userNameAndRepoPrefix, documentModel.RelativePath);
-            _writer.AddAttribute(HtmlTextWriterAttribute.Href, linkPath);
+            var urlStylePath = linkPath.Replace('\\','/');
+            _writer.AddAttribute(HtmlTextWriterAttribute.Href, urlStylePath);
             _writer.AddAttribute(HtmlTextWriterAttribute.Style, "margin-left: " + depth * 10 + "px;");
             _writer.RenderBeginTag(HtmlTextWriterTag.A);
 
