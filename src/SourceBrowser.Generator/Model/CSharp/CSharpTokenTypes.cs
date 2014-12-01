@@ -12,6 +12,7 @@ namespace SourceBrowser.Generator.Model.CSharp
         public const string IDENTIFIER = "Identifier";
         public const string KEYWORD = "Keyword";
         public const string TYPE = "Type";
+        public const string STRING = "String";
         public const string OTHER = "Other";
     }
 }

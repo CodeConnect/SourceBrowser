@@ -39,7 +39,7 @@ namespace SourceBrowser.Generator
         {
             string str = String.Empty;
             Token tokenModel = null;
-
+          
             if (token.IsKeyword())
             {
                 tokenModel = ProcessKeyword(token);
@@ -47,6 +47,10 @@ namespace SourceBrowser.Generator
             else if (token.CSharpKind() == SyntaxKind.IdentifierToken)
             {
                 tokenModel = ProcessIdentifier(token);
+            }
+            else if(token.CSharpKind() == SyntaxKind.StringLiteralToken)
+            {
+                tokenModel = ProcessStringLiteral(token);
             }
             else
             {
@@ -60,6 +64,8 @@ namespace SourceBrowser.Generator
 
             DocumentModel.Tokens.Add(tokenModel);
         }
+
+     
 
         private ICollection<Trivia> ProcessTrivia(SyntaxTriviaList triviaList)
         {
@@ -94,7 +100,17 @@ namespace SourceBrowser.Generator
             var tokenModel = new Token(this.DocumentModel);
             tokenModel.FullName = token.CSharpKind().ToString();
             tokenModel.Value = token.ToString();
-            tokenModel.Type = CSharpTokenTypes.KEYWORD;
+            tokenModel.Type = CSharpTokenTypes.KEYWORD; 
+            tokenModel.LineNumber = token.GetLocation().GetLineSpan().StartLinePosition.Line;
+            return tokenModel;
+        }
+
+        private Token ProcessStringLiteral(SyntaxToken token)
+        {
+            var tokenModel = new Token(this.DocumentModel);
+            tokenModel.FullName = token.CSharpKind().ToString();
+            tokenModel.Value = token.ToString();
+            tokenModel.Type = CSharpTokenTypes.STRING;
             tokenModel.LineNumber = token.GetLocation().GetLineSpan().StartLinePosition.Line;
             return tokenModel;
         }
