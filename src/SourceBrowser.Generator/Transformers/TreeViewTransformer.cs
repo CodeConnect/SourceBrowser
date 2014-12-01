@@ -54,7 +54,7 @@ namespace SourceBrowser.Generator.Transformers
             // The clicable element with the folder name:
             _writer.AddAttribute(HtmlTextWriterAttribute.Class, "node collapsed");
             // ID will be used to programmatically show the underlying UL tag by removing "collapsed" class
-            _writer.AddAttribute(HtmlTextWriterAttribute.Id, getFullId(folderModel)); 
+            _writer.AddAttribute(HtmlTextWriterAttribute.Id, folderModel.GetPath());
             _writer.RenderBeginTag(HtmlTextWriterTag.Li);
 
             // Folder item is not a link. It is merely used to hide/show the underlying UL tag
@@ -106,31 +106,6 @@ namespace SourceBrowser.Generator.Transformers
 
             _writer.RenderEndTag(); // li
             _writer.WriteLine();
-        }
-
-        private string getFullId(IProjectItem item)
-        {
-            if (item.Parent != null)
-            {
-                var parentsId = getFullId(item.Parent);
-                if (parentsId == String.Empty)
-                {
-                    return item.Name; // We don't want a slash that follows nothing.
-                }
-                else
-                {
-                    return parentsId + "/" + item.Name;
-                }
-            }
-            else
-            {
-                return String.Empty; // We don't want to include the solution name in the ID
-            }
-        }
-
-        private string getHyperLink(IProjectItem item)
-        {
-            return _userNameAndRepoPrefix + getFullId(item);
         }
     }
 }

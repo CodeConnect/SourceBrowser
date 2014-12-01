@@ -20,5 +20,18 @@ namespace SourceBrowser.Generator.Model
             Name = name;
             Children = new List<IProjectItem>();    
         }
+
+        public string GetPath()
+        {
+            IProjectItem currentNode = this;
+            string path = "//" + this.Name;
+            while(!(currentNode.Parent is WorkspaceModel))
+            {
+                path = "//" + currentNode.Parent.Name + path;
+                currentNode = currentNode.Parent;
+            }
+
+            return path;
+        }
     }
 }
