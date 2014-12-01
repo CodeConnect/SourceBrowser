@@ -25,7 +25,7 @@ namespace SourceBrowser.Generator.Transformers
         }
         protected override void VisitDocument(DocumentModel documentModel)
         {
-            var documentSavePath = Path.Combine(_savePath, documentModel.ContainingPath);
+            var documentSavePath = Path.Combine(_savePath, documentModel.RelativePath);
             Directory.CreateDirectory(Path.GetDirectoryName(documentSavePath));
 
             var metadataSavePath = documentSavePath + ".json";
@@ -108,7 +108,7 @@ namespace SourceBrowser.Generator.Transformers
             Token referencedToken;
             if(_tokenLookup.TryGetValue(name, out referencedToken))
             {
-                var relPath = Utilities.MakeRelativePath(token.Document.ContainingPath, referencedToken.Document.ContainingPath);
+                var relPath = Utilities.MakeRelativePath(token.Document.RelativePath, referencedToken.Document.RelativePath);
                 var path = relPath + "#" + referencedToken.LineNumber.ToString();
                 sw.Write(path);
             }

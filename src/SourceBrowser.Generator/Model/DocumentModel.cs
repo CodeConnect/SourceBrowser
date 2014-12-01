@@ -16,15 +16,15 @@ namespace SourceBrowser.Generator.Model
 
         public string Name { get; set; }
 
-        public string ContainingPath { get; set; }
+        public string RelativePath { get; set; }
 
         public int NumberOfLines { get; set; }
 
-        public DocumentModel(IProjectItem parent, string name, string containingPath, int numberOfLines)
+        public DocumentModel(IProjectItem parent, string name, string relativePath, int numberOfLines)
         {
             Parent = parent;
             Name = name;
-            ContainingPath = containingPath;
+            RelativePath = relativePath;
             NumberOfLines = numberOfLines;
             Children = new List<IProjectItem>();
             Tokens = new List<Token>();

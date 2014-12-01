@@ -95,7 +95,7 @@ namespace SourceBrowser.Generator.Transformers
             _writer.AddAttribute(HtmlTextWriterAttribute.Class, "node collapsed");
             _writer.RenderBeginTag(HtmlTextWriterTag.Li);
 
-            string linkPath = Path.Combine(_userNameAndRepoPrefix, documentModel.ContainingPath);
+            string linkPath = Path.Combine(_userNameAndRepoPrefix, documentModel.RelativePath);
             _writer.AddAttribute(HtmlTextWriterAttribute.Href, linkPath);
             _writer.AddAttribute(HtmlTextWriterAttribute.Style, "margin-left: " + depth * 10 + "px;");
             _writer.RenderBeginTag(HtmlTextWriterTag.A);
