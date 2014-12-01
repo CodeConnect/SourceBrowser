@@ -26,7 +26,7 @@ namespace SourceBrowser.Generator.Transformers
             {
                 throw new ArgumentNullException("TreeViewTransformer needs to be provided the user name and the repo name.");
             }
-            _userNameAndRepoPrefix = "/Browse/" + userName + "/" + repoName + "/";
+            _userNameAndRepoPrefix = Path.Combine("/Browse", userName, repoName);
         }
 
         protected override void VisitWorkspace(WorkspaceModel workspaceModel)
@@ -94,7 +94,8 @@ namespace SourceBrowser.Generator.Transformers
             _writer.AddAttribute(HtmlTextWriterAttribute.Class, "node collapsed");
             _writer.RenderBeginTag(HtmlTextWriterTag.Li);
 
-            _writer.AddAttribute(HtmlTextWriterAttribute.Href, _userNameAndRepoPrefix + documentModel.RelativePath); 
+            string linkPath = Path.Combine(_userNameAndRepoPrefix, documentModel.RelativePath);
+            _writer.AddAttribute(HtmlTextWriterAttribute.Href, linkPath);
             _writer.AddAttribute(HtmlTextWriterAttribute.Style, "margin-left: " + depth * 10 + "px;");
             _writer.RenderBeginTag(HtmlTextWriterTag.A);
 
