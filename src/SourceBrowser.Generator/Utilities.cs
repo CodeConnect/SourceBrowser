@@ -42,7 +42,7 @@ namespace SourceBrowser.Generator
 
         public static string GetHash(string result)
         {
-            result = GetMD5Hash(result, 8);
+            result = GetMD5Hash(result, 16);
             return result;
         }
         static string GetMD5Hash(string input, int digits)
