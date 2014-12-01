@@ -25,7 +25,7 @@
             var retriever = new GitHubRetriever(githubUrl);
             if (!retriever.IsValidUrl())
             {
-                ViewBag.Error = "Make sure that the provided path is valid.";
+                ViewBag.Error = "Make sure that the provided path points to a valid GitHub repository.";
                 return View("Index");
             }
 
