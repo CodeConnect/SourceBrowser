@@ -28,13 +28,16 @@ namespace SourceBrowser.Generator.Model
         {
             //Find the root WorkspaceModel
             IProjectItem currentNode = this;
-            while(currentNode.Parent != null)
+            while (currentNode.Parent != null)
             {
                 currentNode = currentNode.Parent;
             }
 
+            string relativePath;
             string rootPath = ((WorkspaceModel)currentNode).ContainingPath;
-            var relativePath = path.Remove(0, rootPath.Length);
+            System.Diagnostics.Debug.WriteLine(rootPath);
+            System.Diagnostics.Debug.WriteLine(path);
+            relativePath = path.Remove(0, rootPath.Length);
 
             return relativePath;
         }

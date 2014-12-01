@@ -91,9 +91,18 @@ namespace SourceBrowser.Generator
         private IProjectItem findDocumentParent(WorkspaceModel workspaceModel, Document document)
         {
             IProjectItem currentNode = workspaceModel;
-            string pathSoFar = Directory.GetParent(document.Project.FilePath).FullName;
+            var rootPath = workspaceModel.ContainingPath;
+            var docPath = Directory.GetParent(document.FilePath).FullName;
+            if (!docPath.StartsWith(rootPath))
+                return currentNode;
 
-            foreach (var folder in document.Folders)
+            var relativePath = docPath.Remove(0, rootPath.Length);
+
+            var folders = relativePath.Split(new char[] { '\\' }, StringSplitOptions.RemoveEmptyEntries);
+
+            string pathSoFar = rootPath;
+
+            foreach (var folder in folders)
             {
                 pathSoFar = Path.Combine(pathSoFar, folder);
                 var childFolder = currentNode.Children.Where(n => n.Name == folder).SingleOrDefault();
@@ -102,7 +111,6 @@ namespace SourceBrowser.Generator
                     childFolder = new FolderModel(currentNode, folder, pathSoFar);
                     currentNode.Children.Add(childFolder);
                 }
-                pathSoFar = Path.Combine(pathSoFar, currentNode.Name);
                 currentNode = childFolder;
             }
             return currentNode;
