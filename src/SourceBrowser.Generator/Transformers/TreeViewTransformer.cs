@@ -3,6 +3,7 @@ using System.IO;
 using System.Web.UI;
 using System.Text;
 using SourceBrowser.Generator.Model;
+using System.Web;
 
 namespace SourceBrowser.Generator.Transformers
 {
@@ -67,7 +68,7 @@ namespace SourceBrowser.Generator.Transformers
             _writer.RenderBeginTag(HtmlTextWriterTag.Span);
             _writer.RenderEndTag(); // span
 
-            _writer.Write(folderModel.Name);
+            _writer.Write(HttpUtility.HtmlEncode(folderModel.Name));
 
             _writer.RenderEndTag(); // a
 
@@ -99,7 +100,7 @@ namespace SourceBrowser.Generator.Transformers
             _writer.AddAttribute(HtmlTextWriterAttribute.Style, "margin-left: " + depth * 10 + "px;");
             _writer.RenderBeginTag(HtmlTextWriterTag.A);
 
-            _writer.Write(documentModel.Name);
+            _writer.Write(HttpUtility.HtmlEncode(documentModel.Name));
 
             _writer.RenderEndTag(); // a
 
