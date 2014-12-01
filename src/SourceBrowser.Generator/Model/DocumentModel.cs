@@ -16,18 +16,31 @@ namespace SourceBrowser.Generator.Model
 
         public string Name { get; set; }
 
-        public string RelativePath { get; set; }
+        public string ContainingPath { get; set; }
 
         public int NumberOfLines { get; set; }
 
-        public DocumentModel(IProjectItem parent, string name, string relativePath, int numberOfLines)
+        public DocumentModel(IProjectItem parent, string name, string containingPath, int numberOfLines)
         {
             Parent = parent;
             Name = name;
-            RelativePath = relativePath;
+            ContainingPath = containingPath;
             NumberOfLines = numberOfLines;
             Children = new List<IProjectItem>();
             Tokens = new List<Token>();
+        }
+
+        public string GetPath()
+        {
+            IProjectItem currentNode = this;
+            string path = "//" + this.Name;
+            while (!(currentNode.Parent is WorkspaceModel))
+            {
+                path = "//" + currentNode.Parent.Name + path;
+                currentNode = currentNode.Parent;
+            }
+
+            return path;
         }
     }
 }

@@ -32,5 +32,10 @@ namespace SourceBrowser.Generator.Model
             Name = name;
             Children = new List<IProjectItem>();
         }
+
+        public string GetPath()
+        {
+            return null;
+        }
     }
 }

@@ -16,5 +16,7 @@ namespace SourceBrowser.Generator.Model
         string Name { get; }
 
         ICollection<IProjectItem> Children { get; }
+
+        string GetPath();
     }
 }
