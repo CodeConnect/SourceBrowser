@@ -33,11 +33,8 @@ namespace SourceBrowser.Generator.Model
                 currentNode = currentNode.Parent;
             }
 
-            string relativePath;
             string rootPath = ((WorkspaceModel)currentNode).ContainingPath;
-            System.Diagnostics.Debug.WriteLine(rootPath);
-            System.Diagnostics.Debug.WriteLine(path);
-            relativePath = path.Remove(0, rootPath.Length);
+            var relativePath = path.Remove(0, rootPath.Length);
 
             return relativePath;
         }
