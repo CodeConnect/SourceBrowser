@@ -195,25 +195,12 @@
         /// <returns></returns>
         internal static GithubRepoStructure SetUpRepoStructure(string userName, string repoName)
         {
-            var solutionPath = Path.Combine(StaticHtmlAbsolutePath, userName, repoName);
-
-            List<string> solutionNames;
-            if (Directory.Exists(solutionPath))
-            {
-                var directories = Directory.GetDirectories(solutionPath);
-                solutionNames = new List<string>(directories.Length);
-                solutionNames.AddRange(directories.Select(Path.GetFileName));
-            }
-            else
-            {
-                // If, for some reason the directory doesn't exist, just supply an empty list
-                solutionNames = new List<string>();
-            }
+            // Currently unused, might be useful at some point
+            // var repoRoot = Path.Combine(StaticHtmlAbsolutePath, userName, repoName);
 
             var repoData = new GithubRepoStructure()
             {
                 Name = repoName,
-                Solutions = solutionNames,
                 ParentUserName = userName
             };
             repoData.UseLiveData();
