@@ -158,14 +158,16 @@ namespace SourceBrowser.Generator
             tokenModel.LineNumber = token.GetLocation().GetLineSpan().StartLinePosition.Line + 1;
             
             //If we can find the declaration, we'll link it ourselves
-            if (symbol.DeclaringSyntaxReferences.Any())
+            if (symbol.DeclaringSyntaxReferences.Any()
+                && !(symbol is INamespaceSymbol))
             {
                 var localLink = new SymbolLink();
                 localLink.ReferencedSymbolName = symbol.ToString();
                 tokenModel.Link = localLink;
             }
             //Otherwise, we try to link to the .Net Reference source
-            else if (_refsourceLinkProvider.Assemblies.Contains(symbol.ContainingAssembly?.Identity?.Name))
+            else if (_refsourceLinkProvider.Assemblies.Contains(symbol.ContainingAssembly?.Identity?.Name)
+                && !(symbol is INamespaceSymbol))
             {
                 var referenceLink = new UrlLink();
                 referenceLink.Url = _refsourceLinkProvider.GetLink(symbol);
