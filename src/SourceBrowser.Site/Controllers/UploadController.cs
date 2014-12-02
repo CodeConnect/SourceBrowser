@@ -2,8 +2,8 @@
 {
     using System.IO;
     using System.Web.Mvc;
-
     using SourceBrowser.SolutionRetriever;
+    using SourceBrowser.Generator.Transformers;
     using System;
 
     public class UploadController : Controller
@@ -54,14 +54,28 @@
             // TODO: Use parallel for.
             foreach (var path in solutionPaths)
             {
-                var filenamePosition = path.LastIndexOf('\\');
-                var solutionName = path.Substring(filenamePosition);
-                var solutionPath = repoPath + solutionName; // don't use Path.Combine because solutionName contains "\"
+                var solutionName = Path.GetFileName(path);
+                var modelSavePath = Path.Combine(repoPath, solutionName); 
                 var sourceGenerator = new Generator.SolutionAnalayzer(path);
-                sourceGenerator.AnalyzeAndSave(solutionPath);
+
+                //Build the workspace
+                var workspaceModel = sourceGenerator.BuildWorkspaceModel(modelSavePath);
+
+                //One pass to lookup all declarations
+                var typeTransformer = new TokenLookupTransformer();
+                typeTransformer.Visit(workspaceModel);
+                var tokenLookup = typeTransformer.TokenLookup;
+
+                //Another pass to generate HTMLs
+                var htmlTransformer = new HtmlTransformer(tokenLookup, repoPath);
+                htmlTransformer.Visit(workspaceModel);
+
+                // Generate HTML of the tree view
+                var treeViewTransformer = new TreeViewTransformer(repoPath, retriever.UserName, retriever.RepoName);
+                treeViewTransformer.Visit(workspaceModel);
             }
 
-            return RedirectToAction("LookupFolder", "Browse", new { id = retriever.UserName + "/" + retriever.RepoName });
+            return Redirect("/Browse/" + retriever.UserName + "/" + retriever.RepoName);
         }
 
         /// <summary>

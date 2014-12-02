@@ -12,3 +12,33 @@ $(function () {
         }
     );
 });
+
+$(document).ready(function () {
+    var path = window.location.pathname;
+    expandTreeView(path);
+});
+
+function expandTreeView(path) {
+    var parts = path.split("/");
+    var pathToDate = "";
+
+    // Ignore the first three elements from the path:
+    // Browse/UserName/RepoName/Folder1/Folder2/FileName
+    for (var partNumber = 4; partNumber < parts.length; partNumber++)
+    {
+        pathToDate = pathToDate + "/" + parts[partNumber];
+        expandNode(pathToDate);
+    }
+}
+
+function expandNode(path) {
+    var selector = "li[id='" + path + "']";
+    var node = $(selector);
+    var child = $(selector + " > ul");
+    if (node.length) {
+        node.removeClass("collapsed");
+    }
+    if (child.length) {
+        child.show();
+    }
+}

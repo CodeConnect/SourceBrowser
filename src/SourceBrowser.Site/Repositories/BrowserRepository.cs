@@ -17,66 +17,31 @@
     {
         private static readonly string StaticHtmlAbsolutePath = System.Web.Hosting.HostingEnvironment.MapPath("~/SB_Files/");
 
-        /// <summary>
-        /// Parses provided string and tries to retrieve:
-        /// github user, repo, solution name, file within solution
-        /// </summary>
-        /// <param name="id">
-        /// The id.
-        /// </param>
-        /// <param name="githubUser">
-        /// The github User.
-        /// </param>
-        /// <param name="githubRepo">
-        /// The github Repo.
-        /// </param>
-        /// <param name="solutionName">
-        /// The solution Name.
-        /// </param>
-        /// <param name="fileName">
-        /// The file Name.
-        /// </param>
-        /// <returns>
-        /// True if the folder info could be found.
-        /// </returns>
-        public static bool GetFolderInfo(string id, out string githubUser, out string githubRepo, out string solutionName, out string fileName)
+        // TODO: DO NOT LOAD THIS INTO MEMORY.
+        // This string could be really big. We should probably be distributing this
+        // from a CDN. However, we're not saving them to a CDN, so we'll have to
+        // figure that out first.
+        internal static string GetDocumentHtml(string username, string repository, string path)
         {
-            githubUser = string.Empty;
-            githubRepo = string.Empty;
-            solutionName = string.Empty;
-            fileName = string.Empty;
-            if (string.IsNullOrEmpty(id))
-            {
-                return false;
-            }
+            var fullPath = Path.Combine(StaticHtmlAbsolutePath, username, repository, path);
 
-            var pathParts = id.Split(new[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
-            if (pathParts.Length == 0)
+            using(var sr = new StreamReader(fullPath))
             {
-                return false;
+                var rawHtml = sr.ReadToEnd();
+                return rawHtml;
             }
+        }
 
-            if (pathParts.Length >= 1)
+        internal static JObject GetMetaData(string username, string repository, string path)
+        {
+            var fullPath = Path.Combine(StaticHtmlAbsolutePath, username, repository, path);
+            var metadataPath = fullPath + ".json";
+
+            using(var sr = new StreamReader(metadataPath))
             {
-                githubUser = pathParts[0];
+                var metadata = JObject.Parse(sr.ReadToEnd());
+                return metadata;
             }
-
-            if (pathParts.Length >= 2)
-            {
-                githubRepo = pathParts[1];
-            }
-
-            if (pathParts.Length >= 3)
-            {
-                solutionName = pathParts[2];
-            }
-
-            if (pathParts.Length >= 4)
-            {
-                fileName = string.Join("/", pathParts.Skip(3));
-            }
-
-            return true;
         }
 
         /// <summary>
@@ -258,84 +223,30 @@
 
         internal static GithubSolutionStructure SetUpSolutionStructure(string userName, string repoName, string solutionName)
         {
-            string solutionInfoPath;
-            var solutionInfo = GetSolutionInfo(userName, repoName, solutionName, out solutionInfoPath);
-
-            var viewModel = new GithubSolutionStructure()
+    var viewModel = new GithubSolutionStructure()
             {
                 Name = solutionName,
                 RelativePath = CreatePath(userName, repoName, solutionName),
                 RelativeRootPath = CreatePath(userName, repoName, solutionName),
-                SolutionInfo = solutionInfo,
                 ParentRepo = SetUpRepoStructure(userName, repoName)
             };
 
             return viewModel;
         }
 
-        internal static GithubFileStructure SetUpFileStructure(DocumentInfo docInfo, string userName, string repoName, string solutionName, string pathRemainder)
+        internal static GithubFileStructure SetUpFileStructure(string userName, string repoName, string path, string html, int numLines)
         {
-            string solutionInfoPath;
-            var solutionInfo = GetSolutionInfo(userName, repoName, solutionName, out solutionInfoPath);
-
             var viewModel = new GithubFileStructure
             {
-                FileName = Path.GetFileName(pathRemainder),
-                Directory = GetRelativeDirectory(pathRemainder),
-                RelativePath = CreatePath(userName, repoName, solutionName, GetRelativeDirectory(pathRemainder)), // Used to expand nodes leading to this file
-                RelativeRootPath = CreatePath(userName, repoName, solutionName), // Points to the root of the treeview
-                SourceCode = docInfo.HtmlContent,
-                NumberOfLines = docInfo.NumberOfLines,
-                SolutionInfo = solutionInfo
+                FileName = Path.GetFileName(path),
+                Directory = GetRelativeDirectory(path),
+                RelativePath = CreatePath(userName, repoName, GetRelativeDirectory(path)), // Used to expand nodes leading to this file
+                RelativeRootPath = CreatePath(userName, repoName, path), // Points to the root of the treeview
+                SourceCode = html,
+                NumberOfLines = numLines
             };
 
             return viewModel;
-        }
-
-
-        internal static void FindPage(string path)
-        {
-            var fullPath = Path.Combine(StaticHtmlAbsolutePath, path);
-
-            if (Directory.Exists(fullPath))
-            {
-                // It's a folder, we want to list the files.
-                var files = FindFiles(fullPath);
-                var folders = FindFolders(fullPath);
-            }
-
-            if (File.Exists(fullPath))
-            {
-                // It's a file, we want to list the file.
-            }
-        }
-
-        public static bool IsFile(string path)
-        {
-            var fullPath = Path.Combine(StaticHtmlAbsolutePath, path);
-            if (File.Exists(fullPath))
-            {
-                return true;
-            }
-
-            return false;
-        }
-
-        public static bool IsFolder(string path)
-        {
-            var fullPath = Path.Combine(StaticHtmlAbsolutePath, path);
-            if (Directory.Exists(fullPath))
-            {
-                return true;
-            }
-            return false;
-        }
-
-        public static string GetRootDirectory(string path)
-        {
-            var splitPath = path.Split(new[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
-            var baseDirectory = splitPath.First();
-            return baseDirectory;
         }
 
         public static string GetRelativeDirectory(string path)
@@ -347,19 +258,6 @@
                 return baseDirectory;
             }
             return null;
-        }
-
-        public static DocumentInfo FindFile(string path)
-        {
-            var fullPath = Path.Combine(StaticHtmlAbsolutePath, path);
-            DocumentInfo docInfo;
-            using (var sr = new StreamReader(fullPath))
-            {
-                string rawJson = sr.ReadToEnd();
-                docInfo = JsonConvert.DeserializeObject<DocumentInfo>(rawJson);
-            }
-
-            return docInfo;
         }
 
         public static List<string> FindFiles(string path)
@@ -392,23 +290,7 @@
         }
 
 
-        private static JObject GetSolutionInfo(string userName, string repoName, string solutionName, out string solutionInfoPath)
-        {
-            string absolutePath = Path.Combine(StaticHtmlAbsolutePath, userName, repoName, solutionName);
-            solutionInfoPath = Path.Combine(absolutePath, "solutionInfo.json");
-
-            if (!File.Exists(solutionInfoPath))
-            {
-                return null;
-            }
-
-            using (var sr = new StreamReader(solutionInfoPath))
-            {
-                var rawJson = sr.ReadToEnd();
-                var json = JObject.Parse(rawJson);
-                return json;
-            }
-        }
+                                                                                                                        
 
         private static string CreatePath(string part1, string part2 = null, string part3 = null, string part4 = null)
         {

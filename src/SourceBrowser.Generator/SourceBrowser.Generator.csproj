@@ -85,16 +85,27 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DocumentExtensions.cs" />
-    <Compile Include="DocumentInfo.cs" />
+    <Compile Include="Extensions\DocumentExtensions.cs" />
     <Compile Include="DocumentWalker.cs" />
-    <Compile Include="FileSystemInfo.cs" />
-    <Compile Include="FolderAnalyzer.cs" />
+    <Compile Include="Extensions\SymbolExtensions.cs" />
     <Compile Include="Hacks\DependencyHacks.cs" />
+    <Compile Include="Model\CSharp\CSharpTokenTypes.cs" />
+    <Compile Include="Model\DocumentModel.cs" />
+    <Compile Include="Model\FolderModel.cs" />
+    <Compile Include="Model\IProjectItem.cs" />
+    <Compile Include="Model\ILink.cs" />
+    <Compile Include="Model\SymbolLink.cs" />
+    <Compile Include="Model\Token.cs" />
+    <Compile Include="Model\Trivia.cs" />
+    <Compile Include="Model\UrlLink.cs" />
+    <Compile Include="Model\WorkspaceModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReferencesourceLinkProvider.cs" />
     <Compile Include="SolutionAnalyzer.cs" />
-    <Compile Include="TypeInfo.cs" />
+    <Compile Include="Transformers\AbstractWorkspaceVisitor.cs" />
+    <Compile Include="Transformers\HtmlTransformer.cs" />
+    <Compile Include="Transformers\TokenLookupTransformer.cs" />
+    <Compile Include="Transformers\TreeViewTransformer.cs" />
     <Compile Include="Utilities.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -104,6 +115,7 @@
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.

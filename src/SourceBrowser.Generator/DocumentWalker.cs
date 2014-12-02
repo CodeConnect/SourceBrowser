@@ -7,6 +7,9 @@ using System.Web;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using SourceBrowser.Generator.Extensions;
+using SourceBrowser.Generator.Model;
+using SourceBrowser.Generator.Model.CSharp;
 
 namespace SourceBrowser.Generator
 {
@@ -15,239 +18,180 @@ namespace SourceBrowser.Generator
     /// </summary>
     public class DocumentWalker : CSharpSyntaxWalker
     {
-        string _html = String.Empty;
-        Dictionary<string, string> _typeLookup;
         private SemanticModel _model;
         private ReferencesourceLinkProvider _refsourceLinkProvider;
-        private StringBuilder _stringBuilder = new StringBuilder();
-        private int _numLines = 0;
+        public DocumentModel DocumentModel { get; private set; }
         public string FilePath { get; set; }
 
-        private DocumentInfo DocInfo;
-        public DocumentInfo GetDocumentInfo()
+        public DocumentWalker(IProjectItem parent, Document document, ReferencesourceLinkProvider refSourceLinkProvider): base(SyntaxWalkerDepth.Trivia)
         {
-            DocInfo.HtmlContent = _stringBuilder.ToString();
-            return DocInfo;
-        }
-
-        public DocumentWalker(SemanticModel model, Document document, ReferencesourceLinkProvider refSourceLinkProvider, Dictionary<string, string> typeLookup) : base(SyntaxWalkerDepth.Trivia)
-        {
-            _model = model;
-            _typeLookup = typeLookup;
-            FilePath = document.GetRelativeFilePath();
-
-            DocInfo.FileName = FilePath;
-            DocInfo.NumberOfLines = document.GetTextAsync().Result.Lines.Count;
+            _model = document.GetSemanticModelAsync().Result;
             _refsourceLinkProvider = refSourceLinkProvider;
-        }
+            string containingPath = document.GetRelativeFilePath();
 
-        public override void VisitLeadingTrivia(SyntaxToken token)
-        {
-            foreach (var tr in token.LeadingTrivia)
-            {
-                this.VisitTrivia(tr);
-            }
-        }
-
-        public override void VisitTrailingTrivia(SyntaxToken token)
-        {
-            foreach (var tr in token.TrailingTrivia)
-            {
-                this.VisitTrivia(tr);
-            }
-        }
-
-        public override void VisitTrivia(SyntaxTrivia trivia)
-        {
-            string htmlTrivia = String.Empty;
-            if (trivia.CSharpKind() == SyntaxKind.SingleLineCommentTrivia ||
-                trivia.CSharpKind() == SyntaxKind.MultiLineCommentTrivia ||
-                trivia.CSharpKind() == SyntaxKind.MultiLineDocumentationCommentTrivia ||
-                trivia.CSharpKind() == SyntaxKind.SingleLineDocumentationCommentTrivia)
-            {
-                htmlTrivia += "<span style='color:green'>";
-                htmlTrivia += HttpUtility.HtmlEncode(trivia.ToFullString());
-                htmlTrivia += "</span>";
-            }
-            else if (trivia.CSharpKind() == SyntaxKind.RegionDirectiveTrivia ||
-                     trivia.CSharpKind() == SyntaxKind.EndRegionDirectiveTrivia)
-            {
-                htmlTrivia += "<span style='color:blue'>";
-                // We don't visit insides of region directives,
-                // so we need to use ToFullString() to get the new line and whitespace
-                htmlTrivia += HttpUtility.HtmlEncode(trivia.ToFullString());
-                htmlTrivia += "</span>";
-            }
-            else
-            {
-                htmlTrivia += HttpUtility.HtmlEncode(trivia.ToString());
-            }
-
-            _stringBuilder.Append(htmlTrivia);
-            base.VisitTrivia(trivia);
+            var numberOfLines = document.GetTextAsync().Result.Lines.Count + 1;
+            DocumentModel = new DocumentModel(parent, document.Name, containingPath, numberOfLines);
+            FilePath = document.GetRelativeFilePath();
+            _refsourceLinkProvider = refSourceLinkProvider;
         }
 
         public override void VisitToken(SyntaxToken token)
         {
-            this.VisitLeadingTrivia(token);
             string str = String.Empty;
-
+            Token tokenModel = null;
+          
             if (token.IsKeyword())
             {
-                str = ProcessKeyword(token);
+                tokenModel = ProcessKeyword(token);
             }
             else if (token.CSharpKind() == SyntaxKind.IdentifierToken)
             {
-                str = ProcessIdentifier(token);
+                tokenModel = ProcessIdentifier(token);
+            }
+            else if(token.CSharpKind() == SyntaxKind.StringLiteralToken)
+            {
+                tokenModel = ProcessStringLiteral(token);
             }
             else
             {
-                str = HttpUtility.HtmlEncode(token.ToString());
+                //This covers all semantically useless tokens such as punctuation
+                tokenModel = ProcessOtherToken(token);
             }
 
-            _stringBuilder.Append(str);
-            this.VisitTrailingTrivia(token);
+            //Add trivia to the token
+            tokenModel.LeadingTrivia = ProcessTrivia(token.LeadingTrivia);
+            tokenModel.TrailingTrivia = ProcessTrivia(token.TrailingTrivia);
+
+            DocumentModel.Tokens.Add(tokenModel);
         }
 
-        public string ProcessKeyword(SyntaxToken token)
+     
+
+        private ICollection<Trivia> ProcessTrivia(SyntaxTriviaList triviaList)
         {
-            string str = "<span style='color:blue'>" + HttpUtility.HtmlEncode(token.ToString()) + "</span>";
-            return str;
+            var triviaModelList = triviaList.Select(n => new Trivia()
+            {
+                Type = n.CSharpKind().ToString(),
+                Value = n.ToFullString()
+            }).ToList();
+
+            return triviaModelList;
+        }
+
+        /// <summary>
+        /// Creates a Token based on a SyntaxToken for non-keywords and non-identifiers.
+        /// </summary>
+        private Token ProcessOtherToken(SyntaxToken token)
+        {
+            var tokenModel = new Token(this.DocumentModel);
+            tokenModel.FullName = token.CSharpKind().ToString();
+            tokenModel.Value = token.ToString();
+            tokenModel.Type = CSharpTokenTypes.OTHER;
+            tokenModel.LineNumber = token.GetLocation().GetLineSpan().StartLinePosition.Line + 1;
+
+            return tokenModel;
+        }
+
+        /// <summary>
+        /// Creates a Token based on a SyntaxToken for a Keyword.
+        /// </summary>
+        public Token ProcessKeyword(SyntaxToken token)
+        {
+            var tokenModel = new Token(this.DocumentModel);
+            tokenModel.FullName = token.CSharpKind().ToString();
+            tokenModel.Value = token.ToString();
+            tokenModel.Type = CSharpTokenTypes.KEYWORD;
+            tokenModel.LineNumber = token.GetLocation().GetLineSpan().StartLinePosition.Line + 1;
+            return tokenModel;
+        }
+
+        private Token ProcessStringLiteral(SyntaxToken token)
+        {
+            var tokenModel = new Token(this.DocumentModel);
+            tokenModel.FullName = token.CSharpKind().ToString();
+            tokenModel.Value = token.ToString();
+            tokenModel.Type = CSharpTokenTypes.STRING;
+            tokenModel.LineNumber = token.GetLocation().GetLineSpan().StartLinePosition.Line + 1;
+            return tokenModel;
         }
 
         /// <summary>
         /// Given a syntax token identifier that represents a declaration,
         /// generate and return the proper HTML for this symbol.
         /// </summary>
-        public string ProcessDeclaration(SyntaxToken token, ISymbol parentSymbol)
+        public Token ProcessDeclarationToken(SyntaxToken token, ISymbol parentSymbol)
         {
-            string html = String.Empty;
-            if (parentSymbol != null && parentSymbol is INamedTypeSymbol)
+            var tokenModel = new Token(this.DocumentModel);
+            if (parentSymbol is INamedTypeSymbol)
             {
-                //Type Declaration
-                html = "<span style='color:#2B91AF'>" + HttpUtility.HtmlEncode(token.ToString()) + "</span>";
-                return html;
-            }
-            //This isn't a type declaration
-            return HttpUtility.HtmlEncode(token.ToString());
-        }
-
-        public string ProcessTypeUsage(SyntaxToken token, ISymbol symbol)
-        {
-            //Type usage
-            string fullName = symbol.ToString();
-            string html = String.Empty;
-            string referencedURL;
-            //Check if we can link to this type
-            if (_typeLookup.TryGetValue(fullName, out referencedURL))
-            {
-                var relativePath = Utilities.MakeRelativePath(this.FilePath, referencedURL);
-
-                html = "<span style='color:#2B91AF'>";
-                html += "<a href=";
-                html += relativePath;
-                html += ">";
-                html += HttpUtility.HtmlEncode(token.ToString());
-                html += "</a>";
-                html += "</span>";
-            }
-            else if (_refsourceLinkProvider.Assemblies.Contains(symbol.ContainingAssembly.Identity.Name))
-            {
-                html = "<span>";
-                html += "<a style='color:black' href=";
-                html += _refsourceLinkProvider.GetLink(symbol);
-                html += ">";
-                html += HttpUtility.HtmlEncode(token.ToString());
-                html += "</a>";
-                html += "</span>";
+                tokenModel.Type = CSharpTokenTypes.TYPE;
             }
             else
             {
-                //otherwise, just color it 
-                html += "<span style='color:#2B91AF'>" + HttpUtility.HtmlEncode(token.ToString()) + "</span>";
+                tokenModel.Type = CSharpTokenTypes.IDENTIFIER;
             }
+            tokenModel.Value = token.ToString();
+            tokenModel.LineNumber = token.GetLocation().GetLineSpan().StartLinePosition.Line + 1;
+            tokenModel.FullName = parentSymbol.ToString();
+            tokenModel.IsDeclaration = true;
 
-            return html;
+            return tokenModel;
         }
-
-        public string ProcessMemberUsage(SyntaxToken token, ISymbol symbol)
-        {
-            string fullName = symbol.ToString();
-            string html = string.Empty;
-            string referencedURL;
-            //Check to see if we can link to this method
-            if (_typeLookup.TryGetValue(fullName, out referencedURL))
-            {
-                var relativePath = Utilities.MakeRelativePath(this.FilePath, referencedURL);
-
-                html = "<span>";
-                html += "<a style='color:black' href=";
-                html += relativePath;
-                html += ">";
-                html += HttpUtility.HtmlEncode(token.ToString());
-                html += "</a>";
-                html += "</span>";
-            }
-            else if (_refsourceLinkProvider.Assemblies.Contains(symbol.ContainingAssembly.Identity.Name))
-            {
-                html = "<span>";
-                html += "<a style='color:black' href=";
-                html += _refsourceLinkProvider.GetLink(symbol);
-                html += ">";
-                html += HttpUtility.HtmlEncode(token.ToString());
-                html += "</a>";
-                html += "</span>";
-            }
-            else
-            {
-                //otherwise, just color it 
-                html += "<span>" + HttpUtility.HtmlEncode(token.ToString()) + "</span>";
-            }
-
-            return html;
-        }
-
 
         /// <summary>
         /// Given a syntax token identifier that represents a symbol's usage
         /// generate and return the proper HTML for this symbol
         /// </summary>
-        public string ProcessSymbolUsage(SyntaxToken token, ISymbol symbol)
+        public Token ProcessSymbolUsage(SyntaxToken token, ISymbol symbol)
         {
+            var tokenModel = new Token(this.DocumentModel);
+            tokenModel.FullName = symbol.ToString();
+            tokenModel.Value = token.ToString();
             if (symbol is INamedTypeSymbol)
             {
-                return ProcessTypeUsage(token, symbol);
+                tokenModel.Type = CSharpTokenTypes.TYPE;
             }
-
-            if (symbol is IMethodSymbol)
+            else
             {
-                return ProcessMemberUsage(token, symbol);
+                tokenModel.Type = CSharpTokenTypes.IDENTIFIER;
             }
-
-            if (symbol is IPropertySymbol)
+            tokenModel.LineNumber = token.GetLocation().GetLineSpan().StartLinePosition.Line + 1;
+            
+            //If we can find the declaration, we'll link it ourselves
+            if (symbol.DeclaringSyntaxReferences.Any()
+                && !(symbol is INamespaceSymbol))
             {
-                return ProcessMemberUsage(token, symbol);
+                var localLink = new SymbolLink();
+                localLink.ReferencedSymbolName = symbol.ToString();
+                tokenModel.Link = localLink;
+            }
+            //Otherwise, we try to link to the .Net Reference source
+            else if (_refsourceLinkProvider.Assemblies.Contains(symbol.ContainingAssembly?.Identity?.Name)
+                && !(symbol is INamespaceSymbol))
+            {
+                var referenceLink = new UrlLink();
+                referenceLink.Url = _refsourceLinkProvider.GetLink(symbol);
+                tokenModel.Link = referenceLink;
             }
 
-            return HttpUtility.HtmlEncode(token.ToString());
+            return tokenModel;
         }
 
-        public string ProcessIdentifier(SyntaxToken token)
+        public Token ProcessIdentifier(SyntaxToken token)
         {
             //Check if this token is part of a declaration
             var parentSymbol = _model.GetDeclaredSymbol(token.Parent);
             if (parentSymbol != null)
-                return ProcessDeclaration(token, parentSymbol);
+                return ProcessDeclarationToken(token, parentSymbol);
 
             //Find the symbol this token references
             var symbolInfo = _model.GetSymbolInfo(token.Parent);
-
             if (symbolInfo.Symbol != null)
-            {
                 return ProcessSymbolUsage(token, symbolInfo.Symbol);
-            }
 
-            return HttpUtility.HtmlEncode(token.ToString());
+            //Otherwise it references something we don't
+            //have semantic information on...
+            return ProcessOtherToken(token);
         }
     }
 }

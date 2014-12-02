@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using SourceBrowser.Generator;
+using SourceBrowser.Generator.Transformers;
 
 namespace SourceBrowser.Samples
 {
@@ -38,7 +39,17 @@ namespace SourceBrowser.Samples
                 Console.Write("Analyzing and saving into " + absoluteSaveDirectory);
                 Console.WriteLine("...");
 
-                solutionAnalyzer.AnalyzeAndSave(absoluteSaveDirectory);
+                var workspaceModel = solutionAnalyzer.BuildWorkspaceModel(saveDirectory);
+
+                var typeTransformer = new TokenLookupTransformer();
+                typeTransformer.Visit(workspaceModel);
+                var tokenLookup = typeTransformer.TokenLookup;
+
+                var htmlTransformer = new HtmlTransformer(tokenLookup, absoluteSaveDirectory);
+                htmlTransformer.Visit(workspaceModel);
+
+                var treeViewTransformer = new TreeViewTransformer(absoluteSaveDirectory, "CodeConnect", "SourceBrowser"); // TODO: provide actual username and repo name
+                treeViewTransformer.Visit(workspaceModel);
 
                 Console.WriteLine("Job successful!");
             }

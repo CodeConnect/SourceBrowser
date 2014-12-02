@@ -1,5 +1,4 @@
 ﻿@model SourceBrowser.Site.Models.GithubRepoStructure
-@using SourceBrowser.Site.Extensions
 
 @{
     ViewBag.Title = "LookupRepo";
@@ -28,7 +27,6 @@
             <aside class="col-xs-4" id="browser">
                 <section>
                     <ul id="browserTree" class="treeview" data-role="treeview">
-                        @*Html.Raw(Model.GetHtmlTreeView(Model.LookupPath, pathSoFar: "/Browse/" + Model.UserName + '/'))*@
                     </ul>
                 </section>
             </aside>

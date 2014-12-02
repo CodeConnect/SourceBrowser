@@ -18,8 +18,6 @@
 
         public int NumberOfLines { get; set; }
 
-        public JObject SolutionInfo { get; set; } 
-
         public override string ToString()
         {
             return string.Format(

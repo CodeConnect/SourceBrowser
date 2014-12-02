@@ -1,5 +1,4 @@
 ﻿@model SourceBrowser.Site.Models.GithubFileStructure
-@using SourceBrowser.Site.Extensions
 
 @{
     ViewBag.Title = "LookupFile";
@@ -28,9 +27,7 @@
             <!--Display the tree view.-->
             <aside class="col-xs-4" id="browser">
                 <section>
-                    <ul id="browserTree" class="treeview" data-role="treeview">
-                        @Html.Raw(Model.SolutionInfo.GetHtmlTreeView(Model.RelativePath, filePath: "/Browse/" + Model.RelativeRootPath + '/'))
-                    </ul>
+                    @Html.Raw(ViewBag.TreeView)
                 </section>
             </aside>
         
@@ -52,7 +49,7 @@ as it's in a <pre> tag.*@
                                 <td valign="top">
                                     @if (!String.IsNullOrEmpty(Model.SourceCode))
                                     {
-                                        <pre class="source_code">@Html.Raw(Model.SourceCode)</pre>
+                                        <pre class="source-code">@Html.Raw(Model.SourceCode)</pre>
                                     }
                                 </td>
                             </tr>
@@ -64,4 +61,6 @@ as it's in a <pre> tag.*@
     </div>
 </div>
 
-
+@section Scripts {
+    @Scripts.Render("~/bundles/treeViewScripts")
+}
