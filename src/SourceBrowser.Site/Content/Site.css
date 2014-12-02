@@ -44,7 +44,15 @@ textarea {
     color:blue;
 }
 
-.Type {
+.source-code a {
+    color:#333333;
+}
+
+.source-code .Type {
+    color:#2DADED;
+}
+
+.source-code .Type a {
     color:#2DADED;
 }
 
@@ -52,9 +60,6 @@ textarea {
     color: #18890D;
 }
 
-.source-code a {
-    color:#333333;
-}
 
 .String {
     color:#A31515;
