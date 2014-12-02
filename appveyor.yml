@@ -1,5 +1,7 @@
 version: 0.{build}
 
+os: Visual Studio 2015 Preview
+
 branches:
   # blacklist
   except:
@@ -15,6 +17,6 @@ artifacts:
     type: zip
 
 environment:
+  MSBUILD: C:\Program Files (x86)\MSBuild\14.0\bin\msbuild.exe
   NUGET_APIKEY:
     secure: eCwaphHAp/cyOVc/LxigXppNaFjC3WMFSW07rjFNuonyNg2t9pvi9cCZivqxYZBm
-
