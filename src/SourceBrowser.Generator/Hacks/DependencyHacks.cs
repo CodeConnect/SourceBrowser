@@ -18,7 +18,9 @@ namespace SourceBrowser.Generator.Hacks
     /// the MSBuildWorkspace. (It caused 28 LoaderExceptions for us)
     /// 
     /// The workaround seems to be to reference types within the DLLs we want 
-    /// copied. (ie. BinaryFormatter for )
+    /// copied. (ie. BinaryFormatter for Microsoft.CodeAnalysis.CSharp.Workspaces.dll)
+    /// 
+    /// For more see: http://stackoverflow.com/questions/26535207/best-method-for-deploying-projects-relying-on-roslyn-dlls
     /// </summary>
     class DependencyHacks
     {
