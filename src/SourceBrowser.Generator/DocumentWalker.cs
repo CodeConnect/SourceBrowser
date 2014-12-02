@@ -28,8 +28,8 @@ namespace SourceBrowser.Generator
             _model = document.GetSemanticModelAsync().Result;
             _refsourceLinkProvider = refSourceLinkProvider;
             string containingPath = document.GetRelativeFilePath();
-            
-            var numberOfLines = document.GetTextAsync().Result.Lines.Count;
+
+            var numberOfLines = document.GetTextAsync().Result.Lines.Count + 1;
             DocumentModel = new DocumentModel(parent, document.Name, containingPath, numberOfLines);
             FilePath = document.GetRelativeFilePath();
             _refsourceLinkProvider = refSourceLinkProvider;
@@ -87,7 +87,7 @@ namespace SourceBrowser.Generator
             tokenModel.FullName = token.CSharpKind().ToString();
             tokenModel.Value = token.ToString();
             tokenModel.Type = CSharpTokenTypes.OTHER;
-            tokenModel.LineNumber = token.GetLocation().GetLineSpan().StartLinePosition.Line;
+            tokenModel.LineNumber = token.GetLocation().GetLineSpan().StartLinePosition.Line + 1;
 
             return tokenModel;
         }
@@ -100,8 +100,8 @@ namespace SourceBrowser.Generator
             var tokenModel = new Token(this.DocumentModel);
             tokenModel.FullName = token.CSharpKind().ToString();
             tokenModel.Value = token.ToString();
-            tokenModel.Type = CSharpTokenTypes.KEYWORD; 
-            tokenModel.LineNumber = token.GetLocation().GetLineSpan().StartLinePosition.Line;
+            tokenModel.Type = CSharpTokenTypes.KEYWORD;
+            tokenModel.LineNumber = token.GetLocation().GetLineSpan().StartLinePosition.Line + 1;
             return tokenModel;
         }
 
@@ -111,7 +111,7 @@ namespace SourceBrowser.Generator
             tokenModel.FullName = token.CSharpKind().ToString();
             tokenModel.Value = token.ToString();
             tokenModel.Type = CSharpTokenTypes.STRING;
-            tokenModel.LineNumber = token.GetLocation().GetLineSpan().StartLinePosition.Line;
+            tokenModel.LineNumber = token.GetLocation().GetLineSpan().StartLinePosition.Line + 1;
             return tokenModel;
         }
 
@@ -131,7 +131,7 @@ namespace SourceBrowser.Generator
                 tokenModel.Type = CSharpTokenTypes.IDENTIFIER;
             }
             tokenModel.Value = token.ToString();
-            tokenModel.LineNumber = token.GetLocation().GetLineSpan().StartLinePosition.Line;
+            tokenModel.LineNumber = token.GetLocation().GetLineSpan().StartLinePosition.Line + 1;
             tokenModel.FullName = parentSymbol.ToString();
             tokenModel.IsDeclaration = true;
 
@@ -155,7 +155,7 @@ namespace SourceBrowser.Generator
             {
                 tokenModel.Type = CSharpTokenTypes.IDENTIFIER;
             }
-            tokenModel.LineNumber = token.GetLocation().GetLineSpan().StartLinePosition.Line;
+            tokenModel.LineNumber = token.GetLocation().GetLineSpan().StartLinePosition.Line + 1;
             
             //If we can find the declaration, we'll link it ourselves
             if (symbol.DeclaringSyntaxReferences.Any())
