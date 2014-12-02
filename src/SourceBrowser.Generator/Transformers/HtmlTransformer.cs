@@ -134,7 +134,7 @@ namespace SourceBrowser.Generator.Transformers
             if(trivia.Type.Contains("Comment"))
             {
                 sw.Write("<span class='Comment'>");
-                sw.Write(trivia.Value);
+                sw.Write(HttpUtility.HtmlEncode(trivia.Value));
                 sw.Write("</span>");
             }
             else
