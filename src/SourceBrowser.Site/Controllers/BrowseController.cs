@@ -33,8 +33,9 @@
                 return this.View("LookupError");
             }
 
-            var viewModel = BrowserRepository.SetUpRepoStructure(username, repository);
-            return this.View("LookupRepo", viewModel);
+            ViewBag.TreeView = loadTreeView(username, repository);
+            var viewModel = BrowserRepository.SetUpSolutionStructure(username, repository, "");
+            return View("LookupFolder", viewModel);
         }
 
         public ActionResult LookupFolder(string username, string repository, string path)

@@ -403,7 +403,6 @@
     <Content Include="Views\Browse\LookupError.cshtml" />
     <Content Include="Views\Browse\LookupFile.cshtml" />
     <Content Include="Views\Browse\LookupFolder.cshtml" />
-    <Content Include="Views\Browse\LookupRepo.cshtml" />
     <Content Include="Views\Browse\LookupUser.cshtml" />
     <Content Include="Views\Upload\Index.cshtml" />
   </ItemGroup>
