@@ -1,0 +1,119 @@
+﻿.hide-bullet {
+    list-style-type: none;
+}
+
+.wrapping-list {
+    display: block;
+    float: left;
+}
+
+.userBadge {
+    display: block;
+    
+background: rgb(255,255,255); /* Old browsers */
+background: -moz-linear-gradient(left,  rgba(255,255,255,1) 0%, rgba(255,255,255,1) 34%, rgba(232,232,232,1) 100%); /* FF3.6+ */
+background: -webkit-gradient(linear, left top, right top, color-stop(0%,rgba(255,255,255,1)), color-stop(34%,rgba(255,255,255,1)), color-stop(100%,rgba(232,232,232,1))); /* Chrome,Safari4+ */
+background: -webkit-linear-gradient(left,  rgba(255,255,255,1) 0%,rgba(255,255,255,1) 34%,rgba(232,232,232,1) 100%); /* Chrome10+,Safari5.1+ */
+background: -o-linear-gradient(left,  rgba(255,255,255,1) 0%,rgba(255,255,255,1) 34%,rgba(232,232,232,1) 100%); /* Opera 11.10+ */
+background: -ms-linear-gradient(left,  rgba(255,255,255,1) 0%,rgba(255,255,255,1) 34%,rgba(232,232,232,1) 100%); /* IE10+ */
+background: linear-gradient(to right,  rgba(255,255,255,1) 0%,rgba(255,255,255,1) 34%,rgba(232,232,232,1) 100%); /* W3C */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#e8e8e8',GradientType=1 ); /* IE6-9 */
+
+    width: 450px;
+    height: 100px;
+    padding: 10px;
+    margin: 10px;
+    overflow: hidden;
+}
+
+.userBadge:hover {
+
+background: rgb(255,255,255); /* Old browsers */
+background: -moz-linear-gradient(left,  rgba(255,255,255,1) 0%, rgba(255,255,255,1) 34%, rgba(235,211,255,1) 100%); /* FF3.6+ */
+background: -webkit-gradient(linear, left top, right top, color-stop(0%,rgba(255,255,255,1)), color-stop(34%,rgba(255,255,255,1)), color-stop(100%,rgba(235,211,255,1))); /* Chrome,Safari4+ */
+background: -webkit-linear-gradient(left,  rgba(255,255,255,1) 0%,rgba(255,255,255,1) 34%,rgba(235,211,255,1) 100%); /* Chrome10+,Safari5.1+ */
+background: -o-linear-gradient(left,  rgba(255,255,255,1) 0%,rgba(255,255,255,1) 34%,rgba(235,211,255,1) 100%); /* Opera 11.10+ */
+background: -ms-linear-gradient(left,  rgba(255,255,255,1) 0%,rgba(255,255,255,1) 34%,rgba(235,211,255,1) 100%); /* IE10+ */
+background: linear-gradient(to right,  rgba(255,255,255,1) 0%,rgba(255,255,255,1) 34%,rgba(235,211,255,1) 100%); /* W3C */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#ebd3ff',GradientType=1 ); /* IE6-9 */
+
+}
+
+.userBadge p {
+    color: #555;
+}
+
+.userBadge h3 {
+    color: #333;
+}
+.userBadge img {
+    float: left;
+    border: 0 none;
+    height: 80px;
+    width: 80px;
+}
+
+.userBadge .text {
+    float: left;
+    width: auto;
+    margin-left: 20px;
+}
+
+.userBadge .clipped-text * {
+    max-width: 330px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.minor {
+    font-size: 10px;
+}
+
+.userDetail {
+    color: #555;
+}
+
+.userDetail h3 {
+    color: #333;
+}
+
+.userDetail img {
+    border: 0 none;
+    height: 140px;
+    width: 140px;
+}
+
+.repoBadge {
+    display: block;
+    
+background: rgb(255,255,255); /* Old browsers */
+background: -moz-linear-gradient(left,  rgba(255,255,255,1) 0%, rgba(255,255,255,1) 34%, rgba(232,232,232,1) 100%); /* FF3.6+ */
+background: -webkit-gradient(linear, left top, right top, color-stop(0%,rgba(255,255,255,1)), color-stop(34%,rgba(255,255,255,1)), color-stop(100%,rgba(232,232,232,1))); /* Chrome,Safari4+ */
+background: -webkit-linear-gradient(left,  rgba(255,255,255,1) 0%,rgba(255,255,255,1) 34%,rgba(232,232,232,1) 100%); /* Chrome10+,Safari5.1+ */
+background: -o-linear-gradient(left,  rgba(255,255,255,1) 0%,rgba(255,255,255,1) 34%,rgba(232,232,232,1) 100%); /* Opera 11.10+ */
+background: -ms-linear-gradient(left,  rgba(255,255,255,1) 0%,rgba(255,255,255,1) 34%,rgba(232,232,232,1) 100%); /* IE10+ */
+background: linear-gradient(to right,  rgba(255,255,255,1) 0%,rgba(255,255,255,1) 34%,rgba(232,232,232,1) 100%); /* W3C */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#e8e8e8',GradientType=1 ); /* IE6-9 */
+
+    width: 500px;
+    padding: 10px;
+    margin: 10px;
+}
+
+.repoBadge:hover {
+
+background: rgb(255,255,255); /* Old browsers */
+background: -moz-linear-gradient(left,  rgba(255,255,255,1) 0%, rgba(255,255,255,1) 34%, rgba(235,211,255,1) 100%); /* FF3.6+ */
+background: -webkit-gradient(linear, left top, right top, color-stop(0%,rgba(255,255,255,1)), color-stop(34%,rgba(255,255,255,1)), color-stop(100%,rgba(235,211,255,1))); /* Chrome,Safari4+ */
+background: -webkit-linear-gradient(left,  rgba(255,255,255,1) 0%,rgba(255,255,255,1) 34%,rgba(235,211,255,1) 100%); /* Chrome10+,Safari5.1+ */
+background: -o-linear-gradient(left,  rgba(255,255,255,1) 0%,rgba(255,255,255,1) 34%,rgba(235,211,255,1) 100%); /* Opera 11.10+ */
+background: -ms-linear-gradient(left,  rgba(255,255,255,1) 0%,rgba(255,255,255,1) 34%,rgba(235,211,255,1) 100%); /* IE10+ */
+background: linear-gradient(to right,  rgba(255,255,255,1) 0%,rgba(255,255,255,1) 34%,rgba(235,211,255,1) 100%); /* W3C */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#ebd3ff',GradientType=1 ); /* IE6-9 */
+
+}
+
+.repoBadge .match-h-margin {
+    margin: 10px 0 10px 0;
+}

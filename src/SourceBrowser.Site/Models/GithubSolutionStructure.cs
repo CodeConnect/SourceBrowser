@@ -16,7 +16,7 @@
 
         public override string ToString()
         {
-            return String.Format("'{0}' from {1}'s repo {2}", Name, ParentRepo.ParentUser.Username, ParentRepo.Name);
+            return String.Format("'{0}' from {1}'s repo {2}", Name, ParentRepo.ParentUserName, ParentRepo.Name);
         }
     }
 }
