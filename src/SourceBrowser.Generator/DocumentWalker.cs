@@ -30,7 +30,7 @@ namespace SourceBrowser.Generator
             string containingPath = document.GetRelativeFilePath();
 
             var numberOfLines = document.GetTextAsync().Result.Lines.Count + 1;
-            DocumentModel = new DocumentModel(parent, document.Name, containingPath, numberOfLines);
+            DocumentModel = new DocumentModel(parent, document.Name, numberOfLines);
             FilePath = document.GetRelativeFilePath();
             _refsourceLinkProvider = refSourceLinkProvider;
         }

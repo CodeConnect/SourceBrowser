@@ -26,7 +26,7 @@ function expandTreeView(path) {
     // Browse/UserName/RepoName/Folder1/Folder2/FileName
     for (var partNumber = 4; partNumber < parts.length; partNumber++)
     {
-        pathToDate = pathToDate + "/" + parts[partNumber];
+        pathToDate = pathToDate + parts[partNumber] + "/";
         expandNode(pathToDate);
     }
 }

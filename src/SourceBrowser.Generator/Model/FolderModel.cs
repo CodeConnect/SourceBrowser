@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,27 +17,12 @@ namespace SourceBrowser.Generator.Model
 
         public string RelativePath { get; }
 
-        public FolderModel(IProjectItem parent, string name, string path)
+        public FolderModel(IProjectItem parent, string name)
         {
             Parent = parent;
             Name = name;
-            RelativePath = findRelativePath(path);
+            RelativePath = Path.Combine(parent.RelativePath, name) + "/";
             Children = new List<IProjectItem>();    
-        }
-
-        private string findRelativePath(string path)
-        {
-            //Find the root WorkspaceModel
-            IProjectItem currentNode = this;
-            while (currentNode.Parent != null)
-            {
-                currentNode = currentNode.Parent;
-            }
-
-            string rootPath = ((WorkspaceModel)currentNode).RelativePath;
-            var relativePath = path.Remove(0, rootPath.Length);
-
-            return relativePath;
         }
     }
 }
