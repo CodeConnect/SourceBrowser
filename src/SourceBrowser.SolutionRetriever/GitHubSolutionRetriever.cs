@@ -11,12 +11,10 @@ namespace SourceBrowser.SolutionRetriever
         public string UserName { get; set; }
         public string RepoName { get; set; }
 
-        private string _githubUrl;
-
         public GitHubRetriever(string url)
         {
             _url = url;
-            var splitUrl = url.Split('/');
+            var splitUrl = url.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
 
             if (splitUrl.Length < 3)
                 return;
