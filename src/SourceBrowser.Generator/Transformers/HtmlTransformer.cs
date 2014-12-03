@@ -139,7 +139,7 @@ namespace SourceBrowser.Generator.Transformers
             }
             else
             {
-                sw.Write(trivia.Value);
+                sw.Write(HttpUtility.HtmlEncode(trivia.Value));
             }
         }
     }
