@@ -13,6 +13,8 @@ namespace SourceBrowser.SolutionRetriever
 
         public GitHubRetriever(string url)
         {
+            if (!(url.StartsWith("https://") || url.StartsWith("http://")))
+                url = "https://" + url;
             _url = url;
             var splitUrl = url.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
 
