@@ -39,9 +39,9 @@ namespace SourceBrowser.SolutionRetriever
 
         public string RetrieveProject()
         {
-            string baseRepositoryPath = System.Web.Hosting.HostingEnvironment.MapPath("~/") + "\\GithubStaging\\";
+            string baseRepositoryPath = Path.Combine(System.Web.Hosting.HostingEnvironment.MapPath("~/"),"GithubStaging");
 
-            string absoluteRepositoryPath = baseRepositoryPath + UserName + '\\' + RepoName;
+            string absoluteRepositoryPath = Path.Combine(baseRepositoryPath, UserName, RepoName);
 
             // libgit2 requires the target directory to be empty
             if (Directory.Exists(absoluteRepositoryPath))

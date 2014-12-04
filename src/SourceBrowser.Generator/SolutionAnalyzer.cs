@@ -23,7 +23,6 @@ namespace SourceBrowser.Generator
         MSBuildWorkspace _workspace;
         Solution _solution;
         private ReferencesourceLinkProvider _refsourceLinkProvider = new ReferencesourceLinkProvider();
-        string _saveDirectory = string.Empty;
 
         public SolutionAnalayzer(string solutionPath)
         {
@@ -62,11 +61,11 @@ namespace SourceBrowser.Generator
             }
         }
 
-        public WorkspaceModel BuildWorkspaceModel(string saveDirectory)
+        public WorkspaceModel BuildWorkspaceModel(string rootPath)
         {
-            string solutionName = Path.GetFileName(_solution.FilePath);
             var containingPath = Directory.GetParent(_solution.FilePath).FullName;
-            WorkspaceModel workspaceModel = new WorkspaceModel(solutionName, containingPath);
+            var solutionName = Path.GetFileName(_solution.FilePath);
+            WorkspaceModel workspaceModel = new WorkspaceModel(solutionName, rootPath);
             //Build document model for every file.
             foreach (var doc in _solution.Projects.SelectMany(n => n.Documents))
             {

@@ -59,7 +59,7 @@
                 var sourceGenerator = new Generator.SolutionAnalayzer(path);
 
                 //Build the workspace
-                var workspaceModel = sourceGenerator.BuildWorkspaceModel(modelSavePath);
+                var workspaceModel = sourceGenerator.BuildWorkspaceModel(filePath);
 
                 //One pass to lookup all declarations
                 var typeTransformer = new TokenLookupTransformer();

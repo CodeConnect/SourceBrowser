@@ -38,8 +38,10 @@ namespace SourceBrowser.Samples
 
                 Console.Write("Analyzing and saving into " + absoluteSaveDirectory);
                 Console.WriteLine("...");
-
-                var workspaceModel = solutionAnalyzer.BuildWorkspaceModel(saveDirectory);
+                //NOTE: The rootPath is not always the parent directory of the solution.
+                //The root path should be the longest path within which all documents are contained.
+                var rootPath = Directory.GetParent(solutionPath).FullName;
+                var workspaceModel = solutionAnalyzer.BuildWorkspaceModel(rootPath);
 
                 var typeTransformer = new TokenLookupTransformer();
                 typeTransformer.Visit(workspaceModel);
