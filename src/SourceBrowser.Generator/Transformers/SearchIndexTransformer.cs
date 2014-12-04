@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using SourceBrowser.Generator.Model;
 using System.IO;
+using SourceBrowser.Search;
 
 namespace SourceBrowser.Generator.Transformers
 {
@@ -26,6 +27,7 @@ namespace SourceBrowser.Generator.Transformers
             foreach(var declaration in declarations)
             {
                 //Add to index
+                SearchIndex.AddDeclarationToIndex(documentId, declaration.FullName, declaration.LineNumber);
             }
 
             base.VisitDocument(documentModel);
