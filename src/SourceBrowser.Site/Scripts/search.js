@@ -7,7 +7,7 @@ $("#search-form").submit(function (event) {
     splitPath = splitPath.filter(function (v) { return v !== '' });
 
     if (splitPath.length <= 1) {
-        searchSite(query)
+        searchSite(query);
     }
     else if (splitPath.length >= 2)
     {
