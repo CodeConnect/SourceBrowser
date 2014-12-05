@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using SourceBrowser.Generator.Model;
 using System.IO;
 using SourceBrowser.Search;
+using SourceBrowser.Search.ViewModels;
 
 namespace SourceBrowser.Generator.Transformers
 {
@@ -27,7 +28,8 @@ namespace SourceBrowser.Generator.Transformers
             foreach(var declaration in declarations)
             {
                 //Add to index
-                SearchIndex.AddDeclarationToIndex(documentId, declaration.FullName, declaration.LineNumber);
+                var tokenViewModel = new TokenViewModel(documentId, declaration.FullName, declaration.LineNumber);
+                SearchIndex.AddDeclarationToIndex(tokenViewModel);
             }
 
             base.VisitDocument(documentModel);

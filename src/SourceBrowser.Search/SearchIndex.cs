@@ -3,6 +3,7 @@ using Lucene.Net.Documents;
 using Lucene.Net.Index;
 using Lucene.Net.Search;
 using Lucene.Net.Store;
+using SourceBrowser.Search.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -36,14 +37,12 @@ namespace SourceBrowser.Search
             }
         }
 
-        public static void AddDeclarationToIndex(string documentId, string fullName, int lineNumber)
+        public static void AddDeclarationToIndex(TokenViewModel token)
         {
-            var analyzer = new StandardAnalyzer(Lucene.Net.Util.Version.LUCENE_30);
-            using(var writer = new IndexWriter(_directory,analyzer, IndexWriter.MaxFieldLength.UNLIMITED))
+            using (var analyzer = new StandardAnalyzer(Lucene.Net.Util.Version.LUCENE_30))
+            using (var writer = new IndexWriter(_directory, analyzer, IndexWriter.MaxFieldLength.UNLIMITED))
             {
-                addDeclarationToIndex(writer, documentId, fullName, lineNumber);
-
-                analyzer.Close();
+                addDeclarationToIndex(writer, token.DocumentId, token.FullName, token.LineNumber);
             }
         }
 
