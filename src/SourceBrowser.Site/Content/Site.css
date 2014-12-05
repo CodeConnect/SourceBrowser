@@ -60,6 +60,15 @@ textarea {
     color: #18890D;
 }
 
+#search-box {
+    border: none;
+    background: #FFF;
+    width:400px;
+    height:20px;
+    margin:7px auto;
+    color:#333;
+}
+
 
 .String {
     color:#A31515;
