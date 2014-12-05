@@ -20,6 +20,9 @@ namespace SourceBrowser.Site
             bundles.Add(new ScriptBundle("~/bundles/treeViewScripts").Include(
                                     "~/Scripts/treeViewHelpers.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/search").Include(
+                                    "~/Scripts/search.js"));
+
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
                         "~/Scripts/jquery.validate*"));
 

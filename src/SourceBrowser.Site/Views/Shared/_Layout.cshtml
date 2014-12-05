@@ -28,7 +28,7 @@
                 </ul>
 
                 @* Right aligned items: *@
-                <form>
+                <form id="search-form">
                     <input type="text" id="search-box" class="element place-right" placeholder="Search..." />
                 </form>
             </div>
@@ -46,6 +46,7 @@
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/search")
     @*Scripts.Render("~/bundles/sourcebrowser")*@
     @RenderSection("scripts", required: false)
 </body>
