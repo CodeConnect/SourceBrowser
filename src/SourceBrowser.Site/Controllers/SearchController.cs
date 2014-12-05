@@ -16,9 +16,8 @@ namespace SourceBrowser.Site.Controllers
 
         public ActionResult Repository(string username, string repo, string query)
         {
-            var x = new JsonResult();
-            x.JsonRequestBehavior = JsonRequestBehavior.AllowGet;
-            return x;
+            var placeHolder =Json("test");
+            return placeHolder;
         }
     }
 }

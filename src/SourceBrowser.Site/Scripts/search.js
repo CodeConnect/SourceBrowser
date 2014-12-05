@@ -1,5 +1,4 @@
-﻿//TODO: Rename this from treeViewHelper.j
-$("#search-form").submit(function (event) {
+﻿$("#search-form").submit(function (event) {
     var query = $("#search-box").val();
     var path = window.location.pathname;
     //Split path, removing empty entries
@@ -23,9 +22,23 @@ $("#search-form").submit(function (event) {
 
 function searchRepository(username, repository, query) {
     console.log("search repo");
-    console.log(username);
-    console.log(repository);
-    console.log(query);
+
+    data = JSON.stringify({
+        "username": username,
+        "repository": repository,
+        "query": query
+    });
+
+    $.ajax({
+        type: "POST",
+        url: "/Search/Repository/",
+        data: data,
+        success: results
+    });
+}
+
+function results(e) {
+    alert(e);
 }
 
 function searchSite(query) {
