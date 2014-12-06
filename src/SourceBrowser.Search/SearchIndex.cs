@@ -56,6 +56,8 @@ namespace SourceBrowser.Search
             //add new index entry
             var doc = new Document();
 
+            doc.Add(new Field("Username", token.DocumentId, Field.Store.YES, Field.Index.ANALYZED));
+            doc.Add(new Field("Repository", token.DocumentId, Field.Store.YES, Field.Index.ANALYZED));
             doc.Add(new Field("Id", token.DocumentId, Field.Store.YES, Field.Index.NOT_ANALYZED));
             doc.Add(new Field("Name", token.FullName, Field.Store.YES, Field.Index.ANALYZED));
             doc.Add(new Field("Lines", token.LineNumber.ToString(), Field.Store.YES, Field.Index.NOT_ANALYZED));
@@ -80,6 +82,8 @@ namespace SourceBrowser.Search
         private static TokenViewModel mapDocumentToToken(Document document)
         {
             return new TokenViewModel(
+                document.Get("Username"),
+                document.Get("Repository"),
                 document.Get("Id"),
                 document.Get("Name"),
                 Convert.ToInt32(document.Get("Lines"))

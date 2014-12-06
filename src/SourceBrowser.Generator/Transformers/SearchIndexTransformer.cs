@@ -28,7 +28,7 @@ namespace SourceBrowser.Generator.Transformers
             foreach(var declaration in declarations)
             {
                 //Add to index
-                var tokenViewModel = new TokenViewModel(documentId, declaration.FullName, declaration.LineNumber);
+                var tokenViewModel = new TokenViewModel(_username, _repository, documentId, declaration.FullName, declaration.LineNumber);
                 SearchIndex.AddDeclarationToIndex(tokenViewModel);
             }
 
