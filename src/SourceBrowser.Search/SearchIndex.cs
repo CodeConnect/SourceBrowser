@@ -43,22 +43,22 @@ namespace SourceBrowser.Search
             using (var analyzer = new StandardAnalyzer(Lucene.Net.Util.Version.LUCENE_30))
             using (var writer = new IndexWriter(_directory, analyzer, IndexWriter.MaxFieldLength.UNLIMITED))
             {
-                addDeclarationToIndex(writer, token.DocumentId, token.FullName, token.LineNumber);
+                addDeclarationToIndex(writer, token);
             }
         }
 
-        private static void addDeclarationToIndex(IndexWriter writer, string documentId, string fullName, int lineNumber)
+        private static void addDeclarationToIndex(IndexWriter writer, TokenViewModel token)
         {
             //remove previous entry
-            var searchQuery = new TermQuery(new Term("Id", documentId));
+            var searchQuery = new TermQuery(new Term("Id", token.DocumentId));
             writer.DeleteDocuments(searchQuery);
 
             //add new index entry
             var doc = new Document();
 
-            doc.Add(new Field("Id", documentId, Field.Store.YES, Field.Index.NOT_ANALYZED));
-            doc.Add(new Field("Name", fullName, Field.Store.YES, Field.Index.ANALYZED));
-            doc.Add(new Field("Lines", lineNumber.ToString(), Field.Store.YES, Field.Index.NOT_ANALYZED));
+            doc.Add(new Field("Id", token.DocumentId, Field.Store.YES, Field.Index.NOT_ANALYZED));
+            doc.Add(new Field("Name", token.FullName, Field.Store.YES, Field.Index.ANALYZED));
+            doc.Add(new Field("Lines", token.LineNumber.ToString(), Field.Store.YES, Field.Index.NOT_ANALYZED));
 
             writer.AddDocument(doc);
         }
@@ -92,7 +92,7 @@ namespace SourceBrowser.Search
         }
 
 
-        private static IEnumerable<TokenViewModel> search(string searchQuery, string searchField = "")
+        private static IEnumerable<TokenViewModel> search(string searchQuery)
         {
             if (string.IsNullOrEmpty(searchQuery.Replace("*", "").Replace("?", "")))
                 return new List<TokenViewModel>();
