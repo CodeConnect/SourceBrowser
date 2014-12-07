@@ -96,19 +96,34 @@ namespace SourceBrowser.Search
         }
 
 
-        private static IEnumerable<TokenViewModel> search(string searchQuery)
+        public static IEnumerable<TokenViewModel> SearchRepository(string username, string repository, string searchQuery)
         {
+            if (string.IsNullOrWhiteSpace(username))
+                throw new ArgumentException(nameof(username) + " must be provided.");
+
+            if (string.IsNullOrWhiteSpace(repository))
+                throw new ArgumentException(nameof(repository) + " must be provided.");
+
             if (string.IsNullOrEmpty(searchQuery.Replace("*", "").Replace("?", "")))
                 return new List<TokenViewModel>();
 
             using (var searcher = new IndexSearcher(_directory, false))
             using (var analyzer = new StandardAnalyzer(Lucene.Net.Util.Version.LUCENE_30))
             {
+                var usernameQuery = new TermQuery(new Term("Username", username));
+                var repositoryQuery = new TermQuery(new Term("Repository", repository));
+
+                var boolQuery = new BooleanQuery();
+                boolQuery.Add(usernameQuery, Occur.MUST);
+                boolQuery.Add(repositoryQuery, Occur.MUST);
+                    
                 var hitsLimit = 100;
 
                 var parser = new QueryParser(Lucene.Net.Util.Version.LUCENE_30, "FullName", analyzer);
+
                 var query = parseQuery(searchQuery, parser);
-                var hits = searcher.Search(query, hitsLimit).ScoreDocs;
+                boolQuery.Add(query, Occur.MUST);
+                var hits = searcher.Search(boolQuery, hitsLimit).ScoreDocs;
 
                 var results = MapLuceneToDataList(hits, searcher);
                 analyzer.Close();
