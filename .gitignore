@@ -12,6 +12,7 @@ SB_Files/
 GithubStaging/
 PublishProfiles/
 WorkspaceLogs/
+luceneIndex/
 
 # Build results
 [Dd]ebug/
