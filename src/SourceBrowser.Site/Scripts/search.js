@@ -10,8 +10,10 @@
     }
     else if (splitPath.length >= 2)
     {
-        var username = splitPath[0];
-        var repository = splitPath[1];
+        var username = splitPath[1];
+        console.log(username);
+        var repository = splitPath[2];
+        console.log(repository);
         searchRepository(username, repository, query);
     }
     console.log(splitPath.length);
@@ -30,9 +32,11 @@ function searchRepository(username, repository, query) {
     });
 
     $.ajax({
-        type: "POST",
+        type: "GET",
         url: "/Search/Repository/",
-        data: data,
+        //TODO: If anyone knows a better way to do this, please share it.
+        //My Javascript is not strong...
+        data: "username=" + username + "&repository=" + repository + "&query="+ query,
         success: results
     });
 }

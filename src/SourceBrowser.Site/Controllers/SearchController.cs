@@ -14,10 +14,11 @@ namespace SourceBrowser.Site.Controllers
             return View();
         }
 
-        public ActionResult Repository(string username, string repo, string query)
+        public ActionResult Repository(string username, string repository, string query)
         {
-            var placeHolder =Json("test");
-            return placeHolder;
+            var results = Search.SearchIndex.SearchRepository(username, repository, query);
+            var json = Json(results);
+            return json;
         }
     }
 }

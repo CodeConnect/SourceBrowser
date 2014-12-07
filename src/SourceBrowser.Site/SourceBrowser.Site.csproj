@@ -424,6 +424,10 @@
       <Project>{c91050bd-5010-4ebd-a6ae-52cca7c2553d}</Project>
       <Name>SourceBrowser.Generator</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SourceBrowser.Search\SourceBrowser.Search.csproj">
+      <Project>{6c2ed4c0-e609-47d8-aa05-1cacbe5252ac}</Project>
+      <Name>SourceBrowser.Search</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SourceBrowser.SolutionRetriever\SourceBrowser.SolutionRetriever.csproj">
       <Project>{f90b7983-d137-4c89-b668-a6082be39303}</Project>
       <Name>SourceBrowser.SolutionRetriever</Name>
