@@ -15,6 +15,8 @@ namespace SourceBrowser.Samples
             // For developers that set test variables in code:
             string solutionPath = @"";
             string saveDirectory = @"";
+            string username = "Josh";
+            string repository = "ProjectionBufferTutorial";
 
             // For developers that provide test variables in arguments:
             if (args.Length == 2)
@@ -49,6 +51,9 @@ namespace SourceBrowser.Samples
 
                 var htmlTransformer = new HtmlTransformer(tokenLookup, absoluteSaveDirectory);
                 htmlTransformer.Visit(workspaceModel);
+
+                var searchTransformer = new SearchIndexTransformer(username, repository);
+                searchTransformer.Visit(workspaceModel);
 
                 var treeViewTransformer = new TreeViewTransformer(absoluteSaveDirectory, "CodeConnect", "SourceBrowser"); // TODO: provide actual username and repo name
                 treeViewTransformer.Visit(workspaceModel);
