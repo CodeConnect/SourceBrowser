@@ -11,19 +11,15 @@
     else if (splitPath.length >= 2)
     {
         var username = splitPath[1];
-        console.log(username);
         var repository = splitPath[2];
-        console.log(repository);
         searchRepository(username, repository, query);
     }
-    console.log(splitPath.length);
 
     return false;
 });
 
 
 function searchRepository(username, repository, query) {
-    console.log("search repo");
 
     data = JSON.stringify({
         "username": username,
@@ -37,26 +33,31 @@ function searchRepository(username, repository, query) {
         //TODO: If anyone knows a better way to do this, please share it.
         //My Javascript is not strong...
         data: "username=" + username + "&repository=" + repository + "&query="+ query,
-        success: results
+        success: handleSearch
     });
 }
 
-function results(e) {
+function handleSearch(results) {
     $("#tree-view").hide();
     $("#search-results").show();
 
-    if(e.length == 0)
-    {
+    if (results.length == 0) {
         $("#no-results").show();
-        return;
     }
-
-    $("#no-results").hide();
-
+    else {
+        $("#no-results").hide();
+        var htmlResults = buildResults(results);
+    }
 }
 
+function buildResults(results) {
+    for (var i = 0; i < results.length; i++) {
+        var searchResult = results[i];
+        console.log(searchResult);
+    }
+}
+
+
 function searchSite(query) {
-    console.log("search site");
-    console.log(query);
 }
 
