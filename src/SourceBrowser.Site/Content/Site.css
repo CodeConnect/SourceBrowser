@@ -74,3 +74,17 @@ textarea {
     color:#A31515;
 }
 
+#search-results a {
+    display:block;
+    padding:5px 10px;
+    color:#333;
+}
+
+#search-results a span:first-of-type{
+    font-weight:bold;
+}
+
+#search-results a:hover {
+    text-decoration:none;
+    background:#DDD;
+}
