@@ -80,6 +80,10 @@ textarea {
     color:#333;
 }
 
+#search-results span {
+    display:block;
+}
+
 #search-results a span:first-of-type{
     font-weight:bold;
 }
