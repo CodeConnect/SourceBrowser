@@ -56,11 +56,15 @@ namespace SourceBrowser.Search
 
             //add new index entry
             var doc = new Document();
+            if (token.Name.Contains("MyToolWindow"))
+            {
+            }
 
-            doc.Add(new Field(DocumentFields.Id, token.DocumentId, Field.Store.YES, Field.Index.NOT_ANALYZED));
-            doc.Add(new Field(DocumentFields.Username, token.Username, Field.Store.YES, Field.Index.ANALYZED));
-            doc.Add(new Field(DocumentFields.Repository, token.Repository, Field.Store.YES, Field.Index.ANALYZED));
-            doc.Add(new Field(DocumentFields.Name, token.FullName, Field.Store.YES, Field.Index.ANALYZED));
+            doc.Add(new Field(DocumentFields.Id, token.DocumentId.ToLower(), Field.Store.YES, Field.Index.NOT_ANALYZED));
+            doc.Add(new Field(DocumentFields.Username, token.Username.ToLower(), Field.Store.YES, Field.Index.ANALYZED));
+            doc.Add(new Field(DocumentFields.Repository, token.Repository.ToLower(), Field.Store.YES, Field.Index.ANALYZED));
+            doc.Add(new Field(DocumentFields.Name, token.Name.ToLower(), Field.Store.YES, Field.Index.ANALYZED));
+            doc.Add(new Field(DocumentFields.FullName, token.FullName.ToLower(), Field.Store.YES, Field.Index.ANALYZED));
             doc.Add(new Field(DocumentFields.LineNumber, token.LineNumber.ToString(), Field.Store.YES, Field.Index.NOT_ANALYZED));
 
             writer.AddDocument(doc);
@@ -86,7 +90,7 @@ namespace SourceBrowser.Search
                 document.Get(DocumentFields.Username),
                 document.Get(DocumentFields.Repository),
                 document.Get(DocumentFields.Id),
-                document.Get(DocumentFields.Name),
+                document.Get(DocumentFields.FullName),
                 Convert.ToInt32(document.Get(DocumentFields.LineNumber))
                 );
         }
@@ -95,7 +99,6 @@ namespace SourceBrowser.Search
         {
             return hits.Select(hit => mapDocumentToToken(searcher.Doc(hit.Doc))).ToList();
         }
-
 
         public static IEnumerable<TokenViewModel> SearchRepository(string username, string repository, string searchQuery)
         {
@@ -119,7 +122,6 @@ namespace SourceBrowser.Search
                 boolQuery.Add(repositoryQuery, Occur.MUST);
                     
                 var hitsLimit = 100;
-
                 var parser = new QueryParser(Lucene.Net.Util.Version.LUCENE_30, DocumentFields.Name, analyzer);
 
                 var query = parseQuery(searchQuery, parser);

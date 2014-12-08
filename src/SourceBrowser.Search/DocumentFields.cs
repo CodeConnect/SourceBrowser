@@ -12,6 +12,7 @@ namespace SourceBrowser.Search
     public static class DocumentFields
     {
         public const string Id = "Id";
+        public const string FullName = "FullName";
         public const string Name = "Name";
         public const string Username = "Username";
         public const string Repository = "Repository";
