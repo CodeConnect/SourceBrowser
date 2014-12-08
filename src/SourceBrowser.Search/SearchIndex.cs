@@ -120,11 +120,11 @@ namespace SourceBrowser.Search
                     
                 var hitsLimit = 100;
 
-                var parser = new QueryParser(Lucene.Net.Util.Version.LUCENE_30, "FullName", analyzer);
+                var parser = new QueryParser(Lucene.Net.Util.Version.LUCENE_30, "Name", analyzer);
 
                 var query = parseQuery(searchQuery, parser);
                 boolQuery.Add(query, Occur.MUST);
-                var hits = searcher.Search(boolQuery, hitsLimit).ScoreDocs;
+                var hits = searcher.Search(query, hitsLimit).ScoreDocs;
 
                 var results = MapLuceneToDataList(hits, searcher);
                 analyzer.Close();
