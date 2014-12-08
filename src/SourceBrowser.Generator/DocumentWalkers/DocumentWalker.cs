@@ -11,12 +11,12 @@ using SourceBrowser.Generator.Extensions;
 using SourceBrowser.Generator.Model;
 using SourceBrowser.Generator.Model.CSharp;
 
-namespace SourceBrowser.Generator
+namespace SourceBrowser.Generator.DocumentWalkers
 {
     /// <summary>
     /// 
     /// </summary>
-    public class DocumentWalker : CSharpSyntaxWalker
+    public class DocumentWalker : CSharpSyntaxWalker, IWalker
     {
         private SemanticModel _model;
         private ReferencesourceLinkProvider _refsourceLinkProvider;
@@ -65,7 +65,10 @@ namespace SourceBrowser.Generator
             DocumentModel.Tokens.Add(tokenModel);
         }
 
-     
+        public DocumentModel GetDocumentModel()
+        {
+            return DocumentModel;
+        }
 
         private ICollection<Trivia> ProcessTrivia(SyntaxTriviaList triviaList)
         {

@@ -85,8 +85,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DocumentWalkers\IWalker.cs" />
+    <Compile Include="DocumentWalkers\WalkerSelector.cs" />
     <Compile Include="Extensions\DocumentExtensions.cs" />
-    <Compile Include="DocumentWalker.cs" />
+    <Compile Include="DocumentWalkers\DocumentWalker.cs" />
     <Compile Include="Extensions\SymbolExtensions.cs" />
     <Compile Include="Hacks\DependencyHacks.cs" />
     <Compile Include="Model\CSharp\CSharpTokenTypes.cs" />
