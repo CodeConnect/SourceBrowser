@@ -39,22 +39,39 @@ function searchRepository(username, repository, query) {
 
 function handleSearch(results) {
     $("#tree-view").hide();
-    $("#search-results").show();
 
     if (results.length == 0) {
+        $("#search-results").hide();
         $("#no-results").show();
     }
     else {
         $("#no-results").hide();
+        $("#search-results").show();
         var htmlResults = buildResults(results);
+        $("#search-results").empty().append(htmlResults);
     }
 }
 
 function buildResults(results) {
+    var htmlResults = "";
     for (var i = 0; i < results.length; i++) {
         var searchResult = results[i];
         console.log(searchResult);
+        var lineNumber = searchResult["LineNumber"];
+        var link = "/Browse/" + searchResult["DocumentId"] + "#" + lineNumber;
+        html = "";
+        html += "<a href='" + link + "'>";
+        html += "<span>"
+        html += searchResult["Name"];
+        html += "</span>";
+        html += "<span>"
+        html += searchResult["FullName"];
+        html += "</span>";
+        html += "</a>";
+
+        htmlResults += html;
     }
+    return htmlResults;
 }
 
 
