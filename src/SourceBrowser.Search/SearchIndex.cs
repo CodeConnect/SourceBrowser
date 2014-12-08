@@ -70,20 +70,6 @@ namespace SourceBrowser.Search
             writer.AddDocument(doc);
         }
 
-        private static Query parseQuery(string searchQuery, QueryParser parser)
-        {
-            Query query;
-            try
-            {
-                query = parser.Parse(searchQuery.Trim());
-            }
-            catch(ParseException)
-            {
-                query = parser.Parse(QueryParser.Escape(searchQuery.Trim()));
-            }
-            return query;
-        }
-
         private static TokenViewModel mapDocumentToToken(Document document)
         {
             return new TokenViewModel(
@@ -114,8 +100,8 @@ namespace SourceBrowser.Search
             using (var searcher = new IndexSearcher(_directory, false))
             using (var analyzer = new StandardAnalyzer(Lucene.Net.Util.Version.LUCENE_30))
             {
-                var usernameQuery = new TermQuery(new Term(DocumentFields.Username, username));
-                var repositoryQuery = new TermQuery(new Term(DocumentFields.Repository, repository));
+                var usernameQuery = new TermQuery(new Term(DocumentFields.Username, username.ToLower()));
+                var repositoryQuery = new TermQuery(new Term(DocumentFields.Repository, repository.ToLower()));
 
                 var boolQuery = new BooleanQuery();
                 boolQuery.Add(usernameQuery, Occur.MUST);
@@ -124,7 +110,7 @@ namespace SourceBrowser.Search
                 var hitsLimit = 100;
                 var parser = new QueryParser(Lucene.Net.Util.Version.LUCENE_30, DocumentFields.Name, analyzer);
 
-                var query = parseQuery(searchQuery, parser);
+                var query = new PrefixQuery(new Term(DocumentFields.Name, searchQuery.ToLower()));
                 boolQuery.Add(query, Occur.MUST);
                 var hits = searcher.Search(query, hitsLimit).ScoreDocs;
 
