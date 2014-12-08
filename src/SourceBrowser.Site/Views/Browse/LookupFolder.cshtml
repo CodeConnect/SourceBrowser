@@ -24,12 +24,6 @@
         <!--/Bread crumb-->
 
         <div class="row">
-            <aside class="col-xs-4" id="browser">
-                <section>
-                    @Html.Raw(ViewBag.TreeView)
-                </section>
-            </aside>
-
             <!-- Main Content-->
             <article class="col-xs-8" id="main">
                 <section>
@@ -38,6 +32,11 @@
                     <p><a href="//github.com/@Model.ParentRepo.ParentUserName/@Model.ParentRepo.Name/" target="_blank">View @Model.ParentRepo.Name on github.</a></p>
                 </section>
             </article>
+            <aside class="col-xs-4" id="browser">
+                <section>
+                    @Html.Raw(ViewBag.TreeView)
+                </section>
+            </aside>
         </div>
     </div>
 </div>
