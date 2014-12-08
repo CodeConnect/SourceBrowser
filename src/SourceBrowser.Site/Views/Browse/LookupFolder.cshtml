@@ -33,8 +33,13 @@
                 </section>
             </article>
             <aside class="col-xs-4" id="browser">
-                <section>
+                <section id="tree-view">
                     @Html.Raw(ViewBag.TreeView)
+                </section>
+                <section id="search-results" style="display:none;">
+                    <section id="no-results" style="display:none;">
+                        There were no results
+                    </section>
                 </section>
             </aside>
         </div>

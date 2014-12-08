@@ -42,7 +42,17 @@ function searchRepository(username, repository, query) {
 }
 
 function results(e) {
-    alert(e);
+    $("#tree-view").hide();
+    $("#search-results").show();
+
+    if(e.length == 0)
+    {
+        $("#no-results").show();
+        return;
+    }
+
+    $("#no-results").hide();
+
 }
 
 function searchSite(query) {
