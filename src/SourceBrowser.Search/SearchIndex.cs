@@ -87,7 +87,7 @@ namespace SourceBrowser.Search
                 document.Get(DocumentFields.Repository),
                 document.Get(DocumentFields.Id),
                 document.Get(DocumentFields.Name),
-                Convert.ToInt32(document.Get(DocumentFields.l))
+                Convert.ToInt32(document.Get(DocumentFields.LineNumber))
                 );
         }
 
