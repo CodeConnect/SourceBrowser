@@ -32,7 +32,7 @@ function searchRepository(username, repository, query) {
     });
 
     $.ajax({
-        type: "GET",
+        type: "POST",
         url: "/Search/Repository/",
         //TODO: If anyone knows a better way to do this, please share it.
         //My Javascript is not strong...
