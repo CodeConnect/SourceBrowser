@@ -57,11 +57,11 @@ namespace SourceBrowser.Search
             //add new index entry
             var doc = new Document();
 
-            doc.Add(new Field("Id", token.DocumentId, Field.Store.YES, Field.Index.NOT_ANALYZED));
-            doc.Add(new Field("Username", token.Username, Field.Store.YES, Field.Index.ANALYZED));
-            doc.Add(new Field("Repository", token.Repository, Field.Store.YES, Field.Index.ANALYZED));
-            doc.Add(new Field("Name", token.FullName, Field.Store.YES, Field.Index.ANALYZED));
-            doc.Add(new Field("Lines", token.LineNumber.ToString(), Field.Store.YES, Field.Index.NOT_ANALYZED));
+            doc.Add(new Field(DocumentFields.Id, token.DocumentId, Field.Store.YES, Field.Index.NOT_ANALYZED));
+            doc.Add(new Field(DocumentFields.Username, token.Username, Field.Store.YES, Field.Index.ANALYZED));
+            doc.Add(new Field(DocumentFields.Repository, token.Repository, Field.Store.YES, Field.Index.ANALYZED));
+            doc.Add(new Field(DocumentFields.Name, token.FullName, Field.Store.YES, Field.Index.ANALYZED));
+            doc.Add(new Field(DocumentFields.LineNumber, token.LineNumber.ToString(), Field.Store.YES, Field.Index.NOT_ANALYZED));
 
             writer.AddDocument(doc);
         }
@@ -83,11 +83,11 @@ namespace SourceBrowser.Search
         private static TokenViewModel mapDocumentToToken(Document document)
         {
             return new TokenViewModel(
-                document.Get("Username"),
-                document.Get("Repository"),
-                document.Get("Id"),
-                document.Get("Name"),
-                Convert.ToInt32(document.Get("Lines"))
+                document.Get(DocumentFields.Username),
+                document.Get(DocumentFields.Repository),
+                document.Get(DocumentFields.Id),
+                document.Get(DocumentFields.Name),
+                Convert.ToInt32(document.Get(DocumentFields.l))
                 );
         }
 
@@ -111,8 +111,8 @@ namespace SourceBrowser.Search
             using (var searcher = new IndexSearcher(_directory, false))
             using (var analyzer = new StandardAnalyzer(Lucene.Net.Util.Version.LUCENE_30))
             {
-                var usernameQuery = new TermQuery(new Term("Username", username));
-                var repositoryQuery = new TermQuery(new Term("Repository", repository));
+                var usernameQuery = new TermQuery(new Term(DocumentFields.Username, username));
+                var repositoryQuery = new TermQuery(new Term(DocumentFields.Repository, repository));
 
                 var boolQuery = new BooleanQuery();
                 boolQuery.Add(usernameQuery, Occur.MUST);
@@ -120,7 +120,7 @@ namespace SourceBrowser.Search
                     
                 var hitsLimit = 100;
 
-                var parser = new QueryParser(Lucene.Net.Util.Version.LUCENE_30, "Name", analyzer);
+                var parser = new QueryParser(Lucene.Net.Util.Version.LUCENE_30, DocumentFields.Name, analyzer);
 
                 var query = parseQuery(searchQuery, parser);
                 boolQuery.Add(query, Occur.MUST);

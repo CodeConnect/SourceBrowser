@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="DocumentFields.cs" />
     <Compile Include="SearchIndex.cs" />
     <Compile Include="ViewModels\TokenViewModel.cs" />
   </ItemGroup>

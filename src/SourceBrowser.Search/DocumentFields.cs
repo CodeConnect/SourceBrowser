@@ -1,0 +1,20 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace SourceBrowser.Search
+{
+    /// <summary>
+    /// A class containing the names of the document fields within our Lucene Index
+    /// </summary>
+    public static class DocumentFields
+    {
+        public const string Id = "Id";
+        public const string Name = "Name";
+        public const string Username = "Username";
+        public const string Repository = "Repository";
+        public const string LineNumber = "LineNumber";
+    }
+}
