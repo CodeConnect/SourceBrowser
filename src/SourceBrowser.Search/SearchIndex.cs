@@ -16,7 +16,8 @@ namespace SourceBrowser.Search
 {
     public class SearchIndex
     {
-        private static string _luceneDir = Path.Combine(System.Web.Hosting.HostingEnvironment.MapPath("~"), "luceneIndex");
+        private static string basePath = System.Web.Hosting.HostingEnvironment.MapPath("~") ?? Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+        private static string _luceneDir =  Path.Combine(basePath, "luceneIndex");
         private static FSDirectory _directoryTemp;
         
         private static FSDirectory _directory
@@ -56,9 +57,9 @@ namespace SourceBrowser.Search
             //add new index entry
             var doc = new Document();
 
-            doc.Add(new Field("Username", token.DocumentId, Field.Store.YES, Field.Index.ANALYZED));
-            doc.Add(new Field("Repository", token.DocumentId, Field.Store.YES, Field.Index.ANALYZED));
             doc.Add(new Field("Id", token.DocumentId, Field.Store.YES, Field.Index.NOT_ANALYZED));
+            doc.Add(new Field("Username", token.Username, Field.Store.YES, Field.Index.ANALYZED));
+            doc.Add(new Field("Repository", token.Repository, Field.Store.YES, Field.Index.ANALYZED));
             doc.Add(new Field("Name", token.FullName, Field.Store.YES, Field.Index.ANALYZED));
             doc.Add(new Field("Lines", token.LineNumber.ToString(), Field.Store.YES, Field.Index.NOT_ANALYZED));
 
