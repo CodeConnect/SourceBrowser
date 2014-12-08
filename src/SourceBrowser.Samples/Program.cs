@@ -64,6 +64,7 @@ namespace SourceBrowser.Samples
             {
                 Console.WriteLine("Error:");
                 Console.WriteLine(ex.ToString());
+                Console.ReadLine();
             }
 
         }
