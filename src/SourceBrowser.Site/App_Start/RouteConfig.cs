@@ -45,7 +45,7 @@ namespace SourceBrowser.Site
                 action = "LookupFile",
 
             }
-                , constraints: new { path = @".*\.cs" }
+                , constraints: new { path = @".*(\.cs|\.vb)" }
             );
 
             routes.MapRoute(
