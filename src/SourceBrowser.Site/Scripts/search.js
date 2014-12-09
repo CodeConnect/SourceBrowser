@@ -52,6 +52,19 @@ function handleSearch(results) {
     }
 }
 
+$("#search-box").keyup(function (e) {
+    var val = $("#search-box").val();
+    if (val.length == 0) {
+        $("#search-results").hide();
+        $("#no-results").hide();
+        $("#tree-view").show();
+    }
+    else {
+        console.log(val);
+        $("#search-form").submit();
+    }
+});
+
 function buildResults(results) {
     var htmlResults = "";
     for (var i = 0; i < results.length; i++) {
