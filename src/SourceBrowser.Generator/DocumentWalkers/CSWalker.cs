@@ -16,14 +16,14 @@ namespace SourceBrowser.Generator.DocumentWalkers
     /// <summary>
     /// 
     /// </summary>
-    public class DocumentWalker : CSharpSyntaxWalker, IWalker
+    public class CSWalker : CSharpSyntaxWalker, IWalker
     {
         private SemanticModel _model;
         private ReferencesourceLinkProvider _refsourceLinkProvider;
         public DocumentModel DocumentModel { get; private set; }
         public string FilePath { get; set; }
 
-        public DocumentWalker(IProjectItem parent, Document document, ReferencesourceLinkProvider refSourceLinkProvider): base(SyntaxWalkerDepth.Trivia)
+        public CSWalker(IProjectItem parent, Document document, ReferencesourceLinkProvider refSourceLinkProvider): base(SyntaxWalkerDepth.Trivia)
         {
             _model = document.GetSemanticModelAsync().Result;
             _refsourceLinkProvider = refSourceLinkProvider;

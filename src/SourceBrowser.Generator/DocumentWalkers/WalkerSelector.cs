@@ -16,13 +16,12 @@ namespace SourceBrowser.Generator.DocumentWalkers
             }
             if (fileExtension == ".cs")
             {
-                return new DocumentWalker(parent, document, refSourceLinkProvider);
+                return new CSWalker(parent, document, refSourceLinkProvider);
             }
-            /*
             else if (fileExtension == ".vb")
             {
-                return new DocumentWalker(parent, document, refSourceLinkProvider);
-            }*/
+                return new VBWalker(parent, document, refSourceLinkProvider);
+            }
             return null;
         }
     }
