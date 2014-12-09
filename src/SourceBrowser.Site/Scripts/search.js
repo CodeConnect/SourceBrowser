@@ -58,7 +58,7 @@ function buildResults(results) {
         var searchResult = results[i];
         console.log(searchResult);
         var lineNumber = searchResult["LineNumber"];
-        var link = "/Browse/" + searchResult["DocumentId"] + "#" + lineNumber;
+        var link = "/Browse/" + searchResult["Path"] + "#" + lineNumber;
         html = "";
         html += "<a href='" + link + "'>";
         html += "<span>"

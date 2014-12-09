@@ -51,13 +51,14 @@ namespace SourceBrowser.Search
         private static void addDeclarationToIndex(IndexWriter writer, TokenViewModel token)
         {
             //remove previous entry
-            //var searchQuery = new TermQuery(new Term("Id", token.DocumentId));
-            //writer.DeleteDocuments(searchQuery);
+            var searchQuery = new TermQuery(new Term(DocumentFields.Id, token.Id));
+            writer.DeleteDocuments(searchQuery);
 
             //add new index entry
             var doc = new Document();
 
-            doc.Add(new Field(DocumentFields.Id, token.DocumentId, Field.Store.YES, Field.Index.NOT_ANALYZED));
+            doc.Add(new Field(DocumentFields.Id, token.Id, Field.Store.YES, Field.Index.NOT_ANALYZED));
+            doc.Add(new Field(DocumentFields.Path, token.Path, Field.Store.YES, Field.Index.NOT_ANALYZED));
             doc.Add(new Field(DocumentFields.Username, token.Username, Field.Store.YES, Field.Index.ANALYZED));
             doc.Add(new Field(DocumentFields.Repository, token.Repository, Field.Store.YES, Field.Index.ANALYZED));
             doc.Add(new Field(DocumentFields.Name, token.Name ,Field.Store.YES, Field.Index.ANALYZED));
@@ -72,7 +73,7 @@ namespace SourceBrowser.Search
             return new TokenViewModel(
                 document.Get(DocumentFields.Username),
                 document.Get(DocumentFields.Repository),
-                document.Get(DocumentFields.Id),
+                document.Get(DocumentFields.Path),
                 document.Get(DocumentFields.FullName),
                 Convert.ToInt32(document.Get(DocumentFields.LineNumber))
                 );
