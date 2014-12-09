@@ -26,5 +26,9 @@ namespace SourceBrowser.Generator.Hacks
     {
         //Copies Microsoft.CodeAnalysis.CSharp.Workspaces.dll
         Microsoft.CodeAnalysis.CSharp.Formatting.BinaryOperatorSpacingOptions workaround1;
+
+        // Note: we couldn't obtain Microsoft.CodeAnalysis.VisualBasic.Workspaces in this way
+        // because there are no public members in that assembly. Therefore,
+        // the startup projects (.Site and .Samples) have this added to their references.
     }
 }
