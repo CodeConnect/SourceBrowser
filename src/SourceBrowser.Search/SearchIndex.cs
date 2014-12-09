@@ -51,20 +51,17 @@ namespace SourceBrowser.Search
         private static void addDeclarationToIndex(IndexWriter writer, TokenViewModel token)
         {
             //remove previous entry
-            var searchQuery = new TermQuery(new Term("Id", token.DocumentId));
-            writer.DeleteDocuments(searchQuery);
+            //var searchQuery = new TermQuery(new Term("Id", token.DocumentId));
+            //writer.DeleteDocuments(searchQuery);
 
             //add new index entry
             var doc = new Document();
-            if (token.Name.Contains("MyToolWindow"))
-            {
-            }
 
-            doc.Add(new Field(DocumentFields.Id, token.DocumentId.ToLower(), Field.Store.YES, Field.Index.NOT_ANALYZED));
-            doc.Add(new Field(DocumentFields.Username, token.Username.ToLower(), Field.Store.YES, Field.Index.ANALYZED));
-            doc.Add(new Field(DocumentFields.Repository, token.Repository.ToLower(), Field.Store.YES, Field.Index.ANALYZED));
-            doc.Add(new Field(DocumentFields.Name, token.Name.ToLower(), Field.Store.YES, Field.Index.ANALYZED));
-            doc.Add(new Field(DocumentFields.FullName, token.FullName.ToLower(), Field.Store.YES, Field.Index.ANALYZED));
+            doc.Add(new Field(DocumentFields.Id, token.DocumentId, Field.Store.YES, Field.Index.NOT_ANALYZED));
+            doc.Add(new Field(DocumentFields.Username, token.Username, Field.Store.YES, Field.Index.ANALYZED));
+            doc.Add(new Field(DocumentFields.Repository, token.Repository, Field.Store.YES, Field.Index.ANALYZED));
+            doc.Add(new Field(DocumentFields.Name, token.Name ,Field.Store.YES, Field.Index.ANALYZED));
+            doc.Add(new Field(DocumentFields.FullName, token.FullName, Field.Store.YES, Field.Index.ANALYZED));
             doc.Add(new Field(DocumentFields.LineNumber, token.LineNumber.ToString(), Field.Store.YES, Field.Index.NOT_ANALYZED));
 
             writer.AddDocument(doc);
@@ -100,8 +97,8 @@ namespace SourceBrowser.Search
             using (var searcher = new IndexSearcher(_directory, false))
             using (var analyzer = new StandardAnalyzer(Lucene.Net.Util.Version.LUCENE_30))
             {
-                var usernameQuery = new TermQuery(new Term(DocumentFields.Username, username.ToLower()));
-                var repositoryQuery = new TermQuery(new Term(DocumentFields.Repository, repository.ToLower()));
+                var usernameQuery = new TermQuery(new Term(DocumentFields.Username, username));
+                var repositoryQuery = new TermQuery(new Term(DocumentFields.Repository, repository));
 
                 var boolQuery = new BooleanQuery();
                 boolQuery.Add(usernameQuery, Occur.MUST);
@@ -110,9 +107,11 @@ namespace SourceBrowser.Search
                 var hitsLimit = 100;
                 var parser = new QueryParser(Lucene.Net.Util.Version.LUCENE_30, DocumentFields.Name, analyzer);
 
-                var query = new PrefixQuery(new Term(DocumentFields.Name, searchQuery.ToLower()));
+                var test = parser.Parse(searchQuery + "*");
+
+                var query = new PrefixQuery(new Term(DocumentFields.Name, searchQuery));
                 boolQuery.Add(query, Occur.MUST);
-                var hits = searcher.Search(query, hitsLimit).ScoreDocs;
+                var hits = searcher.Search(test, hitsLimit).ScoreDocs;
 
                 var results = MapLuceneToDataList(hits, searcher);
                 analyzer.Close();
