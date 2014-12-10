@@ -1,4 +1,14 @@
-﻿search = {
+﻿$(document).ready(function () {
+    var path = window.location.pathname;
+    var splitPath = path.split('/');
+    splitPath = splitPath.filter(function (v) { return v !== '' });
+    if (splitPath.length <= 2)
+    {
+        $("#search-form").hide();
+    }
+});
+
+search = {
     //Keeps track of whether a search is ongoing.
     //We only want to send one query at a time.
     isSearching: false,
@@ -23,7 +33,7 @@
         splitPath = splitPath.filter(function (v) { return v !== '' });
 
         //Only search if we're in a repository
-        if (splitPath.length >= 2) {
+        if (splitPath.length > 2) {
             var username = splitPath[1];
             var repository = splitPath[2];
 
