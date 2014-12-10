@@ -10,6 +10,12 @@
         if (search.isSearching)
             return;
         var query = $("#search-box").val();
+        //If there's no query, just clear everything
+        if (query == "")
+        {
+            search.clearSearch();
+            return;
+        }
         search.lastQuery = query;
         //Split path, removing empty entries
         var path = window.location.pathname;
@@ -47,13 +53,11 @@
     },
 
     handleError: function (e) {
-        console.log(e);
         search.isSearching = false;
         search.checkIfSearchTextChanged();
     },
 
     handleSuccess: function (results) {
-        console.log(results);
         $("#tree-view").hide();
         //If we can't find any results, tell the user.
         if (results.length == 0) {
@@ -99,6 +103,13 @@
         if (currentQuery != search.lastQuery)
             search.beginSearch();
     },
+    
+    clearSearch: function () {
+        $("#search-results").hide();
+        $("#no-results").hide();
+        $("#tree-view").show();
+    }
+
 }
 
 
