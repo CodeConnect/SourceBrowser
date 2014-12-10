@@ -84,6 +84,33 @@ namespace SourceBrowser.Search
             return hits.Select(hit => mapDocumentToToken(searcher.Doc(hit.Doc))).ToList();
         }
 
+        private static Query parsePrefixQuery(string searchQuery, QueryParser parser)
+        {
+            Query query;
+            try
+            {
+                query = parser.Parse(searchQuery.Trim() + "*");
+            }
+            catch (ParseException)
+            {
+                query = parser.Parse(QueryParser.Escape(searchQuery.Trim()));
+            }
+            return query;
+        }
+        private static Query parseQuery(string searchQuery, QueryParser parser)
+        {
+            Query query;
+            try
+            {
+                query = parser.Parse(searchQuery.Trim());
+            }
+            catch (ParseException)
+            {
+                query = parser.Parse(QueryParser.Escape(searchQuery.Trim()));
+            }
+            return query;
+        }
+
         public static IEnumerable<TokenViewModel> SearchRepository(string username, string repository, string searchQuery)
         {
             if (string.IsNullOrWhiteSpace(username))
@@ -98,24 +125,25 @@ namespace SourceBrowser.Search
             using (var searcher = new IndexSearcher(_directory, false))
             using (var analyzer = new StandardAnalyzer(Lucene.Net.Util.Version.LUCENE_30))
             {
-                var usernameQuery = new TermQuery(new Term(DocumentFields.Username, username));
-                var repositoryQuery = new TermQuery(new Term(DocumentFields.Repository, repository));
+                var userNameParser = new QueryParser(Lucene.Net.Util.Version.LUCENE_30, DocumentFields.Username, analyzer);
+                var usernameQuery = parseQuery(username, userNameParser);
 
+                var repositoryParser = new QueryParser(Lucene.Net.Util.Version.LUCENE_30, DocumentFields.Repository, analyzer);
+                var repositoryQuery = parseQuery(repository, repositoryParser);
+
+                var nameParser = new QueryParser(Lucene.Net.Util.Version.LUCENE_30, DocumentFields.Name, analyzer);
+                var nameQuery = parsePrefixQuery(searchQuery, nameParser);
+
+                //Ensure that it's the user AND the repository AND the query
                 var boolQuery = new BooleanQuery();
                 boolQuery.Add(usernameQuery, Occur.MUST);
                 boolQuery.Add(repositoryQuery, Occur.MUST);
+                boolQuery.Add(nameQuery, Occur.MUST);
                     
                 var hitsLimit = 100;
-                var parser = new QueryParser(Lucene.Net.Util.Version.LUCENE_30, DocumentFields.Name, analyzer);
-
-                var test = parser.Parse(searchQuery + "*");
-
-                var query = new PrefixQuery(new Term(DocumentFields.Name, searchQuery));
-                boolQuery.Add(query, Occur.MUST);
-                var hits = searcher.Search(test, hitsLimit).ScoreDocs;
+                var hits = searcher.Search(boolQuery, hitsLimit).ScoreDocs;
 
                 var results = MapLuceneToDataList(hits, searcher);
-                analyzer.Close();
                 return results;
             }
         }
