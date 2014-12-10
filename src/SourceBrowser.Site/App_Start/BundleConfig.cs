@@ -10,7 +10,8 @@ namespace SourceBrowser.Site
         {
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
                         "~/Scripts/jquery-2.1.1.js",
-                        "~/Scripts/jquery.widget.js"));
+                        "~/Scripts/jquery.widget.js",
+                        "~/Scripts/history.js/history.adapter.jquery.js"));
 
             /* For now, this bundle is empty and not used.
             bundles.Add(new ScriptBundle("~/bundles/sourcebrowser").Include(
