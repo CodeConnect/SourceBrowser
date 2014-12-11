@@ -20,8 +20,14 @@ namespace SourceBrowser.Search.ViewModels
             {
                 if (FullName == null)
                     return null;
+                string currentName = FullName;
+                var parensIndex = FullName.IndexOf("(");
+                if(parensIndex != -1)
+                {
+                    currentName = currentName.Remove(parensIndex, currentName.Length - parensIndex);
+                }
 
-                var splitName = FullName.Split(new char[] { '.' }, StringSplitOptions.RemoveEmptyEntries);
+                var splitName = currentName.Split(new char[] { '.' }, StringSplitOptions.RemoveEmptyEntries);
                 return splitName.Last();
             }
         }
@@ -29,7 +35,7 @@ namespace SourceBrowser.Search.ViewModels
 
         public TokenViewModel(string username, string repository, string path, string fullName, int lineNumber)
         {
-            Id = System.IO.Path.Combine(username, repository, fullName);
+            Id = username + "/" + repository + "/" + fullName;
             Username = username;
             Repository = repository;
             Path = path;
