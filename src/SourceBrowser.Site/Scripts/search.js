@@ -121,13 +121,31 @@ search = {
     },
 
     handlSearchClick: function (ex) {
+        //Stop navigation. We'll take it from here.
         ex.preventDefault();
+
+        var url = ex.currentTarget.href;
+        var host = ex.currentTarget.host;
+
+        var idx = url.indexOf(host) + host.length;
+        var relativeUrl = url.substr(idx);
+        History.pushState({ state: 1 }, "state1", relativeUrl);
     }
 }
 
-History.Adapter.bind(window, 'statechange', function () {
-    var state = History.getState();
-});
+(function (window, undefined) {
+
+    // Bind to StateChange Event
+    History.Adapter.bind(window, 'statechange', function () { // Note: We are using statechange instead of popstate
+        var State = History.getState(); // Note: We are using History.getState() instead of event.state
+    });
+
+    // Change our States
+    History.pushState({ state: 1 }, "State 1", "?state=1"); // logs {state:1}, "State 1", "?state=1"
+    History.pushState({ state: 2 }, "State 2", "?state=2"); // logs {state:2}, "State 2", "?state=2"
+  
+
+})(window);
 
 
 $("#search-box").keyup(function () {
