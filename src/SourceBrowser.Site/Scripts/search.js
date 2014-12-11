@@ -122,9 +122,10 @@ search = {
 
     handlSearchClick: function (ex) {
         //If we're already on the page, allow the browser to scroll.
-        var currentPathName = window.location.pathname;
-        var newPathName = ex.currentTarget.pathname;
-        if (currentPathName == newPathName)
+        var currentPath= window.location.pathname;
+        var newPath = ex.currentTarget.pathname
+
+        if (currentPath== newPath)
             return;
 
         //Stop navigation. We'll take it from here.
@@ -133,13 +134,15 @@ search = {
         var url = ex.currentTarget.href;
         var host = ex.currentTarget.host;
 
-        var idx = url.indexOf(host) + host.length;
-        var relativeUrl = url.substr(idx);
-        var hashidx = relativeUrl.indexOf("#");
-        var newUrl = relativeUrl.substr(0, hashidx);
-        window.History.pushState(null, null, newUrl);
-        window.History.replaceState(null, null, relativeUrl);
+        var splitByHash = url.split('#');
+        if(splitByHash.length > 2)
+            throw "Too many #'s in path";
 
+        var newUrl = splitByHash[0];
+        var lineNumber = Number(splitByHash[1]);
+
+
+        window.History.pushState({ lineNumber: lineNumber }, null, newUrl);
     }
 }
 
@@ -148,8 +151,14 @@ $(document).ready(function () {
     window.History.Adapter.bind(window, 'statechange', handleStateChange);
 });
 
-function handleStateChange() {
-    //TODO
+function handleStateChange(e) {
+    //TODOa
+    var state = History.getState();
+    var cleanUrl = state.url;
+    var data = state.data;
+    lineNumber = data["lineNumber"];
+    console.log(lineNumber);
+    console.log(cleanUrl);
 }
 
 
