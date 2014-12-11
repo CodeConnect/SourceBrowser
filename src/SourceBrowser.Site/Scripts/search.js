@@ -15,14 +15,13 @@ search = {
     //Retains the state of the most recent query. 
     //When we're done searching, we check the text box to see 
     //if the query has changed.
-   lastQuery: "",
-   beginSearch: function () {
+    lastQuery: "",
+    beginSearch: function () {
         if (search.isSearching)
             return;
         var query = $("#search-box").val();
         //If there's no query, just clear everything
-        if (query == "")
-        {
+        if (query == "") {
             search.clearSearch();
             return;
         }
@@ -43,8 +42,8 @@ search = {
         return false;
     },
 
-    
-   searchRepository: function (username, repository, query) {
+
+    searchRepository: function (username, repository, query) {
         data = JSON.stringify({
             "username": username,
             "repository": repository,
@@ -79,12 +78,13 @@ search = {
             $("#search-results").show();
             var htmlResults = search.buildResults(results);
             $("#search-results").empty().append(htmlResults);
+            $("#search-results a").on("click", search.handlSearchClick);
         }
         search.isSearching = false;
         search.checkIfSearchTextChanged();
     },
 
-    buildResults: function(results) {
+    buildResults: function (results) {
         var htmlResults = "";
         for (var i = 0; i < results.length; i++) {
             var searchResult = results[i];
@@ -108,19 +108,26 @@ search = {
     //After searching, we need to check to see if the user has typed
     //any additional characters into search while we were waiting
     //for the server
-    checkIfSearchTextChanged : function() {
+    checkIfSearchTextChanged: function () {
         var currentQuery = $("#search-box").val();
         if (currentQuery != search.lastQuery)
             search.beginSearch();
     },
-    
+
     clearSearch: function () {
         $("#search-results").hide();
         $("#no-results").hide();
         $("#tree-view").show();
-    }
+    },
 
+    handlSearchClick: function (ex) {
+        ex.preventDefault();
+    }
 }
+
+History.Adapter.bind(window, 'statechange', function () {
+    var state = History.getState();
+});
 
 
 $("#search-box").keyup(function () {
