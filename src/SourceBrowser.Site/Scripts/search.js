@@ -78,7 +78,7 @@ search = {
             $("#search-results").show();
             var htmlResults = search.buildResults(results);
             $("#search-results").empty().append(htmlResults);
-            $("#search-results a").on("click", search.handlSearchClick);
+            $("#search-results a").click(search.handlSearchClick);
         }
         search.isSearching = false;
         search.checkIfSearchTextChanged();
@@ -121,6 +121,12 @@ search = {
     },
 
     handlSearchClick: function (ex) {
+        //If we're already on the page, allow the browser to scroll.
+        var currentPathName = window.location.pathname;
+        var newPathName = ex.currentTarget.pathname;
+        if (currentPathName == newPathName)
+            return;
+
         //Stop navigation. We'll take it from here.
         ex.preventDefault();
 
@@ -129,9 +135,24 @@ search = {
 
         var idx = url.indexOf(host) + host.length;
         var relativeUrl = url.substr(idx);
-        History.pushState({ state: 1 }, "state1", relativeUrl);
+        var hashidx = relativeUrl.indexOf("#");
+        var newUrl = relativeUrl.substr(0, hashidx);
+        window.History.pushState(null, null, newUrl);
+        window.History.replaceState(null, null, relativeUrl);
+
     }
 }
+
+// Bind to StateChange Event
+$(document).ready(function () {
+    window.History.Adapter.bind(window, 'statechange', handleStateChange);
+});
+
+function handleStateChange() {
+    //TODO
+}
+
+
 
 
 $("#search-box").keyup(function () {
