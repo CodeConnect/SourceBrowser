@@ -181,7 +181,9 @@ function handlePageLoadSuccess(args) {
 }
 
 function handlePageLoadError(args) {
-    console.log(args);
+    var errorHtml = "<h2>There was an error processing your request.</h2>";
+    $("#line-numbers").empty();
+    $(".source-code").html(errorHtml);
 }
 
 
