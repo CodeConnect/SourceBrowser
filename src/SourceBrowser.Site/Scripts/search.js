@@ -172,6 +172,12 @@ function handleStateChange(e) {
 function handlePageLoadSuccess(args) {
     $(".source-code").html(args["SourceCode"]);
     var numberOfLines = args["NumberOfLines"];
+    var lineNumberHtml = "";
+    for(var i = 1; i < numberOfLines; i++)
+    {
+        lineNumberHtml += '<a href="' + i + '" name="' + i + '">' + i + '</a>\n';
+    }
+    $("#line-numbers").html(lineNumberHtml);
 }
 
 function handlePageLoadError(args) {
