@@ -15,6 +15,7 @@ using Newtonsoft.Json;
 using System.Reflection;
 using SourceBrowser.Generator.Extensions;
 using SourceBrowser.Generator.Model;
+using SourceBrowser.Generator.DocumentWalkers;
 
 namespace SourceBrowser.Generator
 {
@@ -79,11 +80,11 @@ namespace SourceBrowser.Generator
         {
             var syntaxRoot = document.GetSyntaxRootAsync().Result;
             var containingFolder = findDocumentParent(workspaceModel, document);
-            var docWalker = new DocumentWalker(containingFolder, document, _refsourceLinkProvider);
+            var docWalker = WalkerSelector.GetWalker(containingFolder, document, _refsourceLinkProvider);
             docWalker.Visit(syntaxRoot);
             
             //Save it
-            var documentModel = docWalker.DocumentModel;
+            var documentModel = docWalker.GetDocumentModel();
             containingFolder.Children.Add(documentModel);
         }
 
