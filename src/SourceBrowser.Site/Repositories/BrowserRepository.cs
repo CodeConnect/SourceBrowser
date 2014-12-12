@@ -32,18 +32,6 @@
             }
         }
 
-        internal static JObject GetMetaData(string username, string repository, string path)
-        {
-            var fullPath = Path.Combine(StaticHtmlAbsolutePath, username, repository, path);
-            var metadataPath = fullPath + ".json";
-
-            using(var sr = new StreamReader(metadataPath))
-            {
-                var metadata = JObject.Parse(sr.ReadToEnd());
-                return metadata;
-            }
-        }
-
         /// <summary>
         /// Returns a list of all Github users on file.
         /// </summary>
@@ -221,7 +209,7 @@
             return viewModel;
         }
 
-        internal static GithubFileStructure SetUpFileStructure(string userName, string repoName, string path, string html, int numLines)
+        internal static GithubFileStructure SetUpFileStructure(string userName, string repoName, string path, string html) 
         {
             var viewModel = new GithubFileStructure
             {
@@ -230,7 +218,6 @@
                 RelativePath = CreatePath(userName, repoName, GetRelativeDirectory(path)), // Used to expand nodes leading to this file
                 RelativeRootPath = CreatePath(userName, repoName, path), // Points to the root of the treeview
                 SourceCode = html,
-                NumberOfLines = numLines
             };
 
             return viewModel;

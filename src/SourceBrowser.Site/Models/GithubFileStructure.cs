@@ -16,8 +16,6 @@
 
         public string SourceCode { get; set; }
 
-        public int NumberOfLines { get; set; }
-
         public override string ToString()
         {
             return string.Format(

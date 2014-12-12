@@ -157,21 +157,12 @@ function handleStateChange(e) {
     var cleanUrl = state.url;
     var data = state.data;
     lineNumber = data["lineNumber"];
-    console.log(lineNumber);
-    console.log(cleanUrl);
-
 
     $.ajax({
         type: "GET",
         url: cleanUrl,
         success: function (args) {
-            $(".source-code").html(args["SourceCode"]);
-            var numberOfLines = args["NumberOfLines"];
-            var lineNumberHtml = "";
-            for (var i = 1; i < numberOfLines; i++) {
-                lineNumberHtml += '<a href="' + i + '" name="' + i + '">' + i + '</a>\n';
-            }
-            $("#line-numbers").html(lineNumberHtml);
+            $("#main-content").html(args["SourceCode"]);
             scrollToAnchor(lineNumber);
         },
         error: handlePageLoadError
