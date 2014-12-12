@@ -159,6 +159,23 @@ function handleStateChange(e) {
     lineNumber = data["lineNumber"];
     console.log(lineNumber);
     console.log(cleanUrl);
+
+
+    $.ajax({
+        type: "GET",
+        url: cleanUrl,
+        success: handlePageLoadSuccess,
+        error: handlePageLoadError
+    });
+}
+
+function handlePageLoadSuccess(args) {
+    $(".source-code").html(args["SourceCode"]);
+    var numberOfLines = args["NumberOfLines"];
+}
+
+function handlePageLoadError(args) {
+    console.log(args);
 }
 
 
