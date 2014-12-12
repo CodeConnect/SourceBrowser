@@ -164,20 +164,23 @@ function handleStateChange(e) {
     $.ajax({
         type: "GET",
         url: cleanUrl,
-        success: handlePageLoadSuccess,
+        success: function (args) {
+            $(".source-code").html(args["SourceCode"]);
+            var numberOfLines = args["NumberOfLines"];
+            var lineNumberHtml = "";
+            for (var i = 1; i < numberOfLines; i++) {
+                lineNumberHtml += '<a href="' + i + '" name="' + i + '">' + i + '</a>\n';
+            }
+            $("#line-numbers").html(lineNumberHtml);
+            scrollToAnchor(lineNumber);
+        },
         error: handlePageLoadError
     });
 }
 
-function handlePageLoadSuccess(args) {
-    $(".source-code").html(args["SourceCode"]);
-    var numberOfLines = args["NumberOfLines"];
-    var lineNumberHtml = "";
-    for(var i = 1; i < numberOfLines; i++)
-    {
-        lineNumberHtml += '<a href="' + i + '" name="' + i + '">' + i + '</a>\n';
-    }
-    $("#line-numbers").html(lineNumberHtml);
+function scrollToAnchor(aid) {
+    var aTag = $("a[name='" + aid + "']");
+    $('html,body').animate({ scrollTop: aTag.offset().top }, 'fast');
 }
 
 function handlePageLoadError(args) {
