@@ -9,7 +9,7 @@ namespace SourceBrowser.Search
     /// <summary>
     /// A class containing the names of the document fields within our Lucene Index
     /// </summary>
-    public static class DocumentFields
+    public static class TokenFields
     {
         public const string Id = "Id";
         public const string Path = "Path";

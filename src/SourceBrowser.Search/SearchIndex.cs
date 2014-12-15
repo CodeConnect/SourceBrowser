@@ -51,19 +51,19 @@ namespace SourceBrowser.Search
         private static void addDeclarationToIndex(IndexWriter writer, TokenViewModel token)
         {
             //remove previous entry
-            var searchQuery = new TermQuery(new Term(DocumentFields.Id, token.Id));
+            var searchQuery = new TermQuery(new Term(TokenFields.Id, token.Id));
             writer.DeleteDocuments(searchQuery);
 
             //add new index entry
             var doc = new Document();
 
-            doc.Add(new Field(DocumentFields.Id, token.Id, Field.Store.YES, Field.Index.NOT_ANALYZED));
-            doc.Add(new Field(DocumentFields.Path, token.Path, Field.Store.YES, Field.Index.NOT_ANALYZED));
-            doc.Add(new Field(DocumentFields.Username, token.Username, Field.Store.YES, Field.Index.ANALYZED));
-            doc.Add(new Field(DocumentFields.Repository, token.Repository, Field.Store.YES, Field.Index.ANALYZED));
-            doc.Add(new Field(DocumentFields.Name, token.Name ,Field.Store.YES, Field.Index.ANALYZED));
-            doc.Add(new Field(DocumentFields.FullName, token.FullName, Field.Store.YES, Field.Index.ANALYZED));
-            doc.Add(new Field(DocumentFields.LineNumber, token.LineNumber.ToString(), Field.Store.YES, Field.Index.NOT_ANALYZED));
+            doc.Add(new Field(TokenFields.Id, token.Id, Field.Store.YES, Field.Index.NOT_ANALYZED));
+            doc.Add(new Field(TokenFields.Path, token.Path, Field.Store.YES, Field.Index.NOT_ANALYZED));
+            doc.Add(new Field(TokenFields.Username, token.Username, Field.Store.YES, Field.Index.ANALYZED));
+            doc.Add(new Field(TokenFields.Repository, token.Repository, Field.Store.YES, Field.Index.ANALYZED));
+            doc.Add(new Field(TokenFields.Name, token.Name ,Field.Store.YES, Field.Index.ANALYZED));
+            doc.Add(new Field(TokenFields.FullName, token.FullName, Field.Store.YES, Field.Index.ANALYZED));
+            doc.Add(new Field(TokenFields.LineNumber, token.LineNumber.ToString(), Field.Store.YES, Field.Index.NOT_ANALYZED));
 
             writer.AddDocument(doc);
         }
@@ -71,11 +71,11 @@ namespace SourceBrowser.Search
         private static TokenViewModel mapDocumentToToken(Document document)
         {
             return new TokenViewModel(
-                document.Get(DocumentFields.Username),
-                document.Get(DocumentFields.Repository),
-                document.Get(DocumentFields.Path),
-                document.Get(DocumentFields.FullName),
-                Convert.ToInt32(document.Get(DocumentFields.LineNumber))
+                document.Get(TokenFields.Username),
+                document.Get(TokenFields.Repository),
+                document.Get(TokenFields.Path),
+                document.Get(TokenFields.FullName),
+                Convert.ToInt32(document.Get(TokenFields.LineNumber))
                 );
         }
 
@@ -125,13 +125,13 @@ namespace SourceBrowser.Search
             using (var searcher = new IndexSearcher(_directory, false))
             using (var analyzer = new StandardAnalyzer(Lucene.Net.Util.Version.LUCENE_30))
             {
-                var userNameParser = new QueryParser(Lucene.Net.Util.Version.LUCENE_30, DocumentFields.Username, analyzer);
+                var userNameParser = new QueryParser(Lucene.Net.Util.Version.LUCENE_30, TokenFields.Username, analyzer);
                 var usernameQuery = parseQuery(username, userNameParser);
 
-                var repositoryParser = new QueryParser(Lucene.Net.Util.Version.LUCENE_30, DocumentFields.Repository, analyzer);
+                var repositoryParser = new QueryParser(Lucene.Net.Util.Version.LUCENE_30, TokenFields.Repository, analyzer);
                 var repositoryQuery = parseQuery(repository, repositoryParser);
 
-                var nameParser = new QueryParser(Lucene.Net.Util.Version.LUCENE_30, DocumentFields.Name, analyzer);
+                var nameParser = new QueryParser(Lucene.Net.Util.Version.LUCENE_30, TokenFields.Name, analyzer);
                 var nameQuery = parsePrefixQuery(searchQuery, nameParser);
 
                 //Ensure that it's the user AND the repository AND the query
