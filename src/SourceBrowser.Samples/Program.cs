@@ -57,7 +57,7 @@ namespace SourceBrowser.Samples
                 var searchTransformer = new SearchIndexTransformer(username, repository);
                 searchTransformer.Visit(workspaceModel);
 
-                var treeViewTransformer = new TreeViewTransformer(absoluteSaveDirectory, "CodeConnect", "SourceBrowser"); // TODO: provide actual username and repo name
+                var treeViewTransformer = new TreeViewTransformer(absoluteSaveDirectory, username, repository); 
                 treeViewTransformer.Visit(workspaceModel);
 
                 Console.WriteLine("Job successful!");
