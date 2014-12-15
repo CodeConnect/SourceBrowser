@@ -20,6 +20,7 @@ namespace SourceBrowser.Search
         private static string basePath = System.Web.Hosting.HostingEnvironment.MapPath("~") ?? Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
         private static string _luceneDir =  Path.Combine(basePath, "luceneIndex");
         private static FSDirectory _directoryTemp;
+        private const int HITS_LIMIT = 100;
         
         private static FSDirectory _directory
         {
@@ -141,8 +142,7 @@ namespace SourceBrowser.Search
                 boolQuery.Add(repositoryQuery, Occur.MUST);
                 boolQuery.Add(nameQuery, Occur.MUST);
                     
-                var hitsLimit = 100;
-                var hits = searcher.Search(boolQuery, hitsLimit).ScoreDocs;
+                var hits = searcher.Search(boolQuery, HITS_LIMIT).ScoreDocs;
 
                 var results = MapLuceneToDataList(hits, searcher);
                 return results;
