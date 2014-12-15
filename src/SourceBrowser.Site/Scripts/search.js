@@ -78,7 +78,7 @@ search = {
             $("#search-results").show();
             var htmlResults = search.buildResults(results);
             $("#search-results").empty().append(htmlResults);
-            $("#search-results a").click(search.handlSearchClick);
+            $("#search-results a").click(search.handleSearchClick);
         }
         search.isSearching = false;
         search.checkIfSearchTextChanged();
@@ -93,10 +93,10 @@ search = {
             html = "";
             html += "<a href='" + link + "'>";
             html += "<span>"
-            html += searchResult["Name"];
+            html += searchResult["DisplayName"];
             html += "</span>";
             html += "<span>"
-            html += searchResult["FullName"];
+            html += searchResult["FullyQualifiedName"];
             html += "</span>";
             html += "</a>";
 
@@ -120,7 +120,7 @@ search = {
         $("#tree-view").show();
     },
 
-    handlSearchClick: function (ex) {
+    handleSearchClick: function (ex) {
         //If we're already on the page, allow the browser to scroll.
         var currentPath= window.location.pathname;
         var newPath = ex.currentTarget.pathname

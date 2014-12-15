@@ -10,10 +10,7 @@ namespace SourceBrowser.Site
         {
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
                         "~/Scripts/jquery-2.1.1.js",
-                        "~/Scripts/jquery.widget.js",
-                        "~/Scripts/history.js/history.adapter.jquery.js",
-                        "~/Scripts/history.js/history.js",
-                        "~/Scripts/history.js/history.html4.js"
+                        "~/Scripts/jquery.widget.js"
                         ));
 
             /* For now, this bundle is empty and not used.
@@ -25,6 +22,9 @@ namespace SourceBrowser.Site
                                     "~/Scripts/treeViewHelpers.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/search").Include(
+                                    "~/Scripts/history.js/history.adapter.jquery.js",
+                                    "~/Scripts/history.js/history.js",
+                                    "~/Scripts/history.js/history.html4.js",
                                     "~/Scripts/search.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(

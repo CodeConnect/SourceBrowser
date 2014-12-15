@@ -64,7 +64,7 @@ namespace SourceBrowser.Search
             doc.Add(new Field(TokenFields.Username, token.Username, Field.Store.YES, Field.Index.ANALYZED));
             doc.Add(new Field(TokenFields.Repository, token.Repository, Field.Store.YES, Field.Index.ANALYZED));
             doc.Add(new Field(TokenFields.Name, token.DisplayName ,Field.Store.YES, Field.Index.ANALYZED));
-            doc.Add(new Field(TokenFields.FullName, token.FullyQualifedName, Field.Store.YES, Field.Index.ANALYZED));
+            doc.Add(new Field(TokenFields.FullName, token.FullyQualifiedName, Field.Store.YES, Field.Index.ANALYZED));
             doc.Add(new Field(TokenFields.LineNumber, token.LineNumber.ToString(), Field.Store.YES, Field.Index.NOT_ANALYZED));
 
             writer.AddDocument(doc);
