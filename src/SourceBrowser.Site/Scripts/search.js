@@ -180,20 +180,6 @@ function handlePageLoadError(args) {
     $(".source-code").html(errorHtml);
 }
 
-
-
-
 $("#search-box").keyup(function () {
     search.beginSearch();
 });
-
-
-
-
-
-
-
-
-
-
-
