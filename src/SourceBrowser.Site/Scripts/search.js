@@ -6,6 +6,11 @@
     {
         $("#search-form").hide();
     }
+    else
+    {
+        //Only bind if the page is searchable. (ie. we're in a repository)
+        window.History.Adapter.bind(window, 'statechange', handleStateChange);
+    }
 });
 
 search = {
@@ -145,11 +150,6 @@ search = {
         window.History.pushState({ lineNumber: lineNumber }, null, newUrl);
     }
 }
-
-// Bind to StateChange Event
-$(document).ready(function () {
-    window.History.Adapter.bind(window, 'statechange', handleStateChange);
-});
 
 function handleStateChange(e) {
     //TODOa
