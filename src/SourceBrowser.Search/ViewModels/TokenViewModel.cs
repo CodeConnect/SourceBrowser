@@ -13,15 +13,15 @@ namespace SourceBrowser.Search.ViewModels
         public string Path { get; } 
         public string Username { get; }
         public string Repository { get; }
-        public string FullName { get; }
-        public string Name
+        public string FullyQualifedName { get; }
+        public string DisplayName
         {
             get
             {
-                if (FullName == null)
+                if (FullyQualifedName == null)
                     return null;
-                string currentName = FullName;
-                var parensIndex = FullName.IndexOf("(");
+                string currentName = FullyQualifedName;
+                var parensIndex = FullyQualifedName.IndexOf("(");
                 if(parensIndex != -1)
                 {
                     currentName = currentName.Remove(parensIndex, currentName.Length - parensIndex);
@@ -39,7 +39,7 @@ namespace SourceBrowser.Search.ViewModels
             Username = username;
             Repository = repository;
             Path = path;
-            FullName = fullName;
+            FullyQualifedName = fullName;
             LineNumber = lineNumber;
         }
     }
