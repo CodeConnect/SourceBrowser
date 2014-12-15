@@ -15,14 +15,16 @@ namespace SourceBrowser.Samples
             // For developers that set test variables in code:
             string solutionPath = @"";
             string saveDirectory = @"";
-            string username = "Josh";
-            string repository = "ProjectionBufferTutorial";
+            string username = "";
+            string repository = "";
 
             // For developers that provide test variables in arguments:
-            if (args.Length == 2)
+            if (args.Length == 4)
             {
                 solutionPath = args[0];
                 saveDirectory = args[1];
+                username = args[2];
+                repository = args[3];
             }
 
             // Combine user's root with relative solution paths, or use absolute paths.
