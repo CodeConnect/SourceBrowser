@@ -121,6 +121,10 @@ namespace SourceBrowser.Search
             if (string.IsNullOrWhiteSpace(repository))
                 throw new ArgumentException(nameof(repository) + " must be provided.");
 
+            //If they send an empty query, just return nothing.
+            if (string.IsNullOrWhiteSpace(searchQuery))
+                return new List<TokenViewModel>();
+
             //Replace wild-card characters. For now we're not going to let the user
             //construct advanced queries unless it becomes a 'must-have'
             if (string.IsNullOrEmpty(searchQuery.Replace("*", "").Replace("?", "")))
