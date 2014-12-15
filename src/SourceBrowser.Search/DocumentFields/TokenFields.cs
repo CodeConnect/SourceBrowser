@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SourceBrowser.Search
+namespace SourceBrowser.Search.DocumentFields
 {
     /// <summary>
     /// A class containing the names of the document fields within our Lucene Index

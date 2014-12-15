@@ -4,6 +4,7 @@ using Lucene.Net.Index;
 using Lucene.Net.QueryParsers;
 using Lucene.Net.Search;
 using Lucene.Net.Store;
+using SourceBrowser.Search.DocumentFields;
 using SourceBrowser.Search.ViewModels;
 using System;
 using System.Collections.Generic;
