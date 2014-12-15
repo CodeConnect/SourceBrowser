@@ -21,7 +21,7 @@ search = {
             return;
         var query = $("#search-box").val();
         //If there's no query, just clear everything
-        if (query == "") {
+        if (query === "") {
             search.clearSearch();
             return;
         }
@@ -69,7 +69,7 @@ search = {
     handleSuccess: function (results) {
         $("#tree-view").hide();
         //If we can't find any results, tell the user.
-        if (results.length == 0) {
+        if (results.length === 0) {
             $("#search-results").hide();
             $("#no-results").show();
         }
@@ -125,7 +125,7 @@ search = {
         var currentPath= window.location.pathname;
         var newPath = ex.currentTarget.pathname
 
-        if (currentPath== newPath)
+        if (currentPath === newPath)
             return;
 
         //Stop navigation. We'll take it from here.
