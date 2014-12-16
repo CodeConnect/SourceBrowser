@@ -23,19 +23,17 @@
         </div>
         <!--/Bread crumb-->
 
-        <div class="row">
+        <div class="row" id="sb-viewhost">
         
             <!-- Main Content-->
-            <article class="col-xs-8" id="main" style="overflow-x:scroll">
-                <section id="main-content">
-                    @if (!String.IsNullOrEmpty(Model.SourceCode))
-                    {
-                        @Html.Raw(Model.SourceCode)
-                    }
-                </section>
+            <article id="main-content">
+                @if (!String.IsNullOrEmpty(Model.SourceCode))
+                {
+                    @Html.Raw(Model.SourceCode)
+                }
             </article>
             <!--Display the tree view.-->
-            <aside class="col-xs-4" id="browser">
+            <aside id="browser">
                 <section id="tree-view">
                     @Html.Raw(ViewBag.TreeView)
                 </section>

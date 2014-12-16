@@ -79,6 +79,7 @@ textarea {
     padding:5px 10px;
     color:#333;
     overflow:hidden;
+    word-wrap: break-word;
 }
 
 #search-results span {
@@ -98,3 +99,50 @@ textarea {
     text-decoration:none;
     background:#DDD;
 }
+
+/* Browse layout with source in one pane and treeview/search in another: */
+#sb-viewhost {
+    background-color: #000;
+    top: 45px;
+    bottom: 0;
+    /* Not sure why, but without this, sb-viewhost is 30px wider than the screen */
+    left: 15px;
+    right: 15px;
+    position: fixed;
+    overflow: hidden;
+}
+
+#main-content {
+    background-color: #dda;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 320px;
+    overflow: scroll;
+    overflow-y: auto;
+    overflow-x: auto;
+    padding-left: 20px;
+}
+
+#browser {
+    background-color: #aad;
+    position: absolute;
+    width: 320px;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    padding-left: 20px;
+    overflow-y: auto;
+    overflow-x: scroll; /* For file names that are too long*/
+}
+
+#search-results {
+    background-color: #55c;
+}
+
+#tree-view {
+    background-color: #5c5;
+}
+
+/* End of browse layout */
