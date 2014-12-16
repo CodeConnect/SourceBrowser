@@ -28,36 +28,46 @@ namespace SourceBrowser.Generator.Transformers
             var documentSavePath = Path.Combine(_savePath, documentModel.RelativePath);
             Directory.CreateDirectory(Path.GetDirectoryName(documentSavePath));
 
-            var metadataSavePath = documentSavePath + ".json";
-            createAndSaveMetadata(documentModel, metadataSavePath);
-
-            //TODO: Write the HTML to the appropriate path
-
             using (var sw = new StreamWriter(documentSavePath))
             {
-                var tokenTypes = documentModel.Tokens.Select(n => n.Type).Distinct();
+                sw.WriteLine("<table cellpadding='0' cellspacing='0'>");
+                sw.WriteLine("<tbody>");
+                sw.WriteLine("<tr>");
+                sw.WriteLine("<td valign='top' style='min-diwth:65px'>");
+                sw.WriteLine("<pre id='line-numbers'>");
+
+                //Create the sidebar with line numbers
+                this.createLineNumberHtml(sw, documentModel.NumberOfLines);
+
+                sw.WriteLine("</pre>"); //line-numbers
+                sw.WriteLine("</td>");
+
+                sw.WriteLine("<td valign='top'>");
+                sw.WriteLine("<pre class='source-code'>");
+                
 
                 foreach (var token in documentModel.Tokens)
                 {
                     processToken(sw, token);
                 }
+
+                sw.WriteLine("</pre>");
+                sw.WriteLine("</td>");
+                sw.WriteLine("</tr>");
+                sw.WriteLine("</tbody>");
+                sw.WriteLine("</table>");
+
             }
 
             base.VisitDocument(documentModel);
         }
 
-        private void createAndSaveMetadata(DocumentModel documentModel, string metadataPath)
+        private void createLineNumberHtml(StreamWriter sw, int numberOfLines)
         {
-            var metadata = new
+            //Note that we start at line 1, as most editors dont start at line 0.
+            for(int i = 1; i < numberOfLines; i++)
             {
-                NumberOfLines = documentModel.NumberOfLines,
-            };
-
-            var json = JObject.FromObject(metadata);
-
-            using (var sw = new StreamWriter(metadataPath))
-            {
-                sw.Write(json);
+                sw.WriteLine("<a href='#" + i + "' name='" + i + "'>" + i + "</a>");
             }
         }
 
@@ -118,7 +128,6 @@ namespace SourceBrowser.Generator.Transformers
                 sw.Write('#');
             }
         }
-
 
 
         private void processTriviaCollection(StreamWriter sw, ICollection<Trivia> triviaCollection)

@@ -5,6 +5,7 @@
 
     using SourceBrowser.Site.Repositories;
     using System.IO;
+    using SourceBrowser.Site.Attributes;
 
     public class BrowseController : Controller
     {
@@ -52,21 +53,25 @@
 
         public ActionResult LookupFile(string username, string repository, string path)
         {
-            System.Diagnostics.Debug.Write(username);
-            System.Diagnostics.Debug.Write(repository);
-            System.Diagnostics.Debug.Write(path);
             if (string.IsNullOrEmpty(path))
             {
                 return View("LookupError");
             }
 
-            var metaData = BrowserRepository.GetMetaData(username, repository, path);
-            int numberOfLines = metaData["NumberOfLines"].ToObject<int>();
             var rawHtml = BrowserRepository.GetDocumentHtml(username, repository, path);
 
             ViewBag.TreeView = loadTreeView(username, repository);
-            var viewModel = BrowserRepository.SetUpFileStructure(username, repository, path, rawHtml, numberOfLines);
+            var viewModel = BrowserRepository.SetUpFileStructure(username, repository, path, rawHtml);
             return View("LookupFile", viewModel);
+        }
+
+        public ActionResult LookupFileAjax(string username, string repository, string path)
+        {
+            var rawHtml = BrowserRepository.GetDocumentHtml(username, repository, path);
+
+            ViewBag.TreeView = loadTreeView(username, repository);
+            var viewModel = BrowserRepository.SetUpFileStructure(username, repository, path, rawHtml);
+            return Json(viewModel, JsonRequestBehavior.AllowGet);
         }
 
         private dynamic loadTreeView(string username, string repository)

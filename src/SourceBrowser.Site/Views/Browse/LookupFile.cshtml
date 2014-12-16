@@ -24,39 +24,27 @@
         <!--/Bread crumb-->
 
         <div class="row">
-            <!--Display the tree view.-->
-            <aside class="col-xs-4" id="browser">
-                <section>
-                    @Html.Raw(ViewBag.TreeView)
-                </section>
-            </aside>
         
             <!-- Main Content-->
             <article class="col-xs-8" id="main" style="overflow-x:scroll">
-                <section>
-
-                    <table cellpadding="0" cellspacing="0">
-                        <tbody>
-                            <tr>
-                                <td valign="top" style="min-width:65px">
-@*BE CAREFUL WITH PRE TAGS: Comments within them will affect the resulting markup...
-This is intentionally left aligned and formatted weird.
-as it's in a <pre> tag.*@
-                                    <pre id="line-numbers">
-@for (int i = 1; i < Model.NumberOfLines; i++){<a href="#@i" name="@i">@i</a>
-}</pre>
-                                </td>
-                                <td valign="top">
-                                    @if (!String.IsNullOrEmpty(Model.SourceCode))
-                                    {
-                                        <pre class="source-code">@Html.Raw(Model.SourceCode)</pre>
-                                    }
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <section id="main-content">
+                    @if (!String.IsNullOrEmpty(Model.SourceCode))
+                    {
+                        @Html.Raw(Model.SourceCode)
+                    }
                 </section>
             </article>
+            <!--Display the tree view.-->
+            <aside class="col-xs-4" id="browser">
+                <section id="tree-view">
+                    @Html.Raw(ViewBag.TreeView)
+                </section>
+                <section id="search-results" style="display:none;">
+                </section>
+                <section id="no-results" style="display:none;">
+                    There were no results
+                </section>
+            </aside>
         </div>
     </div>
 </div>

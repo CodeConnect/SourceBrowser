@@ -108,6 +108,7 @@
     <Compile Include="SolutionAnalyzer.cs" />
     <Compile Include="Transformers\AbstractWorkspaceVisitor.cs" />
     <Compile Include="Transformers\HtmlTransformer.cs" />
+    <Compile Include="Transformers\SearchIndexTransformer.cs" />
     <Compile Include="Transformers\TokenLookupTransformer.cs" />
     <Compile Include="Transformers\TreeViewTransformer.cs" />
     <Compile Include="Utilities.cs" />
@@ -119,7 +120,12 @@
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\SourceBrowser.Search\SourceBrowser.Search.csproj">
+      <Project>{6c2ed4c0-e609-47d8-aa05-1cacbe5252ac}</Project>
+      <Name>SourceBrowser.Search</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.

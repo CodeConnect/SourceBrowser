@@ -15,12 +15,16 @@ namespace SourceBrowser.Samples
             // For developers that set test variables in code:
             string solutionPath = @"";
             string saveDirectory = @"";
+            string username = "";
+            string repository = "";
 
             // For developers that provide test variables in arguments:
-            if (args.Length == 2)
+            if (args.Length == 4)
             {
                 solutionPath = args[0];
                 saveDirectory = args[1];
+                username = args[2];
+                repository = args[3];
             }
 
             // Combine user's root with relative solution paths, or use absolute paths.
@@ -50,7 +54,10 @@ namespace SourceBrowser.Samples
                 var htmlTransformer = new HtmlTransformer(tokenLookup, absoluteSaveDirectory);
                 htmlTransformer.Visit(workspaceModel);
 
-                var treeViewTransformer = new TreeViewTransformer(absoluteSaveDirectory, "CodeConnect", "SourceBrowser"); // TODO: provide actual username and repo name
+                var searchTransformer = new SearchIndexTransformer(username, repository);
+                searchTransformer.Visit(workspaceModel);
+
+                var treeViewTransformer = new TreeViewTransformer(absoluteSaveDirectory, username, repository); 
                 treeViewTransformer.Visit(workspaceModel);
 
                 Console.WriteLine("Job successful!");
@@ -59,6 +66,7 @@ namespace SourceBrowser.Samples
             {
                 Console.WriteLine("Error:");
                 Console.WriteLine(ex.ToString());
+                Console.ReadLine();
             }
 
         }

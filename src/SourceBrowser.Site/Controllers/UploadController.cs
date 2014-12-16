@@ -70,6 +70,11 @@
                 var htmlTransformer = new HtmlTransformer(tokenLookup, repoPath);
                 htmlTransformer.Visit(workspaceModel);
 
+                var searchTransformer = new SearchIndexTransformer(retriever.UserName, retriever.RepoName);
+                searchTransformer.Visit(workspaceModel);
+
+
+
                 // Generate HTML of the tree view
                 var treeViewTransformer = new TreeViewTransformer(repoPath, retriever.UserName, retriever.RepoName);
                 treeViewTransformer.Visit(workspaceModel);

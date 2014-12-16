@@ -164,9 +164,11 @@
     <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="App_Start\Constraints\AjaxOnlyConstraint.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BrowseController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\SearchController.cs" />
     <Compile Include="Controllers\UploadController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -346,6 +348,16 @@
     <Content Include="less\variables.less" />
     <Content Include="less\window.less" />
     <Content Include="less\wizard.less" />
+    <Content Include="Scripts\history.js\amplify.store.js" />
+    <Content Include="Scripts\history.js\history.adapter.dojo.js" />
+    <Content Include="Scripts\history.js\history.adapter.jquery.js" />
+    <Content Include="Scripts\history.js\history.adapter.mootools.js" />
+    <Content Include="Scripts\history.js\history.adapter.prototype.js" />
+    <Content Include="Scripts\history.js\history.adapter.yui.js" />
+    <Content Include="Scripts\history.js\history.adapter.zepto.js" />
+    <Content Include="Scripts\history.js\history.html4.js" />
+    <Content Include="Scripts\history.js\history.js" />
+    <Content Include="Scripts\history.js\json2.js" />
     <Content Include="Scripts\jquery-2.1.1.min.map" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
     <None Include="Scripts\jquery-2.1.1.intellisense.js" />
@@ -361,6 +373,7 @@
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
+    <Content Include="Scripts\search.js" />
     <Content Include="Scripts\treeViewHelpers.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Web.config" />
@@ -411,6 +424,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\Search\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
@@ -423,6 +437,10 @@
     <ProjectReference Include="..\SourceBrowser.Generator\SourceBrowser.Generator.csproj">
       <Project>{c91050bd-5010-4ebd-a6ae-52cca7c2553d}</Project>
       <Name>SourceBrowser.Generator</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SourceBrowser.Search\SourceBrowser.Search.csproj">
+      <Project>{6c2ed4c0-e609-47d8-aa05-1cacbe5252ac}</Project>
+      <Name>SourceBrowser.Search</Name>
     </ProjectReference>
     <ProjectReference Include="..\SourceBrowser.SolutionRetriever\SourceBrowser.SolutionRetriever.csproj">
       <Project>{f90b7983-d137-4c89-b668-a6082be39303}</Project>
