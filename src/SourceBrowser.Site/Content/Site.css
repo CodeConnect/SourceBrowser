@@ -102,7 +102,6 @@ textarea {
 
 /* Browse layout with source in one pane and treeview/search in another: */
 #sb-viewhost {
-    background-color: #000;
     top: 45px;
     bottom: 0;
     /* Not sure why, but without this, sb-viewhost is 30px wider than the screen */
@@ -113,7 +112,6 @@ textarea {
 }
 
 #main-content {
-    background-color: #dda;
     position: absolute;
     top: 0;
     bottom: 0;
@@ -126,7 +124,6 @@ textarea {
 }
 
 #browser {
-    background-color: #aad;
     position: absolute;
     width: 320px;
     top: 0;
@@ -138,11 +135,9 @@ textarea {
 }
 
 #search-results {
-    background-color: #55c;
 }
 
 #tree-view {
-    background-color: #5c5;
 }
 
 /* End of browse layout */
