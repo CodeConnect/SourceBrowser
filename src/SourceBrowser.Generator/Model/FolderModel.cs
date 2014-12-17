@@ -9,11 +9,11 @@ namespace SourceBrowser.Generator.Model
 {
     public class FolderModel : IProjectItem
     {
-        public ICollection<IProjectItem> Children { get; set; }
+        public ICollection<IProjectItem> Children { get;  }
 
-        public IProjectItem Parent { get; private set; }
+        public IProjectItem Parent { get; }
 
-        public string Name { get; set; }
+        public string Name { get; }
 
         public string RelativePath { get; }
 
