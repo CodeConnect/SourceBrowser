@@ -58,9 +58,11 @@ namespace SourceBrowser.Generator
                 tokenModel = ProcessOtherToken(token);
             }
 
+            var leadingTrivia = ProcessTrivia(token.LeadingTrivia);
+            var trailingTrivia = ProcessTrivia(token.TrailingTrivia);
+
             //Add trivia to the token
-            tokenModel.LeadingTrivia = ProcessTrivia(token.LeadingTrivia);
-            tokenModel.TrailingTrivia = ProcessTrivia(token.TrailingTrivia);
+            tokenModel = tokenModel.WithTrivia(leadingTrivia, trailingTrivia);
 
             DocumentModel.Tokens.Add(tokenModel);
         }
@@ -83,12 +85,12 @@ namespace SourceBrowser.Generator
         /// </summary>
         private Token ProcessOtherToken(SyntaxToken token)
         {
-            var tokenModel = new Token(this.DocumentModel);
-            tokenModel.FullName = token.CSharpKind().ToString();
-            tokenModel.Value = token.ToString();
-            tokenModel.Type = CSharpTokenTypes.OTHER;
-            tokenModel.LineNumber = token.GetLocation().GetLineSpan().StartLinePosition.Line + 1;
+            string fullName = token.CSharpKind().ToString();
+            string value = token.ToString();
+            string type = CSharpTokenTypes.OTHER;
+            int lineNumber = token.GetLocation().GetLineSpan().StartLinePosition.Line + 1;
 
+            var tokenModel = new Token(this.DocumentModel, fullName, value, type, lineNumber);
             return tokenModel;
         }
 
@@ -97,21 +99,22 @@ namespace SourceBrowser.Generator
         /// </summary>
         public Token ProcessKeyword(SyntaxToken token)
         {
-            var tokenModel = new Token(this.DocumentModel);
-            tokenModel.FullName = token.CSharpKind().ToString();
-            tokenModel.Value = token.ToString();
-            tokenModel.Type = CSharpTokenTypes.KEYWORD;
-            tokenModel.LineNumber = token.GetLocation().GetLineSpan().StartLinePosition.Line + 1;
+            string fullName = token.CSharpKind().ToString();
+            string value = token.ToString();
+            string type = CSharpTokenTypes.KEYWORD;
+            int lineNumber = token.GetLocation().GetLineSpan().StartLinePosition.Line + 1;
+            var tokenModel = new Token(this.DocumentModel, fullName, value, type, lineNumber);
             return tokenModel;
         }
 
         private Token ProcessStringLiteral(SyntaxToken token)
         {
-            var tokenModel = new Token(this.DocumentModel);
-            tokenModel.FullName = token.CSharpKind().ToString();
-            tokenModel.Value = token.ToString();
-            tokenModel.Type = CSharpTokenTypes.STRING;
-            tokenModel.LineNumber = token.GetLocation().GetLineSpan().StartLinePosition.Line + 1;
+            string fullName = token.CSharpKind().ToString();
+            string value = token.ToString();
+            string type = CSharpTokenTypes.STRING;
+            int lineNumber = token.GetLocation().GetLineSpan().StartLinePosition.Line + 1;
+
+            var tokenModel = new Token(this.DocumentModel, fullName, value, type, lineNumber);
             return tokenModel;
         }
 
@@ -121,20 +124,22 @@ namespace SourceBrowser.Generator
         /// </summary>
         public Token ProcessDeclarationToken(SyntaxToken token, ISymbol parentSymbol)
         {
-            var tokenModel = new Token(this.DocumentModel);
+            string fullName = parentSymbol.ToString();
+            string value = token.ToString();
+            string type = string.Empty;
+            bool isDeclaration = true;
+            int lineNumber = token.GetLocation().GetLineSpan().StartLinePosition.Line + 1;
+                 
             if (parentSymbol is INamedTypeSymbol)
             {
-                tokenModel.Type = CSharpTokenTypes.TYPE;
+                type = CSharpTokenTypes.TYPE;
             }
             else
             {
-                tokenModel.Type = CSharpTokenTypes.IDENTIFIER;
+                type = CSharpTokenTypes.IDENTIFIER;
             }
-            tokenModel.Value = token.ToString();
-            tokenModel.LineNumber = token.GetLocation().GetLineSpan().StartLinePosition.Line + 1;
-            tokenModel.FullName = parentSymbol.ToString();
-            tokenModel.IsDeclaration = true;
 
+            var tokenModel = new Token(this.DocumentModel, fullName, value, type, lineNumber, isDeclaration);
             return tokenModel;
         }
 
@@ -144,33 +149,36 @@ namespace SourceBrowser.Generator
         /// </summary>
         public Token ProcessSymbolUsage(SyntaxToken token, ISymbol symbol)
         {
-            var tokenModel = new Token(this.DocumentModel);
-            tokenModel.FullName = symbol.ToString();
-            tokenModel.Value = token.ToString();
+            string fullName = symbol.ToString();
+            string value = token.ToString();
+            string type = String.Empty;
+            int lineNumber = token.GetLocation().GetLineSpan().StartLinePosition.Line + 1;
+
             if (symbol is INamedTypeSymbol)
             {
-                tokenModel.Type = CSharpTokenTypes.TYPE;
+                type = CSharpTokenTypes.TYPE;
             }
             else
             {
-                tokenModel.Type = CSharpTokenTypes.IDENTIFIER;
+                type = CSharpTokenTypes.IDENTIFIER;
             }
-            tokenModel.LineNumber = token.GetLocation().GetLineSpan().StartLinePosition.Line + 1;
+            var tokenModel = new Token(this.DocumentModel, fullName, value, type, lineNumber);
             
             //If we can find the declaration, we'll link it ourselves
             if (symbol.DeclaringSyntaxReferences.Any()
                 && !(symbol is INamespaceSymbol))
             {
-                var localLink = new SymbolLink(referencedSymbolName: symbol.ToString());
-                tokenModel.Link = localLink;
+                var link = new SymbolLink(referencedSymbolName: symbol.ToString());
+                tokenModel = tokenModel.WithLink(link);
             }
             //Otherwise, we try to link to the .Net Reference source
             else if (_refsourceLinkProvider.Assemblies.Contains(symbol.ContainingAssembly?.Identity?.Name)
                 && !(symbol is INamespaceSymbol))
             {
-                var referenceLink = new UrlLink(url: _refsourceLinkProvider.GetLink(symbol));
-                tokenModel.Link = referenceLink;
+                var link = new UrlLink(url: _refsourceLinkProvider.GetLink(symbol));
+                tokenModel = tokenModel.WithLink(link);
             }
+
 
             return tokenModel;
         }
