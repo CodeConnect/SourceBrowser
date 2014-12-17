@@ -71,11 +71,10 @@ namespace SourceBrowser.Generator
 
         private ICollection<Trivia> ProcessTrivia(SyntaxTriviaList triviaList)
         {
-            var triviaModelList = triviaList.Select(n => new Trivia()
-            {
-                Type = n.CSharpKind().ToString(),
-                Value = n.ToFullString()
-            }).ToList();
+            var triviaModelList = triviaList.Select(n => new Trivia(
+                value: n.ToFullString(),
+                type: n.CSharpKind().ToString()
+            )).ToList();
 
             return triviaModelList;
         }
