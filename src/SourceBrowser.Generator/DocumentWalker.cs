@@ -161,8 +161,7 @@ namespace SourceBrowser.Generator
             if (symbol.DeclaringSyntaxReferences.Any()
                 && !(symbol is INamespaceSymbol))
             {
-                var localLink = new SymbolLink();
-                localLink.ReferencedSymbolName = symbol.ToString();
+                var localLink = new SymbolLink(referencedSymbolName: symbol.ToString());
                 tokenModel.Link = localLink;
             }
             //Otherwise, we try to link to the .Net Reference source

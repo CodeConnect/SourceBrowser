@@ -9,7 +9,7 @@ namespace SourceBrowser.Generator.Model
 {
     public class SymbolLink : ILink
     {
-        public string ReferencedSymbolName { get; set; }
+        public string ReferencedSymbolName { get; }
 
         public string Link
         {
@@ -18,6 +18,11 @@ namespace SourceBrowser.Generator.Model
             {
                 throw new NotImplementedException();
             }
+        }
+
+        public SymbolLink(string referencedSymbolName)
+        {
+            ReferencedSymbolName = referencedSymbolName;
         }
     }
 }
