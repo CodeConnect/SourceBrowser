@@ -168,8 +168,7 @@ namespace SourceBrowser.Generator
             else if (_refsourceLinkProvider.Assemblies.Contains(symbol.ContainingAssembly?.Identity?.Name)
                 && !(symbol is INamespaceSymbol))
             {
-                var referenceLink = new UrlLink();
-                referenceLink.Url = _refsourceLinkProvider.GetLink(symbol);
+                var referenceLink = new UrlLink(url: _refsourceLinkProvider.GetLink(symbol));
                 tokenModel.Link = referenceLink;
             }
 
