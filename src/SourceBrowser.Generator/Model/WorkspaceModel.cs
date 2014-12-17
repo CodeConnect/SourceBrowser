@@ -11,16 +11,13 @@ namespace SourceBrowser.Generator.Model
     /// </summary>
     public class WorkspaceModel : IProjectItem
     {
-        public ICollection<IProjectItem> Children { get; set; }
+        public ICollection<IProjectItem> Children { get; }
 
-        public string Name
-        {
-            get; private set;
-        }
+        public string Name { get; }
 
-        public string BasePath { get; set; }
+        public string BasePath { get; }
 
-        public string RelativePath { get; set; }
+        public string RelativePath { get; }
 
         //The WorkspaceModel has no parent. It is the top level item.
         public IProjectItem Parent
