@@ -33,6 +33,7 @@ namespace SourceBrowser.Generator.Model
             Value = value;
             Type = type;
             LineNumber = lineNumber;
+            IsDeclaration = isDeclaration;
         }
 
         private Token(Token oldToken, ILink link) : this(oldToken.Document, oldToken.FullName, oldToken.Value, oldToken.Type, oldToken.LineNumber, oldToken.IsDeclaration)
