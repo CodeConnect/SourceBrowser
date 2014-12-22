@@ -15,38 +15,24 @@ namespace SourceBrowser.SolutionRetriever
 
         public static void GetUserInformation(string username, ref string fullName, ref string avatarUrl, ref string gitHubUrl, ref string blogUrl)
         {
-            try
-            {
-                var user = _github.User.Get(username).Result;
+            var user = _github.User.Get(username).Result;
 
-                avatarUrl = user.AvatarUrl;
-                gitHubUrl = user.HtmlUrl;
-                blogUrl = user.Blog;
-                fullName = user.Name;
-            }
-            catch
-            {
-                // Swallow. This wasn't necessary information
-            }
+            avatarUrl = user.AvatarUrl;
+            gitHubUrl = user.HtmlUrl;
+            blogUrl = user.Blog;
+            fullName = user.Name;
         }
 
         public static void GetRepoInformation(string userName, string repoName, ref int forksCount, ref int starsCount, ref string language, ref string homepage, ref bool isPrivate, ref string description)
         {
-            try
-            {
-                var repo = _github.Repository.Get(userName, repoName).Result;
+            var repo = _github.Repository.Get(userName, repoName).Result;
 
-                forksCount = repo.ForksCount;
-                starsCount = repo.StargazersCount;
-                language = repo.Language;
-                homepage = repo.Homepage;
-                isPrivate = repo.Private;
-                description = repo.Description;
-            }
-            catch
-            {
-                // Swallow. This wasn't necessary information
-            }
+            forksCount = repo.ForksCount;
+            starsCount = repo.StargazersCount;
+            language = repo.Language;
+            homepage = repo.Homepage;
+            isPrivate = repo.Private;
+            description = repo.Description;
         }
 
     }

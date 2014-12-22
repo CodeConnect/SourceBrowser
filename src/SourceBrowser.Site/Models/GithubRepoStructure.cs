@@ -22,7 +22,14 @@
 
         public void UseLiveData()
         {
-            GitHubInformationRetriever.GetRepoInformation(ParentUserName, Name, ref forksCount, ref starsCount, ref language, ref homepage, ref isPrivate, ref description);
+            try
+            {
+                GitHubInformationRetriever.GetRepoInformation(ParentUserName, Name, ref forksCount, ref starsCount, ref language, ref homepage, ref isPrivate, ref description);
+            }
+            catch
+            {
+                // Swallow. This information is not essential to operation of SourceBrowser.
+            }
         }
 
         public override string ToString()
