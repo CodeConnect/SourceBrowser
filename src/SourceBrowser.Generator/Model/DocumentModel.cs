@@ -9,17 +9,17 @@ namespace SourceBrowser.Generator.Model
 {
     public class DocumentModel : IProjectItem
     {
-        public IProjectItem Parent { get; set; }
+        public IProjectItem Parent { get; }
 
-        public ICollection<IProjectItem> Children { get; set; }
+        public ICollection<IProjectItem> Children { get; }
 
-        public ICollection<Token> Tokens { get; set; }
+        public ICollection<Token> Tokens { get;  }
 
-        public string Name { get; set; }
+        public string Name { get; }
 
         public string RelativePath { get; }
 
-        public int NumberOfLines { get; set; }
+        public int NumberOfLines { get; } 
 
         public DocumentModel(IProjectItem parent, string name, int numberOfLines)
         {
