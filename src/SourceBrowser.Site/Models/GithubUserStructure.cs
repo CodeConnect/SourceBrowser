@@ -19,7 +19,14 @@
 
         public void UseLiveData()
         {
-            GitHubInformationRetriever.GetUserInformation(Username, ref FullName, ref AvatarURL, ref GitHubURL, ref BlogURL);
+            try
+            {
+                GitHubInformationRetriever.GetUserInformation(Username, ref FullName, ref AvatarURL, ref GitHubURL, ref BlogURL);
+            }
+            catch
+            {
+                // Swallow. This information is not essential to operation of SourceBrowser.
+            }
         }
 
         public override string ToString()
