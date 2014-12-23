@@ -190,12 +190,20 @@ namespace SourceBrowser.Generator.DocumentWalkers
             //Check if this token is part of a declaration
             var parentSymbol = _model.GetDeclaredSymbol(token.Parent);
             if (parentSymbol != null)
+            {
                 return ProcessDeclarationToken(token, parentSymbol);
+            }
 
             //Find the symbol this token references
-            var symbolInfo = _model.GetSymbolInfo(token.Parent);
-            if (symbolInfo.Symbol != null)
-                return ProcessSymbolUsage(token, symbolInfo.Symbol);
+            var symbol = _model.GetSymbolInfo(token.Parent).Symbol;
+            if (symbol != null)
+            {
+                if (symbol.Kind == SymbolKind.Parameter)
+                {
+                    symbol = symbol.ContainingSymbol;
+                }
+                return ProcessSymbolUsage(token, symbol);
+            }
 
             //Otherwise it references something we don't
             //have semantic information on...
