@@ -100,6 +100,11 @@ textarea {
     background:#DDD;
 }
 
+/* Modifications to the metro CSS */
+.metro .navigation-bar {
+    z-index: 10;
+}
+
 /* Browse layout with source in one pane and treeview/search in another: */
 #sb-viewhost {
     top: 45px;
