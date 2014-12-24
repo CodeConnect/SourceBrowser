@@ -1,0 +1,21 @@
+﻿.btn-search {
+    background-image: url("search.png");
+    height: 16px;
+    width: 16px;
+}
+
+header .full-name {
+    visibility: collapse;
+}
+
+@media screen and (min-width: 768px) {
+    header .full-name {
+        visibility: visible;
+    }
+}
+
+header .logo {
+    background-image: url("logo.png");
+    height: 32px;
+    width: 32px;
+}

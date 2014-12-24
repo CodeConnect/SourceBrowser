@@ -50,6 +50,7 @@ namespace SourceBrowser.Site
                       "~/css/metro-bootstrap.css",
                       "~/css/metro-bootstrap-responsive.css",
                       "~/Content/sourcebrowser-browse.css",
+                      "~/Content/sourcebrowser-codebrowser.css",
                       "~/Content/site.css"));
 
             // Set EnableOptimizations to false for debugging. For more information,
