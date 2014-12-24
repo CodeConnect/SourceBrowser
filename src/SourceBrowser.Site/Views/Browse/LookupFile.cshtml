@@ -4,47 +4,26 @@
     ViewBag.Title = "LookupFile";
 }
 
-<div class="container body-content">
-    <div class="container-fluid" id="mainContainer">
-        <div class="row">
-            <!--Bread crumb-->
-            <header class="col-xs-12">
-                <p>
-                    <nav class="breadcrumbs mini">
-                        <ul>
-                            <li>
-                            </li>
-                            <li>
-                            </li>
-                        </ul>
-                    </nav>
-                </p>
-            </header>
-        </div>
-        <!--/Bread crumb-->
-
-        <div class="row" id="sb-viewhost">
+<div id="sb-viewhost">
         
-            <!-- Main Content-->
-            <article id="main-content">
-                @if (!String.IsNullOrEmpty(Model.SourceCode))
-                {
-                    @Html.Raw(Model.SourceCode)
-                }
-            </article>
-            <!--Display the tree view.-->
-            <aside id="browser">
-                <section id="tree-view">
-                    @Html.Raw(ViewBag.TreeView)
-                </section>
-                <section id="search-results" style="display:none;">
-                </section>
-                <section id="no-results" style="display:none;">
-                    There were no results
-                </section>
-            </aside>
-        </div>
-    </div>
+    <!-- Main Content-->
+    <article id="main-content">
+        @if (!String.IsNullOrEmpty(Model.SourceCode))
+        {
+            @Html.Raw(Model.SourceCode)
+        }
+    </article>
+    <!--Display the tree view.-->
+    <aside id="browser">
+        <section id="tree-view" class="metro">
+            @Html.Raw(ViewBag.TreeView)
+        </section>
+        <section id="search-results" style="display:none;">
+        </section>
+        <section id="no-results" style="display:none;">
+            There were no results
+        </section>
+    </aside>
 </div>
 
 @section Scripts {

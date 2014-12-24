@@ -9,44 +9,34 @@
     @Scripts.Render("~/bundles/modernizr")
 </head>
 
-<body class="metro">
-    <header class="bg-dark" data-load="header.html">
-        <div class="navigation-bar dark">
-            <div class="navigation-bar-content container">
-                @* Left aligned items: *@
-                <a href="/" class="element"><span class="icon-grid-view"></span> SOURCE BROWSER <sup>0.1</sup></a>
-                <span class="element-divider"></span>
-
-                <a class="element1 pull-menu" href="#"></a>
-                <ul class="element-menu">
-                    <li>
-                        @Html.ActionLink("Browse", "", "Browse")
-                    </li>
-                    <li>
-                        @Html.ActionLink("Upload", "", "Upload")
-                    </li>
-                </ul>
-
-                @* Right aligned items: *@
-                <div class="element-menu place-right input-element" id="search-form">
+<body>
+    <header class="metro" data-load="header.html">
+        <nav class="navigation-bar dark">
+            <nav class="navigation-bar-content">
+                <a href="/" class="element"><span class="logo"></span><span class="visible-on-wide-screen"> SOURCE BROWSER <sup>0.1</sup></span></a>
+                <span class="element-divider visible-on-wide-screen"></span>
+                <a class="element" href="/Browse/" class="visible-on-wide-screen">Browse</a>
+                <a class="element" href="/Upload/" class="visible-on-wide-screen">Upload</a>
+                <div class="element input-element place-right">
                     <form>
-                        <input type="text" id="search-box" class="element place-right" placeholder="Search..." />
+                        <div class="input-control text">
+                            <input type="text" placeholder="Search...">
+                            <button class="btn-search"></button>
+                        </div>
                     </form>
                 </div>
-
-
-            </div>
-        </div>
+                <div class="element pull-menu place-right visible-on-narrow-screen">
+                    <a class="dropdown-toggle" href="#"></a>
+                    <ul class="dropdown-menu place-right" data-role="dropdown">
+                        <li><a href="/Browse/">Browse</a></li>
+                        <li><a href="/Browse/">Browse</a></li>
+                    </ul>
+                </div>
+            </nav>
+        </nav>
     </header>
     
     @RenderBody()
-    
-    <div class="container body-content">
-        <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - <a href="http://codeconnect.io">Code Connect</a></p>
-        </footer>
-    </div>
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")

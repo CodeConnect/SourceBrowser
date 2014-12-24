@@ -4,43 +4,22 @@
     ViewBag.Title = "LookupFolder";
 }
 
-<div class="container body-content">
-    <div class="container-fluid" id="mainContainer">
-        <div class="row">
-            <!--Bread crumb-->
-            <header class="col-xs-12">
-                <p>
-                    <nav class="breadcrumbs mini">
-                        <ul>
-                            <li>
-                            </li>
-                            <li>
-                            </li>
-                        </ul>
-                    </nav>
-                </p>
-            </header>
-        </div>
-        <!--/Bread crumb-->
-
-        <div class="row" id="sb-viewhost">
-            <!-- Main Content-->
-            <article id="main-content">
-                <h3>Browsing @Model.ParentRepo.ParentUserName's repository @Model.ParentRepo.Name.</h3>
-                <p>Use the menu on the left to pick a file within a repository.</p>
-                <p><a href="//github.com/@Model.ParentRepo.ParentUserName/@Model.ParentRepo.Name/" target="_blank">View @Model.ParentRepo.Name on github.</a></p>
-            </article>
-            <aside id="browser">
-                <section id="tree-view">
-                    @Html.Raw(ViewBag.TreeView)
-                </section>
-                <section id="search-results" style="display:none;"></section>
-                <section id="no-results" style="display:none;">
-                    There were no results
-                </section>
-            </aside>
-        </div>
-    </div>
+<div id="sb-viewhost">
+    <!-- Main Content-->
+    <article id="main-content">
+        <h3>Browsing @Model.ParentRepo.ParentUserName's repository @Model.ParentRepo.Name.</h3>
+        <p>Use the menu on the left to pick a file within a repository.</p>
+        <p><a href="//github.com/@Model.ParentRepo.ParentUserName/@Model.ParentRepo.Name/" target="_blank">View @Model.ParentRepo.Name on github.</a></p>
+    </article>
+    <aside id="browser">
+        <section id="tree-view" class="metro">
+            @Html.Raw(ViewBag.TreeView)
+        </section>
+        <section id="search-results" style="display:none;"></section>
+        <section id="no-results" style="display:none;">
+            There were no results
+        </section>
+    </aside>
 </div>
 
 @section Scripts {
