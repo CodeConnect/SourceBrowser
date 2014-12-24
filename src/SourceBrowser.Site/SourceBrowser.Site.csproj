@@ -198,13 +198,16 @@
     <Content Include="Content\datepicker.css" />
     <Content Include="Content\dialog.css" />
     <Content Include="Content\draggable.css" />
+    <Content Include="Content\logo.png" />
     <Content Include="Content\menu.css" />
     <Content Include="Content\progressbar.css" />
     <Content Include="Content\resizable.css" />
+    <Content Include="Content\search.png" />
     <Content Include="Content\selectable.css" />
     <Content Include="Content\selectmenu.css" />
     <Content Include="Content\slider.css" />
     <Content Include="Content\sortable.css" />
+    <Content Include="Content\sourcebrowser-codebrowser.css" />
     <Content Include="Content\spinner.css" />
     <Content Include="Content\tabs.css" />
     <Content Include="Content\theme.css" />
