@@ -1,16 +1,34 @@
-﻿.btn-search {
+﻿header {
+    background-color: #333;
+    color: #fff;
+    height: 45px;
+}
+
+.btn-search {
     background-image: url("search.png");
     height: 16px;
     width: 16px;
 }
 
-header .full-name {
+header input {
+    width: 300px;
+}
+
+header .visible-on-wide-screen {
     visibility: collapse;
 }
 
-@media screen and (min-width: 768px) {
-    header .full-name {
+header .visible-on-narrow-screen {
+    visibility: hidden;
+}
+
+@media screen and (min-width: 800px) {
+    header .visible-on-wide-screen {
         visibility: visible;
+    }
+
+    header .visible-on-narrow-screen {
+        visibility: collapse;
     }
 }
 
@@ -19,3 +37,44 @@ header .logo {
     height: 32px;
     width: 32px;
 }
+
+/* Browse layout with source in one pane and treeview/search in another: */
+#sb-viewhost {
+    top: 45px;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    position: fixed;
+    overflow: hidden;
+}
+
+#main-content {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 320px;
+    overflow: scroll;
+    overflow-y: auto;
+    overflow-x: auto;
+    padding-left: 20px;
+}
+
+#browser {
+    position: absolute;
+    width: 320px;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    padding-left: 20px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+#search-results {
+}
+
+#tree-view {
+}
+
+/* End of browse layout */
