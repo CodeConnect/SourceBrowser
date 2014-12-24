@@ -62,7 +62,7 @@
 
             ViewBag.TreeView = loadTreeView(username, repository);
             var viewModel = BrowserRepository.SetUpFileStructure(username, repository, path, rawHtml);
-            return View("LookupFile", viewModel);
+            return View("LookupFile", "_BrowseLayout", viewModel);
         }
 
         public ActionResult LookupFileAjax(string username, string repository, string path)
