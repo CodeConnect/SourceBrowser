@@ -1,0 +1,57 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - Source Browser</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+
+<body class="metro">
+    <header class="bg-dark" data-load="header.html">
+        <div class="navigation-bar dark">
+            <div class="navigation-bar-content container">
+                @* Left aligned items: *@
+                <a href="/" class="element"><span class="icon-grid-view"></span> SOURCE BROWSER <sup>0.1</sup></a>
+                <span class="element-divider"></span>
+
+                <a class="element1 pull-menu" href="#"></a>
+                <ul class="element-menu">
+                    <li>
+                        @Html.ActionLink("Browse", "", "Browse")
+                    </li>
+                    <li>
+                        @Html.ActionLink("Upload", "", "Upload")
+                    </li>
+                </ul>
+
+                @* Right aligned items: *@
+                <div class="element-menu place-right input-element" id="search-form">
+                    <form>
+                        <input type="text" id="search-box" class="element place-right" placeholder="Search..." />
+                    </form>
+                </div>
+
+
+            </div>
+        </div>
+    </header>
+    
+    @RenderBody()
+    
+    <div class="container body-content">
+        <hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year - <a href="http://codeconnect.io">Code Connect</a></p>
+        </footer>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/search")
+    @*Scripts.Render("~/bundles/sourcebrowser")*@
+    @RenderSection("scripts", required: false)
+</body>
+</html>

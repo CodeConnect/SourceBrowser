@@ -421,6 +421,7 @@
     <Content Include="Views\Browse\LookupFolder.cshtml" />
     <Content Include="Views\Browse\LookupUser.cshtml" />
     <Content Include="Views\Upload\Index.cshtml" />
+    <Content Include="Views\Shared\_BrowseLayout.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
