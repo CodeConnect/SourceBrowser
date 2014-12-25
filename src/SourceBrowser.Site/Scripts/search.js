@@ -183,3 +183,7 @@ function handlePageLoadError(args) {
 $("#search-box").keyup(function () {
     search.beginSearch();
 });
+
+$("search-button").click(function () {
+    search.beginSearch();
+});
