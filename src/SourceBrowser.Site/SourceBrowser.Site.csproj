@@ -198,11 +198,15 @@
     <Content Include="Content\datepicker.css" />
     <Content Include="Content\dialog.css" />
     <Content Include="Content\draggable.css" />
-    <Content Include="Content\logo.png" />
+    <Content Include="Content\logo.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Content\menu.css" />
     <Content Include="Content\progressbar.css" />
     <Content Include="Content\resizable.css" />
-    <Content Include="Content\search.png" />
+    <Content Include="Content\search.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Content\selectable.css" />
     <Content Include="Content\selectmenu.css" />
     <Content Include="Content\slider.css" />
