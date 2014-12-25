@@ -157,6 +157,19 @@
     overflow-x: hidden;
 }
 
+#drag-handle {
+    display: block;
+    bottom: 0;
+    background: #dce;
+    border-left: 5px solid #fff;
+    border-right: 5px solid #fff;
+    width: 15px;
+    position: absolute;
+    right: 320px;
+    top: 0;
+    cursor: col-resize;
+}
+
 #search-results {
 }
 
