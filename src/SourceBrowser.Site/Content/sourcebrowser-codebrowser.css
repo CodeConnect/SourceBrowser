@@ -1,4 +1,4 @@
-﻿header {
+﻿.sourcebrowser-header {
     background-color: #333;
     color: #fff;
     height: 45px;
@@ -8,37 +8,37 @@
     font-size: 14px;
 }
 
-header .element {
+.sourcebrowser-header .element {
     padding: 15px;
     line-height: 15px;
     float: left;
 }
 
-header .title-element {
+.sourcebrowser-header .title-element {
     font-family: 'Segoe UI','Open Sans',Verdana,Arial,Helvetica,sans-serif;
 }
 
-header a {
+.sourcebrowser-header a {
     color: #fff;
 }
 
-header a:hover {
+.sourcebrowser-header a:hover {
     color: #fff;
 }
 
-header .element:hover {
+.sourcebrowser-header .element:hover {
     background-color: #201a1a;
 }
 
-header .before-divider {
+.sourcebrowser-header .before-divider {
     border-right: 1px #606060 solid;
 }
 
-header .place-right {
+.sourcebrowser-header .place-right {
     float: right;
 }
 
-header .pull-menu {
+.sourcebrowser-header .pull-menu {
     display: block;
     float: right!important;
     color: #fff;
@@ -53,7 +53,7 @@ header .pull-menu {
     margin: 0;
 }
 
-header .pull-menu:before {
+.sourcebrowser-header .pull-menu:before {
     content: "≡";
     position: absolute;
     font-size: 20pt;
@@ -61,21 +61,21 @@ header .pull-menu:before {
     left: 10px;
 }
 
-header .input-element {
+.sourcebrowser-header .input-element {
     padding: 15px;
     line-height: 15px;
     position: relative;
     margin: 0;
 }
 
-header form {
+.sourcebrowser-header form {
     margin: 0;
     padding-bottom: 0;
     position: relative;
     top: -6px;
 }
 
-header .btn-search {
+.sourcebrowser-header .btn-search {
     background-image: url("search.png");
     height: 16px;
     width: 16px;
@@ -85,35 +85,35 @@ header .btn-search {
     cursor: pointer;
 }
 
-header input {
+.sourcebrowser-header input {
     width: 300px;
     font-size: 12px;
     padding: 3px;
 }
 
-header .visible-on-wide-screen {
+.sourcebrowser-header .visible-on-wide-screen {
     display: block;
 }
 
-header .visible-on-narrow-screen {
+.sourcebrowser-header .visible-on-narrow-screen {
     display: none;
 }
 
 @media screen and (min-width: 800px) {
-    header .pull-menu {
+    .sourcebrowser-header .pull-menu {
         display: none;
     }
 
-    header .visible-on-wide-screen {
+    .sourcebrowser-header .visible-on-wide-screen {
         display: block;
     }
 
-    header .visible-on-narrow-screen {
+    .sourcebrowser-header .visible-on-narrow-screen {
         display: none;
     }
 }
 
-header .logo {
+.sourcebrowser-header .logo {
     background-image: url("logo.png");
     height: 32px;
     width: 32px;
