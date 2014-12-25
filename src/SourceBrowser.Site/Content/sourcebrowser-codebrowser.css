@@ -1,11 +1,16 @@
 ﻿.sourcebrowser-header {
-    background-color: #333;
-    color: #fff;
     height: 45px;
     width: 100%;
     color: inherit;
+    background-color: #333;
+    color: #fff;
     font-family: 'Segoe UI Light_','Open Sans Light',Verdana,Arial,Helvetica,sans-serif;
     font-size: 14px;
+}
+
+.sourcebrowser-header .navigation-bar-content
+{
+    margin: 0 15px;
 }
 
 .sourcebrowser-header .element {
