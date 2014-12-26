@@ -90,9 +90,12 @@
 }
 
 #search-box {
-    width: 300px;
-    font-size: 12px;
-    padding: 3px;
+    border: none;
+    background: #FFF;
+    color:#333;
+    width: 290px;
+    font-size: 14px;
+    padding: 5px;
 }
 
 .sourcebrowser-header .visible-on-wide-screen {

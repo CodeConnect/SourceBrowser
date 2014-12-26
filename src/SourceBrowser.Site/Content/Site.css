@@ -14,13 +14,6 @@
     padding-right: 15px;
 }
 
-/* Set width on the form input elements since they're 100% wide by default */
-input,
-select,
-textarea {
-    max-width: 280px;
-}
-
 .sb-jumbotron
 {
     background-color: #7f34a9;
@@ -59,16 +52,6 @@ textarea {
 .Comment {
     color: #18890D;
 }
-
-#search-box {
-    border: none;
-    background: #FFF;
-    width:400px;
-    height:20px;
-    margin:7px auto;
-    color:#333;
-}
-
 
 .String {
     color:#A31515;
