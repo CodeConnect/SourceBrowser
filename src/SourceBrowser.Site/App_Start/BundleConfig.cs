@@ -10,6 +10,7 @@ namespace SourceBrowser.Site
         {
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
                         "~/Scripts/jquery-2.1.1.js",
+                        "~/Scripts/jquery-ui-1.11.1.js",
                         "~/Scripts/jquery.widget.js"
                         ));
 
