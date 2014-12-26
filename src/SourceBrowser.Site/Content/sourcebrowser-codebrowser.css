@@ -204,5 +204,13 @@
     background:#E6F2FA;
 }
 
+/* No results */
+
+#no-results {
+    padding: 5px 20px;
+    word-wrap: break-word;
+    color: #333;
+    font-weight: bold;
+}
 
 /* End of browse layout */
