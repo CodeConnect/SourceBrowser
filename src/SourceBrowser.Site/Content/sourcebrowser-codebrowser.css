@@ -67,7 +67,7 @@
 }
 
 .sourcebrowser-header .input-element {
-    padding: 15px;
+    padding: 15px 0; /* Only top and bottom padding */
     line-height: 15px;
     position: relative;
     margin: 0;
@@ -84,10 +84,9 @@
     background-image: url("search.png");
     height: 16px;
     width: 16px;
-    top: 2px;
-    right: 2px;
     background-color: transparent;
     cursor: pointer;
+    border: 0;
 }
 
 #search-box {
@@ -159,8 +158,8 @@
 #drag-handle {
     display: block;
     bottom: 0;
-    background: #dce;
-    border-left: 5px solid #fff;
+    background: #333;
+    border-left: 5px solid #fff; /* Border gives user more room to grab the handle */
     border-right: 5px solid #fff;
     width: 15px;
     position: absolute;
