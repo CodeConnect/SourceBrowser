@@ -191,6 +191,10 @@ namespace SourceBrowser.Generator.DocumentWalkers
             var parentSymbol = _model.GetDeclaredSymbol(token.Parent);
             if (parentSymbol != null)
             {
+                if(parentSymbol.Kind == SymbolKind.Parameter)
+                {
+                    parentSymbol = parentSymbol.ContainingSymbol;
+                }
                 return ProcessDeclarationToken(token, parentSymbol);
             }
 
