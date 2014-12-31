@@ -10,6 +10,8 @@ using Microsoft.CodeAnalysis.VisualBasic.Syntax;
 using SourceBrowser.Generator.Extensions;
 using SourceBrowser.Generator.Model;
 using SourceBrowser.Generator.Model.VisualBasic;
+using Microsoft.CodeAnalysis.Shared.Extensions;
+using Microsoft.CodeAnalysis.FindSymbols;
 
 namespace SourceBrowser.Generator.DocumentWalkers
 {
@@ -23,7 +25,9 @@ namespace SourceBrowser.Generator.DocumentWalkers
         public DocumentModel DocumentModel { get; private set; }
         public string FilePath { get; set; }
 
-        public VBWalker(IProjectItem parent, Document document, ReferencesourceLinkProvider refSourceLinkProvider): base(SyntaxWalkerDepth.Trivia)
+        private Document _document;
+
+        public VBWalker(IProjectItem parent, Document document, ReferencesourceLinkProvider refSourceLinkProvider) : base(SyntaxWalkerDepth.Trivia)
         {
             _model = document.GetSemanticModelAsync().Result;
             _refsourceLinkProvider = refSourceLinkProvider;
@@ -33,12 +37,13 @@ namespace SourceBrowser.Generator.DocumentWalkers
             DocumentModel = new DocumentModel(parent, document.Name, numberOfLines);
             FilePath = document.GetRelativeFilePath();
             _refsourceLinkProvider = refSourceLinkProvider;
+            _document = document;
         }
 
         public override void VisitToken(SyntaxToken token)
         {
             Token tokenModel = null;
-          
+
             if (token.IsKeyword())
             {
                 tokenModel = ProcessKeyword(token);
@@ -47,7 +52,7 @@ namespace SourceBrowser.Generator.DocumentWalkers
             {
                 tokenModel = ProcessIdentifier(token);
             }
-            else if(token.VisualBasicKind() == SyntaxKind.StringLiteralToken)
+            else if (token.VisualBasicKind() == SyntaxKind.StringLiteralToken)
             {
                 tokenModel = ProcessStringLiteral(token);
             }
@@ -92,7 +97,6 @@ namespace SourceBrowser.Generator.DocumentWalkers
             int lineNumber = token.GetLocation().GetLineSpan().StartLinePosition.Line + 1;
 
             var tokenModel = new Token(this.DocumentModel, fullName, value, type, lineNumber);
-
             return tokenModel;
         }
 
@@ -105,7 +109,6 @@ namespace SourceBrowser.Generator.DocumentWalkers
             string value = token.ToString();
             string type = VisualBasicTokenTypes.KEYWORD;
             int lineNumber = token.GetLocation().GetLineSpan().StartLinePosition.Line + 1;
-
             var tokenModel = new Token(this.DocumentModel, fullName, value, type, lineNumber);
             return tokenModel;
         }
@@ -116,46 +119,18 @@ namespace SourceBrowser.Generator.DocumentWalkers
             string value = token.ToString();
             string type = VisualBasicTokenTypes.STRING;
             int lineNumber = token.GetLocation().GetLineSpan().StartLinePosition.Line + 1;
-
             var tokenModel = new Token(this.DocumentModel, fullName, value, type, lineNumber);
             return tokenModel;
         }
 
-        /// <summary>
-        /// Given a syntax token identifier that represents a declaration,
-        /// generate and return the proper HTML for this symbol.
-        /// </summary>
-        public Token ProcessDeclarationToken(SyntaxToken token, ISymbol parentSymbol)
+        public Token ProcessSymbolUsage(SyntaxToken token, ISymbol symbol, bool isDeclaration)
         {
-            string fullName = parentSymbol.ToString();
+            string fullName = GetSymbolName(symbol);
             string value = token.ToString();
-            string type = string.Empty;
+            string type = String.Empty;
             int lineNumber = token.GetLocation().GetLineSpan().StartLinePosition.Line + 1;
-            bool isDeclaration = true;
+            bool isSearchable = isDeclaration;
 
-            if (parentSymbol is INamedTypeSymbol)
-            {
-                type = VisualBasicTokenTypes.TYPE;
-            }
-            else
-            {
-                type = VisualBasicTokenTypes.IDENTIFIER;
-            }
-
-            var tokenModel = new Token(this.DocumentModel, fullName, value, type, lineNumber, isDeclaration);
-            return tokenModel;
-        }
-
-        /// <summary>
-        /// Given a syntax token identifier that represents a symbol's usage
-        /// generate and return the proper HTML for this symbol
-        /// </summary>
-        public Token ProcessSymbolUsage(SyntaxToken token, ISymbol symbol)
-        {
-            string fullName = symbol.ToString();
-            string value = token.ToString();
-            string type = string.Empty;
-            int lineNumber = token.GetLocation().GetLineSpan().StartLinePosition.Line + 1;
             if (symbol is INamedTypeSymbol)
             {
                 type = VisualBasicTokenTypes.TYPE;
@@ -164,14 +139,20 @@ namespace SourceBrowser.Generator.DocumentWalkers
             {
                 type = VisualBasicTokenTypes.IDENTIFIER;
             }
-            
+
+            //Do not allow us to search locals
+            if (symbol.Kind == SymbolKind.Local || symbol.Kind == SymbolKind.Parameter)
+            {
+                isSearchable = false;
+            }
+
             var tokenModel = new Token(this.DocumentModel, fullName, value, type, lineNumber);
 
             //If we can find the declaration, we'll link it ourselves
             if (symbol.DeclaringSyntaxReferences.Any()
                 && !(symbol is INamespaceSymbol))
             {
-                var link = new SymbolLink(referencedSymbolName: symbol.ToString());
+                var link = new SymbolLink(referencedSymbolName: fullName);
                 tokenModel = tokenModel.WithLink(link);
             }
             //Otherwise, we try to link to the .Net Reference source
@@ -185,28 +166,34 @@ namespace SourceBrowser.Generator.DocumentWalkers
             return tokenModel;
         }
 
+        private string GetSymbolName(ISymbol symbol)
+        {
+            if (symbol.Kind == SymbolKind.Parameter || symbol.Kind == SymbolKind.Local)
+            {
+                var containingName = symbol.ContainingSymbol.ToString();
+                var name = containingName + "::" + symbol.Name;
+                return name;
+            }
+            else
+            {
+                return symbol.ToString();
+            }
+        }
+
         public Token ProcessIdentifier(SyntaxToken token)
         {
             //Check if this token is part of a declaration
-            var parentSymbol = _model.GetDeclaredSymbol(token.Parent);
-            if (parentSymbol != null)
+            bool isDeclaration = false;
+            if (_model.GetDeclaredSymbol(token.Parent) != null)
             {
-                if (parentSymbol.Kind == SymbolKind.Parameter)
-                {
-                    parentSymbol = parentSymbol.ContainingSymbol;
-                }
-                return ProcessDeclarationToken(token, parentSymbol);
+                isDeclaration = true;
             }
-
-            //Find the symbol this token references
-            var symbol = _model.GetSymbolInfo(token.Parent).Symbol;
+            var startPosition = token.GetLocation().SourceSpan.Start;
+            //Note: We're using the SymbolFinder as it correctly resolves 
+            var symbol = SymbolFinder.FindSymbolAtPosition(_model, startPosition, _document.Project.Solution.Workspace);
             if (symbol != null)
             {
-                if (symbol.Kind == SymbolKind.Parameter)
-                {
-                    symbol = symbol.ContainingSymbol;
-                }
-                return ProcessSymbolUsage(token, symbol);
+                return ProcessSymbolUsage(token, symbol, isDeclaration);
             }
 
             //Otherwise it references something we don't
