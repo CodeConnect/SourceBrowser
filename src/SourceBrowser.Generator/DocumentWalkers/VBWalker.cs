@@ -168,16 +168,23 @@ namespace SourceBrowser.Generator.DocumentWalkers
 
         private string GetSymbolName(ISymbol symbol)
         {
-            if (symbol.Kind == SymbolKind.Parameter || symbol.Kind == SymbolKind.Local)
+            string fullyQualifiedName;
+            if (symbol.Kind == SymbolKind.Parameter)
             {
                 var containingName = symbol.ContainingSymbol.ToString();
-                var name = containingName + "::" + symbol.Name;
-                return name;
+                fullyQualifiedName = containingName + VBDelimiters.PARAMETER + symbol.Name;
+            }
+            else if (symbol.Kind == SymbolKind.Local)
+            {
+                var containingName = symbol.ContainingSymbol.ToString();
+                fullyQualifiedName = containingName + VBDelimiters.LOCAL_VARIABLE + symbol.Name;
             }
             else
             {
-                return symbol.ToString();
+                fullyQualifiedName = symbol.ToString();
             }
+
+            return fullyQualifiedName;
         }
 
         public Token ProcessIdentifier(SyntaxToken token)
