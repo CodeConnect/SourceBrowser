@@ -23,7 +23,7 @@ namespace SourceBrowser.Generator.Transformers
         protected override void VisitDocument(DocumentModel documentModel)
         {
             var documentId = Path.Combine(_username, _repository, documentModel.RelativePath);
-            var declarations = documentModel.Tokens.Where(n => n.IsDeclaration);
+            var declarations = documentModel.Tokens.Where(n => n.IsDeclaration && n.IsSearchable);
 
             foreach(var declaration in declarations)
             {
