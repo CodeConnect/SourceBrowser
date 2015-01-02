@@ -173,6 +173,7 @@
 
 #browser {
     position: absolute;
+    background:#FFF;
     width: 320px;
     top: 0;
     bottom: 0;
