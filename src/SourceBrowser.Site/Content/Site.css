@@ -14,13 +14,6 @@
     padding-right: 15px;
 }
 
-/* Set width on the form input elements since they're 100% wide by default */
-input,
-select,
-textarea {
-    max-width: 280px;
-}
-
 .sb-jumbotron
 {
     background-color: #7f34a9;
@@ -60,41 +53,6 @@ textarea {
     color: #18890D;
 }
 
-#search-box {
-    border: none;
-    background: #FFF;
-    width:400px;
-    height:20px;
-    margin:7px auto;
-    color:#333;
-}
-
-
 .String {
     color:#A31515;
-}
-
-#search-results a {
-    display:block;
-    padding:5px 10px;
-    color:#333;
-    overflow:hidden;
-}
-
-#search-results span {
-    display:block;
-}
-
-#search-results a span:first-of-type{
-    font-weight:bold;
-}
-
-#search-results a span:last-of-type{
-    font-size:12px;
-    color:#666;
-}
-
-#search-results a:hover {
-    text-decoration:none;
-    background:#DDD;
 }

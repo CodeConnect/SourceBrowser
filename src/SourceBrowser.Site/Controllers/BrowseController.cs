@@ -36,7 +36,7 @@
 
             ViewBag.TreeView = loadTreeView(username, repository);
             var viewModel = BrowserRepository.SetUpSolutionStructure(username, repository, "");
-            return View("LookupFolder", viewModel);
+            return View("LookupFolder", "_BrowseLayout", viewModel);
         }
 
         public ActionResult LookupFolder(string username, string repository, string path)
@@ -48,7 +48,7 @@
 
             ViewBag.TreeView = loadTreeView(username, repository);
             var viewModel = BrowserRepository.SetUpSolutionStructure(username, repository, path);
-            return View("LookupFolder", viewModel);
+            return View("LookupFolder", "_BrowseLayout", viewModel);
         }
 
         public ActionResult LookupFile(string username, string repository, string path)
@@ -62,7 +62,7 @@
 
             ViewBag.TreeView = loadTreeView(username, repository);
             var viewModel = BrowserRepository.SetUpFileStructure(username, repository, path, rawHtml);
-            return View("LookupFile", viewModel);
+            return View("LookupFile", "_BrowseLayout", viewModel);
         }
 
         public ActionResult LookupFileAjax(string username, string repository, string path)

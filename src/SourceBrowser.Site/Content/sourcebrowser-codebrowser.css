@@ -1,0 +1,239 @@
+﻿.sourcebrowser-header {
+    height: 45px;
+    width: 100%;
+    color: inherit;
+    background-color: #333;
+    color: #fff;
+    font-family: 'Segoe UI Light_','Open Sans Light',Verdana,Arial,Helvetica,sans-serif;
+    font-size: 14px;
+}
+
+.sourcebrowser-header .navigation-bar-content
+{
+    margin: 0 15px;
+}
+
+.sourcebrowser-header .element {
+    padding: 15px;
+    line-height: 15px;
+    float: left;
+}
+
+.sourcebrowser-header .title-element { /* a tag containing .logo and .title*/
+    padding: 0;
+    font-family: 'Segoe UI','Open Sans',Verdana,Arial,Helvetica,sans-serif;
+    float: left;
+    width: auto;
+    display: block;
+    text-decoration: none;
+}
+
+.sourcebrowser-header .title-element .logo {
+    margin: 6px;
+    font-family: 'Segoe UI','Open Sans',Verdana,Arial,Helvetica,sans-serif;
+    background-image: url("logo.png");
+    height: 32px;
+    width: 32px;
+    background: transparent;
+    float: left;
+    display: inline-block;
+}
+
+.sourcebrowser-header .title-element .title {
+    padding: 15px 15px 15px 0;
+    line-height: 15px;
+    float: left;
+    display: inline-block;
+}
+
+.sourcebrowser-header a {
+    color: #fff;
+}
+
+.sourcebrowser-header a:hover {
+    color: #fff;
+}
+
+.sourcebrowser-header .element:hover {
+    background-color: #201a1a;
+}
+
+.sourcebrowser-header .title-element:hover {
+    background-color: #201a1a;
+}
+
+.sourcebrowser-header .after-divider {
+    border-left: 1px #606060 solid;
+}
+
+.sourcebrowser-header .place-right {
+    float: right;
+}
+
+.sourcebrowser-header .pull-menu {
+    display: block;
+    float: right!important;
+    color: #fff;
+    cursor: pointer;
+    font: 1.8em sans-serif;
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 45px;
+    width: 40px;
+    line-height: 20px;
+    margin: 0;
+}
+
+.sourcebrowser-header .pull-menu:before {
+    content: "≡";
+    position: absolute;
+    font-size: 20pt;
+    top: 10px;
+    left: 10px;
+}
+
+.sourcebrowser-header .input-element {
+    padding: 15px 0; /* Only top and bottom padding */
+    line-height: 15px;
+    position: relative;
+    margin: 0;
+}
+
+.sourcebrowser-header form {
+    margin: 0;
+    padding-bottom: 0;
+    position: relative;
+    top: -6px;
+}
+
+#search-button {
+    background-image: url("search.png");
+    height: 16px;
+    width: 16px;
+    background-color: transparent;
+    cursor: pointer;
+    border: 0;
+}
+
+#search-box {
+    border: none;
+    background: #FFF;
+    color:#333;
+    min-width: 170px;
+    font-size: 14px;
+    padding: 5px;
+}
+
+@media screen and (min-width: 700px) {
+    #search-box {
+        width: 290px;
+    }
+}
+
+.sourcebrowser-header .visible-on-wide-screen {
+    display: none;
+}
+
+.sourcebrowser-header .visible-on-narrow-screen {
+    display: block;
+}
+
+@media screen and (min-width: 700px) {
+    .sourcebrowser-header .visible-on-wide-screen {
+        display: block;
+    }
+
+    .sourcebrowser-header .visible-on-narrow-screen {
+        display: none;
+    }
+}
+
+/* Browse layout with source in one pane and treeview/search in another: */
+#sb-viewhost {
+    top: 45px;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    position: fixed;
+    overflow: hidden;
+}
+
+#main-content {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 335px;
+    overflow: scroll;
+    overflow-y: auto;
+    overflow-x: auto;
+    padding-left: 20px;
+}
+
+#browser {
+    position: absolute;
+    width: 320px;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+#drag-handle {
+    display: block;
+    bottom: 0;
+    background: #333;
+    border-left: 5px solid #fff; /* Border gives user more room to grab the handle */
+    border-right: 5px solid #fff;
+    width: 15px;
+    position: absolute;
+    right: 320px;
+    top: 0;
+    cursor: col-resize;
+}
+
+#search-results {
+}
+
+#tree-view {
+}
+
+/* Individual search result */
+#search-results a {
+    display:block;
+    padding:5px 20px;
+    color:#333;
+    overflow:hidden;
+    word-wrap: break-word;
+}
+
+#search-results span {
+    display:block;
+}
+
+#search-results a span:first-of-type{
+    font-weight:bold;
+}
+
+#search-results a span:last-of-type{
+    font-size:12px;
+    color:#666;
+}
+
+#search-results a:hover {
+    text-decoration:none;
+    background:#E6F2FA;
+}
+
+/* No results */
+
+#no-results {
+    padding: 5px 20px;
+    word-wrap: break-word;
+    color: #333;
+    font-weight: bold;
+}
+
+/* End of browse layout */

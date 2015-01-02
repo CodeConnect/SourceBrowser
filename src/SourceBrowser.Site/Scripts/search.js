@@ -11,6 +11,25 @@
         //Only bind if the page is searchable. (ie. we're in a repository)
         window.History.Adapter.bind(window, 'statechange', handleStateChange);
     }
+
+    // Drag-to-resize search results pane
+    // Adapted from http://www.catchmyfame.com/2010/08/12/adjustable-columns-with-jquery/
+
+    var stopTwoLeft = parseInt($('#main-content').offset().left) + 300;
+    var stopTwoRight = parseInt($('#browser').offset().left) + $('#browser').width() - 200;
+
+    $("#drag-handle").draggable({
+        axis: 'x',
+        start: function (event, ui) {
+            leftOneStart = $('#main-content').width();
+            leftThreeStart = $('#browser').width();
+        },
+        drag: function (event, ui) {
+            $('#main-content').width(leftOneStart + (ui.position.left - ui.originalPosition.left));
+            $('#browser').width(leftThreeStart - (ui.position.left - ui.originalPosition.left));
+        },
+        containment: [stopTwoLeft, 0, stopTwoRight, 0]
+    });
 });
 
 search = {
@@ -183,3 +202,8 @@ function handlePageLoadError(args) {
 $("#search-box").keyup(function () {
     search.beginSearch();
 });
+
+$("search-button").click(function () {
+    search.beginSearch();
+});
+

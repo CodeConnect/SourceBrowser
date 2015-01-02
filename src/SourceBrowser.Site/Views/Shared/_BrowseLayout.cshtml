@@ -1,0 +1,40 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - Source Browser</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+
+<body>
+    <header class="sourcebrowser-header" data-load="header.html">
+        <nav class="navigation-bar-content">
+            <a href="/" class="title-element">
+                <div class="logo"></div>
+                <div class="title">SOURCE BROWSER <sup>0.1</sup></div>
+            </a>
+            <a class="element visible-on-wide-screen after-divider" href="/Browse/">Browse</a>
+            <a class="element visible-on-wide-screen" href="/Upload/">Upload</a>
+            <div class="input-element place-right" id="search-form">
+                <form>
+                    <div class="input-control text">
+                        <input type="text" id="search-box" placeholder="Search...">
+                        <button type="submit" id="search-button"></button>
+                    </div>
+                </form>
+            </div>
+        </nav>
+    </header>
+    
+    @RenderBody()
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/search")
+    @*Scripts.Render("~/bundles/sourcebrowser")*@
+    @RenderSection("scripts", required: false)
+</body>
+</html>
