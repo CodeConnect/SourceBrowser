@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SourceBrowser.SolutionRetri
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SourceBrowser.Search", "SourceBrowser.Search\SourceBrowser.Search.csproj", "{6C2ED4C0-E609-47D8-AA05-1CACBE5252AC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SourceBrowser.Tests", "SourceBrowser.Tests\SourceBrowser.Tests.csproj", "{EA8F0B24-B238-4A04-9A54-8AB12BDB5E88}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{6C2ED4C0-E609-47D8-AA05-1CACBE5252AC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6C2ED4C0-E609-47D8-AA05-1CACBE5252AC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6C2ED4C0-E609-47D8-AA05-1CACBE5252AC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EA8F0B24-B238-4A04-9A54-8AB12BDB5E88}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EA8F0B24-B238-4A04-9A54-8AB12BDB5E88}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EA8F0B24-B238-4A04-9A54-8AB12BDB5E88}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EA8F0B24-B238-4A04-9A54-8AB12BDB5E88}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

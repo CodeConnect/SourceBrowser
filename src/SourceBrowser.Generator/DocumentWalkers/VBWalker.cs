@@ -43,11 +43,11 @@ namespace SourceBrowser.Generator.DocumentWalkers
             {
                 tokenModel = ProcessKeyword(token);
             }
-            else if (token.VisualBasicKind() == SyntaxKind.IdentifierToken)
+            else if (token.VBKind() == SyntaxKind.IdentifierToken)
             {
                 tokenModel = ProcessIdentifier(token);
             }
-            else if(token.VisualBasicKind() == SyntaxKind.StringLiteralToken)
+            else if(token.VBKind() == SyntaxKind.StringLiteralToken)
             {
                 tokenModel = ProcessStringLiteral(token);
             }
@@ -75,7 +75,7 @@ namespace SourceBrowser.Generator.DocumentWalkers
         {
             var triviaModelList = triviaList.Select(n => new Trivia(
                 value: n.ToFullString(),
-                type: n.VisualBasicKind().ToString()
+                type: n.VBKind().ToString()
             )).ToList();
 
             return triviaModelList;
@@ -101,7 +101,7 @@ namespace SourceBrowser.Generator.DocumentWalkers
         /// </summary>
         public Token ProcessKeyword(SyntaxToken token)
         {
-            string fullName = token.VisualBasicKind().ToString();
+            string fullName = token.VBKind().ToString();
             string value = token.ToString();
             string type = VisualBasicTokenTypes.KEYWORD;
             int lineNumber = token.GetLocation().GetLineSpan().StartLinePosition.Line + 1;
@@ -112,7 +112,7 @@ namespace SourceBrowser.Generator.DocumentWalkers
 
         private Token ProcessStringLiteral(SyntaxToken token)
         {
-            string fullName = token.VisualBasicKind().ToString();
+            string fullName = token.VBKind().ToString();
             string value = token.ToString();
             string type = VisualBasicTokenTypes.STRING;
             int lineNumber = token.GetLocation().GetLineSpan().StartLinePosition.Line + 1;
