@@ -44,10 +44,6 @@
             return File.Exists(fullPath);
         }
 
-
-
-
-
         /// <summary>
         /// Returns a list of all Github users on file.
         /// </summary>
@@ -73,7 +69,7 @@
             return users;
         }
 
-             /// <summary>
+        /// <summary>
         /// Returns a structure containing information on user's github repositories available at Source Browser.
         /// If the structure does not exist, creates it.
         /// </summary>
@@ -278,9 +274,6 @@
             directories = new List<string>(directoryPaths);
             return directories;
         }
-
-
-                                                                                                                        
 
         private static string CreatePath(string part1, string part2 = null, string part3 = null, string part4 = null)
         {
