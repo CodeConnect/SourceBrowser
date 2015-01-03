@@ -32,6 +32,18 @@
             }
         }
 
+        internal static bool PathExists(string username, string repository = "", string path = "")
+        {
+            var fullPath = Path.Combine(StaticHtmlAbsolutePath, username, repository, path);
+            return Directory.Exists(fullPath);
+        }
+
+        internal static bool FileExists(string username, string repository, string path)
+        {
+            var fullPath = Path.Combine(StaticHtmlAbsolutePath, username, repository, path);
+            return File.Exists(fullPath);
+        }
+
         /// <summary>
         /// Returns a list of all Github users on file.
         /// </summary>
@@ -262,9 +274,6 @@
             directories = new List<string>(directoryPaths);
             return directories;
         }
-
-
-                                                                                                                        
 
         private static string CreatePath(string part1, string part2 = null, string part3 = null, string part4 = null)
         {
