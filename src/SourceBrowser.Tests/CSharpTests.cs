@@ -6,6 +6,7 @@ using Microsoft.CodeAnalysis;
 using System.Linq;
 using SourceBrowser.Generator.Model;
 using SourceBrowser.Generator;
+using SourceBrowser.Generator.Model.CSharp;
 
 namespace SourceBrowser.Tests
 {
@@ -23,8 +24,9 @@ namespace SourceBrowser.Tests
                     Document(
                         @"
                         class C1
-                        {{
-                        }}")));
+                        {
+                            public void M1 () { }
+                        }")));
 
             WorkspaceModel ws = new WorkspaceModel("Workspace1", "");
             FolderModel fm = new FolderModel(ws, "Project1");
@@ -36,8 +38,14 @@ namespace SourceBrowser.Tests
             walker.Visit(document.GetSyntaxRootAsync().Result);
             var documentModel = walker.GetDocumentModel();
 
-            //Make sure there's five tokens
-            Assert.IsTrue(documentModel.Tokens.Count == 5);
+            //Make sure there's 10 tokens
+            Assert.IsTrue(documentModel.Tokens.Count == 12);
+
+            //Make sure they're classified correctly
+            Assert.IsTrue(documentModel.Tokens.Count(n => n.Type == CSharpTokenTypes.KEYWORD) == 3);
+            Assert.IsTrue(documentModel.Tokens.Count(n => n.Type == CSharpTokenTypes.TYPE) == 1);
+            Assert.IsTrue(documentModel.Tokens.Count(n => n.Type == CSharpTokenTypes.IDENTIFIER) == 1);
+            Assert.IsTrue(documentModel.Tokens.Count(n => n.Type == CSharpTokenTypes.OTHER) == 7);
         }
 
         [TestMethod]
@@ -83,5 +91,6 @@ namespace SourceBrowser.Tests
             Assert.IsTrue(((SymbolLink)links.First()).ReferencedSymbolName == "C1.Method2()");
             Assert.IsTrue(((SymbolLink)links.Last()).ReferencedSymbolName == "C1.Method1()");
         }
+
     }
 }
