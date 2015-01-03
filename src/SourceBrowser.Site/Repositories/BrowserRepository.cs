@@ -32,11 +32,20 @@
             }
         }
 
-        internal static bool RepositoryExists(string username, string repository)
+        internal static bool PathExists(string username, string repository = "", string path = "")
         {
-            var fullPath = Path.Combine(StaticHtmlAbsolutePath, username, repository);
+            var fullPath = Path.Combine(StaticHtmlAbsolutePath, username, repository, path);
             return Directory.Exists(fullPath);
         }
+
+        internal static bool FileExists(string username, string repository, string path)
+        {
+            var fullPath = Path.Combine(StaticHtmlAbsolutePath, username, repository, path);
+            return File.Exists(fullPath);
+        }
+
+
+
 
 
         /// <summary>
@@ -64,7 +73,7 @@
             return users;
         }
 
-        /// <summary>
+             /// <summary>
         /// Returns a structure containing information on user's github repositories available at Source Browser.
         /// If the structure does not exist, creates it.
         /// </summary>

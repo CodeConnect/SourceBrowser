@@ -34,7 +34,7 @@
                 return this.View("LookupError");
             }
 
-            if(!BrowserRepository.RepositoryExists(username, repository))
+            if(!BrowserRepository.PathExists(username, repository))
             {
                 ViewBag.ErrorMessage = "Specified repository could not be found";
                 return this.View("LookupError");
@@ -52,6 +52,12 @@
                 return this.View("LookupError");
             }
 
+            if (!BrowserRepository.PathExists(username, repository, path))
+            {
+                ViewBag.ErrorMessage = "Specified folder could not be found";
+                return this.View("LookupError");
+            }
+
             ViewBag.TreeView = loadTreeView(username, repository);
             var viewModel = BrowserRepository.SetUpSolutionStructure(username, repository, path);
             return View("LookupFolder", "_BrowseLayout", viewModel);
@@ -64,6 +70,11 @@
                 return View("LookupError");
             }
 
+            if (!BrowserRepository.FileExists(username, repository, path))
+            {
+                ViewBag.ErrorMessage = "Specified file could not be found";
+                return this.View("LookupError");
+            }
             var rawHtml = BrowserRepository.GetDocumentHtml(username, repository, path);
 
             ViewBag.TreeView = loadTreeView(username, repository);
