@@ -126,5 +126,42 @@ namespace SourceBrowser.Tests
             //TODO: Test Parameters once PR #66 is merged.
 
         }
+
+        public void TestLocals()
+        {
+
+            var solution = base.Solution(
+             Project(
+                 ProjectName("Project1"),
+                 Sign,
+                 Document(
+                    @"
+                    class C1
+                    {
+                        public void M1()
+                        {
+                            string p1 = String.Empty;
+                            int p2 = 0;
+                            
+                            p2 = p2 + 1;
+                            p1 = p1 + ""sample text""
+                        }
+                    }")));
+
+            WorkspaceModel ws = new WorkspaceModel("Workspace1", "");
+            FolderModel fm = new FolderModel(ws, "Project1");
+
+            var document = solution.Projects.SelectMany(n => n.Documents).Where(n => n.Name == "Document1.cs").Single();
+            var linkProvider = new ReferencesourceLinkProvider();
+
+            var walker = new SourceBrowser.Generator.DocumentWalkers.CSWalker(fm, document, linkProvider);
+            walker.Visit(document.GetSyntaxRootAsync().Result);
+            var documentModel = walker.GetDocumentModel();
+
+            var links = documentModel.Tokens.Select(n => n.Link).Where(n => n != null);
+
+            //TODO: Test locals once PR #66 is merged.
+
+        }
     }
 }
