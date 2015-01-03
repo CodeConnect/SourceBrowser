@@ -24,9 +24,11 @@ namespace SourceBrowser.Generator.Model
 
         public bool IsDeclaration { get; }
 
+        public bool IsSearchable { get; }
+
         public DocumentModel Document { get; }
 
-        public Token(DocumentModel document, string fullName, string value, string type, int lineNumber, bool isDeclaration = false)
+        public Token(DocumentModel document, string fullName, string value, string type, int lineNumber, bool isDeclaration = false, bool isSearchable = false)
         {
             Document = document;
             FullName = fullName;
@@ -34,9 +36,11 @@ namespace SourceBrowser.Generator.Model
             Type = type;
             LineNumber = lineNumber;
             IsDeclaration = isDeclaration;
+            IsSearchable = isSearchable;
         }
 
-        private Token(Token oldToken, ILink link) : this(oldToken.Document, oldToken.FullName, oldToken.Value, oldToken.Type, oldToken.LineNumber, oldToken.IsDeclaration)
+        private Token(Token oldToken, ILink link) :
+            this(oldToken.Document, oldToken.FullName, oldToken.Value, oldToken.Type, oldToken.LineNumber, oldToken.IsDeclaration, oldToken.IsSearchable)
         {
             Link = link;
             LeadingTrivia = oldToken.LeadingTrivia;
@@ -44,7 +48,7 @@ namespace SourceBrowser.Generator.Model
         }
 
         private Token(Token oldToken, ICollection<Trivia> leading, ICollection<Trivia> trailing) :
-            this(oldToken.Document, oldToken.FullName, oldToken.Value, oldToken.Type, oldToken.LineNumber, oldToken.IsDeclaration)
+            this(oldToken.Document, oldToken.FullName, oldToken.Value, oldToken.Type, oldToken.LineNumber, oldToken.IsDeclaration, oldToken.IsSearchable)
         {
             Link = oldToken.Link;
             LeadingTrivia = leading;
