@@ -34,6 +34,12 @@
                 return this.View("LookupError");
             }
 
+            if(!BrowserRepository.RepositoryExists(username, repository))
+            {
+                ViewBag.ErrorMessage = "Specified repository could not be found";
+                return this.View("LookupError");
+            }
+
             ViewBag.TreeView = loadTreeView(username, repository);
             var viewModel = BrowserRepository.SetUpSolutionStructure(username, repository, "");
             return View("LookupFolder", "_BrowseLayout", viewModel);

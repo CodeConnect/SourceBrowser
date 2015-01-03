@@ -32,6 +32,13 @@
             }
         }
 
+        internal static bool RepositoryExists(string username, string repository)
+        {
+            var fullPath = Path.Combine(StaticHtmlAbsolutePath, username, repository);
+            return Directory.Exists(fullPath);
+        }
+
+
         /// <summary>
         /// Returns a list of all Github users on file.
         /// </summary>

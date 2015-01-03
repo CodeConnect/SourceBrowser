@@ -7,5 +7,10 @@
 <div style="margin:65px 0px 65px 0px" class="text-center">
     <h2>There was and error retrieving this project</h2>
     <h4>Please ensure the URL you're using is correct.</h4>
+    @if(ViewBag.ErrorMessage != null)
+    {
+        <br/>
+        <h4>@ViewBag.ErrorMessage</h4>
+    }
 </div>
 
