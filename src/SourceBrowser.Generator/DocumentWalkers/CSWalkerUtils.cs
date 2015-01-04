@@ -9,6 +9,7 @@ namespace SourceBrowser.Generator.DocumentWalkers
         private readonly DocumentWalker<CSWalkerUtils> _walker;
 
         internal CSWalkerUtils(DocumentWalker<CSWalkerUtils> walker)
+            : base(SyntaxWalkerDepth.Trivia)
         {
             _walker = walker;
         }

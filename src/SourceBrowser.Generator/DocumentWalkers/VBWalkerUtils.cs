@@ -9,6 +9,7 @@ namespace SourceBrowser.Generator.DocumentWalkers
         private readonly DocumentWalker<VBWalkerUtils> _walker;
 
         internal VBWalkerUtils(DocumentWalker<VBWalkerUtils> walker)
+             : base(SyntaxWalkerDepth.Trivia)
         {
             _walker = walker;
         }
