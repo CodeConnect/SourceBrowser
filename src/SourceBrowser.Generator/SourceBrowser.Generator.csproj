@@ -85,11 +85,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DocumentWalkers\VBWalker.cs" />
+    <Compile Include="DocumentWalkers\CSWalkerUtils.cs" />
+    <Compile Include="DocumentWalkers\DocumentWalker.cs" />
+    <Compile Include="DocumentWalkers\IWalkerUtils.cs" />
     <Compile Include="DocumentWalkers\IWalker.cs" />
+    <Compile Include="DocumentWalkers\VBWalkerUtils.cs" />
     <Compile Include="DocumentWalkers\WalkerSelector.cs" />
     <Compile Include="Extensions\DocumentExtensions.cs" />
-    <Compile Include="DocumentWalkers\CSWalker.cs" />
     <Compile Include="Extensions\SymbolExtensions.cs" />
     <Compile Include="Hacks\DependencyHacks.cs" />
     <Compile Include="Model\CSharp\CSharpDelimiters.cs" />

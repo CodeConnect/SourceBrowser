@@ -1,24 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.VisualBasic;
-using Microsoft.CodeAnalysis.VisualBasic.Syntax;
-using SourceBrowser.Generator.Extensions;
 using SourceBrowser.Generator.Model;
-using SourceBrowser.Generator.Model.VisualBasic;
-using Microsoft.CodeAnalysis.Shared.Extensions;
+using SourceBrowser.Generator.Extensions;
 using Microsoft.CodeAnalysis.FindSymbols;
 
 namespace SourceBrowser.Generator.DocumentWalkers
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    public class VBWalker : VisualBasicSyntaxWalker, IWalker
+    class DocumentWalker<TWalkerUtils> : IWalker
+        where TWalkerUtils : IWalkerUtils
     {
         private SemanticModel _model;
         private ReferencesourceLinkProvider _refsourceLinkProvider;
@@ -27,7 +18,10 @@ namespace SourceBrowser.Generator.DocumentWalkers
 
         private Document _document;
 
-        public VBWalker(IProjectItem parent, Document document, ReferencesourceLinkProvider refSourceLinkProvider) : base(SyntaxWalkerDepth.Trivia)
+        private IWalkerUtils _walkerUtils;
+
+        public DocumentWalker(IProjectItem parent, Document document, ReferencesourceLinkProvider refSourceLinkProvider,
+            Func<DocumentWalker<TWalkerUtils>, TWalkerUtils> walkerUtilsFactoryMethod)
         {
             _model = document.GetSemanticModelAsync().Result;
             _refsourceLinkProvider = refSourceLinkProvider;
@@ -38,21 +32,28 @@ namespace SourceBrowser.Generator.DocumentWalkers
             FilePath = document.GetRelativeFilePath();
             _refsourceLinkProvider = refSourceLinkProvider;
             _document = document;
+
+            _walkerUtils = walkerUtilsFactoryMethod(this);
         }
 
-        public override void VisitToken(SyntaxToken token)
+        public void Visit(SyntaxNode syntaxRoot)
+        {
+            _walkerUtils.Visit(syntaxRoot);
+        }
+
+        public void VisitToken(SyntaxToken token)
         {
             Token tokenModel = null;
 
-            if (token.IsKeyword())
+            if (_walkerUtils.IsKeyword(token))
             {
                 tokenModel = ProcessKeyword(token);
             }
-            else if (token.VisualBasicKind() == SyntaxKind.IdentifierToken)
+            else if (_walkerUtils.IsIdentifier(token))
             {
                 tokenModel = ProcessIdentifier(token);
             }
-            else if (token.VisualBasicKind() == SyntaxKind.StringLiteralToken)
+            else if (_walkerUtils.IsLiteral(token))
             {
                 tokenModel = ProcessStringLiteral(token);
             }
@@ -80,7 +81,7 @@ namespace SourceBrowser.Generator.DocumentWalkers
         {
             var triviaModelList = triviaList.Select(n => new Trivia(
                 value: n.ToFullString(),
-                type: n.VisualBasicKind().ToString()
+                type: n.CSharpKind().ToString()
             )).ToList();
 
             return triviaModelList;
@@ -93,7 +94,7 @@ namespace SourceBrowser.Generator.DocumentWalkers
         {
             string fullName = token.CSharpKind().ToString();
             string value = token.ToString();
-            string type = VisualBasicTokenTypes.OTHER;
+            string type = _walkerUtils.OtherTokenTypeName;
             int lineNumber = token.GetLocation().GetLineSpan().StartLinePosition.Line + 1;
 
             var tokenModel = new Token(this.DocumentModel, fullName, value, type, lineNumber);
@@ -105,9 +106,9 @@ namespace SourceBrowser.Generator.DocumentWalkers
         /// </summary>
         public Token ProcessKeyword(SyntaxToken token)
         {
-            string fullName = token.VisualBasicKind().ToString();
+            string fullName = _walkerUtils.GetFullName(token);
             string value = token.ToString();
-            string type = VisualBasicTokenTypes.KEYWORD;
+            string type = _walkerUtils.KeywordTokenTypeName;
             int lineNumber = token.GetLocation().GetLineSpan().StartLinePosition.Line + 1;
             var tokenModel = new Token(this.DocumentModel, fullName, value, type, lineNumber);
             return tokenModel;
@@ -115,9 +116,9 @@ namespace SourceBrowser.Generator.DocumentWalkers
 
         private Token ProcessStringLiteral(SyntaxToken token)
         {
-            string fullName = token.VisualBasicKind().ToString();
+            string fullName = _walkerUtils.GetFullName(token);
             string value = token.ToString();
-            string type = VisualBasicTokenTypes.STRING;
+            string type = _walkerUtils.StringTokenTypeName;
             int lineNumber = token.GetLocation().GetLineSpan().StartLinePosition.Line + 1;
             var tokenModel = new Token(this.DocumentModel, fullName, value, type, lineNumber);
             return tokenModel;
@@ -133,11 +134,11 @@ namespace SourceBrowser.Generator.DocumentWalkers
 
             if (symbol is INamedTypeSymbol)
             {
-                type = VisualBasicTokenTypes.TYPE;
+                type = _walkerUtils.TypeTokenTypeName;
             }
             else
             {
-                type = VisualBasicTokenTypes.IDENTIFIER;
+                type = _walkerUtils.IdentifierTokenTypeName;
             }
 
             //Do not allow us to search locals
@@ -146,7 +147,7 @@ namespace SourceBrowser.Generator.DocumentWalkers
                 isSearchable = false;
             }
 
-            var tokenModel = new Token(this.DocumentModel, fullName, value, type, lineNumber);
+            var tokenModel = new Token(this.DocumentModel, fullName, value, type, lineNumber, isDeclaration, isSearchable);
 
             //If we can find the declaration, we'll link it ourselves
             if (symbol.DeclaringSyntaxReferences.Any()
@@ -172,12 +173,12 @@ namespace SourceBrowser.Generator.DocumentWalkers
             if (symbol.Kind == SymbolKind.Parameter)
             {
                 var containingName = symbol.ContainingSymbol.ToString();
-                fullyQualifiedName = containingName + VBDelimiters.PARAMETER + symbol.Name;
+                fullyQualifiedName = containingName + _walkerUtils.ParameterDelimiter + symbol.Name;
             }
             else if (symbol.Kind == SymbolKind.Local)
             {
                 var containingName = symbol.ContainingSymbol.ToString();
-                fullyQualifiedName = containingName + VBDelimiters.LOCAL_VARIABLE + symbol.Name;
+                fullyQualifiedName = containingName + _walkerUtils.LocalVariableDelimiter + symbol.Name;
             }
             else
             {
