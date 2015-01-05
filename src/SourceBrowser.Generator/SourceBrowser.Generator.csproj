@@ -112,7 +112,6 @@
     <Compile Include="DocumentWalkers\WalkerSelector.cs" />
     <Compile Include="Extensions\DocumentExtensions.cs" />
     <Compile Include="Extensions\SymbolExtensions.cs" />
-    <Compile Include="Hacks\DependencyHacks.cs" />
     <Compile Include="Model\CSharp\CSharpDelimiters.cs" />
     <Compile Include="Model\VisualBasic\VBDelimiters.cs" />
     <Compile Include="Model\VisualBasic\VisualBasicTokenTypes.cs" />
