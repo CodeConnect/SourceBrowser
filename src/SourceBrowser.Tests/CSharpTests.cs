@@ -34,7 +34,8 @@ namespace SourceBrowser.Tests
             var document = solution.Projects.SelectMany(n => n.Documents).Where(n => n.Name == "Document1.cs").Single();
             var linkProvider = new ReferencesourceLinkProvider();
 
-            var walker = new SourceBrowser.Generator.DocumentWalkers.CSWalker(fm, document, linkProvider);
+            var walker = SourceBrowser.Generator.DocumentWalkers.WalkerSelector.GetWalker(fm, document, linkProvider);
+            
             walker.Visit(document.GetSyntaxRootAsync().Result);
             var documentModel = walker.GetDocumentModel();
 
@@ -75,7 +76,7 @@ namespace SourceBrowser.Tests
             var document = solution.Projects.SelectMany(n => n.Documents).Where(n => n.Name == "Document1.cs").Single();
             var linkProvider = new ReferencesourceLinkProvider();
 
-            var walker = new SourceBrowser.Generator.DocumentWalkers.CSWalker(fm, document, linkProvider);
+            var walker = SourceBrowser.Generator.DocumentWalkers.WalkerSelector.GetWalker(fm, document, linkProvider);
             walker.Visit(document.GetSyntaxRootAsync().Result);
             var documentModel = walker.GetDocumentModel();
 
@@ -117,7 +118,7 @@ namespace SourceBrowser.Tests
             var document = solution.Projects.SelectMany(n => n.Documents).Where(n => n.Name == "Document1.cs").Single();
             var linkProvider = new ReferencesourceLinkProvider();
 
-            var walker = new SourceBrowser.Generator.DocumentWalkers.CSWalker(fm, document, linkProvider);
+            var walker = SourceBrowser.Generator.DocumentWalkers.WalkerSelector.GetWalker(fm, document, linkProvider);
             walker.Visit(document.GetSyntaxRootAsync().Result);
             var documentModel = walker.GetDocumentModel();
 
@@ -154,7 +155,7 @@ namespace SourceBrowser.Tests
             var document = solution.Projects.SelectMany(n => n.Documents).Where(n => n.Name == "Document1.cs").Single();
             var linkProvider = new ReferencesourceLinkProvider();
 
-            var walker = new SourceBrowser.Generator.DocumentWalkers.CSWalker(fm, document, linkProvider);
+            var walker = SourceBrowser.Generator.DocumentWalkers.WalkerSelector.GetWalker(fm, document, linkProvider);
             walker.Visit(document.GetSyntaxRootAsync().Result);
             var documentModel = walker.GetDocumentModel();
 

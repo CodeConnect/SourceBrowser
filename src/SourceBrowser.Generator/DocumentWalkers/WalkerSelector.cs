@@ -3,9 +3,10 @@ using System.IO;
 using Microsoft.CodeAnalysis;
 using SourceBrowser.Generator.Model;
 
+
 namespace SourceBrowser.Generator.DocumentWalkers
 {
-    class WalkerSelector
+    internal class WalkerSelector
     {
         public static IWalker GetWalker(IProjectItem parent, Document document, ReferencesourceLinkProvider refSourceLinkProvider)
         {
