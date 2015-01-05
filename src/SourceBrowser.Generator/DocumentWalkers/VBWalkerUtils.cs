@@ -31,11 +31,11 @@ namespace SourceBrowser.Generator.DocumentWalkers
 
         public string GetFullName(SyntaxToken token) => token.CSharpKind().ToString();
 
-        public bool IsIdentifier(SyntaxToken token) => token.VisualBasicKind() == SyntaxKind.IdentifierToken;
+        public bool IsIdentifier(SyntaxToken token) => token.VBKind() == SyntaxKind.IdentifierToken;
 
         public bool IsKeyword(SyntaxToken token) => token.IsKeyword();
 
-        public bool IsLiteral(SyntaxToken token) => token.VisualBasicKind() == SyntaxKind.StringLiteralToken;
+        public bool IsLiteral(SyntaxToken token) => token.VBKind() == SyntaxKind.StringLiteralToken;
 
         public override void VisitToken(SyntaxToken token) => _walker.VisitToken(token);
     }

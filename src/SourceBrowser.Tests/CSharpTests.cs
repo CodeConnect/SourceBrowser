@@ -82,15 +82,15 @@ namespace SourceBrowser.Tests
 
             //Make sure there's two links
             var links = documentModel.Tokens.Select(n => n.Link).Where(n => n != null);
-            Assert.IsTrue(links.Count() == 2);
+            Assert.IsTrue(links.Count() == 5);
 
-            //Make sure they're both symbol links
-            Assert.IsTrue(links.First() is SymbolLink);
-            Assert.IsTrue(links.Last() is SymbolLink);
+            //Make sure they're all symbol links
+            Assert.IsTrue(links.All(n => n is SymbolLink));
 
             //Make sure they link correctly
-            Assert.IsTrue(((SymbolLink)links.First()).ReferencedSymbolName == "C1.Method2()");
-            Assert.IsTrue(((SymbolLink)links.Last()).ReferencedSymbolName == "C1.Method1()");
+            Assert.IsTrue(links.Count(n => ((SymbolLink)(n)).ReferencedSymbolName == "C1.Method1()") == 2);
+            Assert.IsTrue(links.Count(n => ((SymbolLink)(n)).ReferencedSymbolName == "C1.Method2()") == 2);
+            Assert.IsTrue(links.Count(n => ((SymbolLink)(n)).ReferencedSymbolName == "C1") == 1);
         }
 
         [TestMethod]
