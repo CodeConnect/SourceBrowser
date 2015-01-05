@@ -38,7 +38,7 @@ namespace SourceBrowser.Tests
             walker.Visit(document.GetSyntaxRootAsync().Result);
             var documentModel = walker.GetDocumentModel();
 
-            //Make sure there's 10 tokens
+            //Make sure there's 12 tokens
             Assert.IsTrue(documentModel.Tokens.Count == 12);
 
             //Make sure they're classified correctly
