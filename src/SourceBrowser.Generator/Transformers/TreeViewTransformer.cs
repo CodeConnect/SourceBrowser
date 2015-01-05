@@ -23,6 +23,8 @@ namespace SourceBrowser.Generator.Transformers
         public TreeViewTransformer(string savePath, string userName, string repoName)
         {
             _savePath = Path.Combine(savePath, _treeViewOutputFile);
+            Directory.CreateDirectory(Directory.GetParent(_savePath).FullName);
+
             if (String.IsNullOrEmpty(userName) || String.IsNullOrEmpty(repoName))
             {
                 throw new ArgumentNullException("TreeViewTransformer needs to be provided the user name and the repo name.");
