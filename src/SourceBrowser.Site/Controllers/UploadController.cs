@@ -4,6 +4,7 @@
     using System.Web.Mvc;
     using SourceBrowser.SolutionRetriever;
     using SourceBrowser.Generator.Transformers;
+    using SourceBrowser.Site.Repositories;
     using System;
 
     public class UploadController : Controller
@@ -29,10 +30,10 @@
                 return View("Index");
             }
 
-            string filePath = string.Empty;
+            string repoRootPath = string.Empty;
             try
             {
-                filePath = retriever.RetrieveProject();
+                repoRootPath = retriever.RetrieveProject();
             }
             catch (Exception ex)
             {
@@ -41,7 +42,7 @@
             }
 
             // Generate the source browser files for this solution
-            var solutionPaths = GetSolutionPaths(filePath);
+            var solutionPaths = GetSolutionPaths(repoRootPath);
             if (solutionPaths.Length == 0)
             {
                 ViewBag.Error = "No C# solution was found. Ensure that a valid .sln file exists within your repository.";
@@ -52,15 +53,19 @@
             var repoPath = Path.Combine(organizationPath, retriever.RepoName);
 
             // TODO: Use parallel for.
-            foreach (var path in solutionPaths)
+            foreach (var solutionPath in solutionPaths)
             {
-                var solutionName = Path.GetFileName(path);
-                var modelSavePath = Path.Combine(repoPath, solutionName); 
-                var sourceGenerator = new Generator.SolutionAnalayzer(path);
-
-                //Build the workspace
-                var workspaceModel = sourceGenerator.BuildWorkspaceModel(filePath);
-
+                Generator.Model.WorkspaceModel workspaceModel;
+                try
+                {
+                    workspaceModel = UploadRepository.ProcessSolution(solutionPath, repoRootPath);
+                }
+                catch (Exception ex)
+                {
+                    ViewBag.Error = "There was an error processing solution " + Path.GetFileName(solutionPath);
+                    return View("Index");
+                }
+                
                 //One pass to lookup all declarations
                 var typeTransformer = new TokenLookupTransformer();
                 typeTransformer.Visit(workspaceModel);

@@ -62,11 +62,10 @@ namespace SourceBrowser.Generator
             }
         }
 
-        public WorkspaceModel BuildWorkspaceModel(string rootPath)
+        public WorkspaceModel BuildWorkspaceModel(string repositoryRootPath)
         {
-            var containingPath = Directory.GetParent(_solution.FilePath).FullName;
             var solutionName = Path.GetFileName(_solution.FilePath);
-            WorkspaceModel workspaceModel = new WorkspaceModel(solutionName, rootPath);
+            WorkspaceModel workspaceModel = new WorkspaceModel(solutionName, repositoryRootPath);
             //Build document model for every file.
             foreach (var doc in _solution.Projects.SelectMany(n => n.Documents))
             {
