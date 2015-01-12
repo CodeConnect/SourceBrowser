@@ -249,6 +249,7 @@
     <Compile Include="Models\SourceFolderViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\BrowserRepository.cs" />
+    <Compile Include="Repositories\UploadRepository.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Utilities\Serialization.cs" />
   </ItemGroup>
@@ -433,6 +434,9 @@
     <Content Include="Scripts\jquery-2.1.1.min.map" />
     <!-- Allows each user to have their own set of publish profiles. See https://stackoverflow.com/questions/13613677/how-to-avoid-multiple-publish-profiles-in-visual-studio-2012-project-files -->
     <None Include="Properties\PublishProfiles\*.pubxml" />
+    <Content Include="LowPrivilegeUser.config">
+      <SubType>Designer</SubType>
+    </Content>
     <None Include="Scripts\jquery.validate-vsdoc.js" />
     <None Include="Scripts\jquery-2.1.1.intellisense.js" />
     <Content Include="Scripts\jquery-2.1.1.js" />
