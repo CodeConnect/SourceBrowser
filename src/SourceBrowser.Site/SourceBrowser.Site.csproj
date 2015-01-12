@@ -432,7 +432,9 @@
     <Content Include="Scripts\history.js\history.js" />
     <Content Include="Scripts\history.js\json2.js" />
     <Content Include="Scripts\jquery-2.1.1.min.map" />
-    <Content Include="LowPrivilegeUser.config" />
+    <Content Include="LowPrivilegeUser.config">
+      <SubType>Designer</SubType>
+    </Content>
     <None Include="Scripts\jquery.validate-vsdoc.js" />
     <None Include="Scripts\jquery-2.1.1.intellisense.js" />
     <Content Include="Scripts\jquery-2.1.1.js" />
