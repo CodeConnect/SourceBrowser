@@ -3,9 +3,12 @@
     margin:20px;
 }
 
-.source-code span
+#main-content pre, 
+#main-content pre a, 
+#main-content pre span, 
+#main-content pre span a
 {
-    font-family:monospace;
+    font-family: Consolas,"Liberation Mono",Menlo,Courier,monospace;
 }
 
 /* Set padding to keep content from hitting the edges */
