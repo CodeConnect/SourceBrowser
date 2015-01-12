@@ -431,6 +431,8 @@
     <Content Include="Scripts\history.js\history.js" />
     <Content Include="Scripts\history.js\json2.js" />
     <Content Include="Scripts\jquery-2.1.1.min.map" />
+    <!-- Allows each user to have their own set of publish profiles. See https://stackoverflow.com/questions/13613677/how-to-avoid-multiple-publish-profiles-in-visual-studio-2012-project-files -->
+    <None Include="Properties\PublishProfiles\*.pubxml" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
     <None Include="Scripts\jquery-2.1.1.intellisense.js" />
     <Content Include="Scripts\jquery-2.1.1.js" />
