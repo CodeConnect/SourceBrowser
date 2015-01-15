@@ -43,10 +43,10 @@ namespace SourceBrowser.Search
                 File.Delete(lockFilePath);
         }
 
-        static object _lock = new object();
+        static object _luceneWriteLock = new object();
         public static void AddDeclarationsToIndex(IEnumerable<TokenViewModel> tokenModels)
         {
-            lock(_lock)
+            lock(_luceneWriteLock)
             {
                 using (var analyzer = new StandardAnalyzer(Lucene.Net.Util.Version.LUCENE_30))
                 using (var writer = new IndexWriter(_directory, analyzer, IndexWriter.MaxFieldLength.UNLIMITED))
@@ -62,7 +62,7 @@ namespace SourceBrowser.Search
 
         public static void AddDeclarationToIndex(TokenViewModel token)
         {
-            lock(_lock)
+            lock(_luceneWriteLock)
             {
                 using (var analyzer = new StandardAnalyzer(Lucene.Net.Util.Version.LUCENE_30))
                 using (var writer = new IndexWriter(_directory, analyzer, IndexWriter.MaxFieldLength.UNLIMITED))
