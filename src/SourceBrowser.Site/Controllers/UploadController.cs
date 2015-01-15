@@ -6,6 +6,7 @@
     using SourceBrowser.Generator.Transformers;
     using SourceBrowser.Site.Repositories;
     using System;
+    using System.Linq;
 
     public class UploadController : Controller
     {
@@ -53,7 +54,9 @@
             var repoPath = Path.Combine(organizationPath, retriever.RepoName);
 
             // TODO: Use parallel for.
-            foreach (var solutionPath in solutionPaths)
+            // TODO: Process all solutions.
+            // For now, we're assuming the shallowest and shortest .sln file is the one we're interested in
+            foreach (var solutionPath in solutionPaths.OrderBy(n => n.Length).Take(1))
             {
                 Generator.Model.WorkspaceModel workspaceModel;
                 try
@@ -65,7 +68,7 @@
                     ViewBag.Error = "There was an error processing solution " + Path.GetFileName(solutionPath);
                     return View("Index");
                 }
-                
+
                 //One pass to lookup all declarations
                 var typeTransformer = new TokenLookupTransformer();
                 typeTransformer.Visit(workspaceModel);

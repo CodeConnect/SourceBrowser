@@ -25,12 +25,16 @@ namespace SourceBrowser.Generator.Transformers
             var documentId = Path.Combine(_username, _repository, documentModel.RelativePath);
             var declarations = documentModel.Tokens.Where(n => n.IsDeclaration && n.IsSearchable);
 
-            foreach(var declaration in declarations)
-            {
-                //Add to index
-                var tokenViewModel = new TokenViewModel(_username, _repository, documentId, declaration.FullName, declaration.LineNumber);
-                SearchIndex.AddDeclarationToIndex(tokenViewModel);
-            }
+            var tokenModels = from declaration in declarations
+                              select new TokenViewModel(
+                                  _username,
+                                  _repository,
+                                  documentId,
+                                  declaration.FullName,
+                                  declaration.LineNumber
+                                  );
+
+            SearchIndex.AddDeclarationsToIndex(tokenModels);
 
             base.VisitDocument(documentModel);
         }
