@@ -171,7 +171,6 @@ search = {
 }
 
 function handleStateChange(e) {
-    //TODOa
     var state = History.getState();
     var cleanUrl = state.url;
     var data = state.data;
@@ -182,15 +181,12 @@ function handleStateChange(e) {
         url: cleanUrl,
         success: function (args) {
             $("#main-content").html(args["SourceCode"]);
-            scrollToAnchor(lineNumber);
+             var newUrl = cleanUrl + "#" + lineNumber;
+             window.history.replaceState(null, null, newUrl);
+             window.location = newUrl;
         },
         error: handlePageLoadError
     });
-}
-
-function scrollToAnchor(aid) {
-    var aTag = $("a[name='" + aid + "']");
-    $('html,body').animate({ scrollTop: aTag.offset().top }, 'fast');
 }
 
 function handlePageLoadError(args) {
