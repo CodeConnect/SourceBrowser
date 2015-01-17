@@ -12,6 +12,7 @@
     using SourceBrowser.Site.Models;
     using SourceBrowser.Site.Utilities;
     using SourceBrowser.SolutionRetriever;
+    using SourceBrowser.Shared;
 
     internal static class BrowserRepository
     {
@@ -32,7 +33,36 @@
             }
         }
 
-        internal static bool PathExists(string username, string repository = "", string path = "")
+        internal static bool TryLockRepository(string userName, string repoName)
+        {
+	        string lockFileDirectory = Path.Combine(StaticHtmlAbsolutePath, userName, repoName);
+            string lockFilePath = Path.Combine(lockFileDirectory, Constants.REPO_LOCK_FILENAME);
+	        if (File.Exists(lockFilePath))
+	        {
+		        return false;
+	        }
+	        else
+	        {
+		        // Create a file that indicates that the upload will begin
+		        Directory.CreateDirectory(lockFileDirectory);
+		        using (var test = File.CreateText(lockFilePath))
+		        {
+			        test.WriteLine(Constants.REPO_STATUS_PROCESSING);
+		        }
+		        return true;
+	        }
+        }
+
+        internal static void UnlockRepository(string userName, string repoName)
+        {
+	        string lockFilePath = Path.Combine(StaticHtmlAbsolutePath, userName, repoName, Constants.REPO_LOCK_FILENAME);
+	        if (File.Exists(lockFilePath))
+	        {
+		        File.Delete(lockFilePath);
+	        }
+        }
+
+		internal static bool PathExists(string username, string repository = "", string path = "")
         {
             var fullPath = Path.Combine(StaticHtmlAbsolutePath, username, repository, path);
             return Directory.Exists(fullPath);

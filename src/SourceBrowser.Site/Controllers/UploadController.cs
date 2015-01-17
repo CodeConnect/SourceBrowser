@@ -31,6 +31,13 @@
                 return View("Index");
             }
 
+            // Check if this repo already exists
+            if (!BrowserRepository.TryLockRepository(retriever.UserName, retriever.RepoName))
+            {
+	            // Redirect the user to that repository.
+	            return Redirect("/Browse/" + retriever.UserName + "/" + retriever.RepoName);
+            }
+
             string repoRootPath = string.Empty;
             try
             {
@@ -38,6 +45,7 @@
             }
             catch (Exception ex)
             {
+	            BrowserRepository.UnlockRepository(retriever.UserName, retriever.RepoName);
                 ViewBag.Error = "There was an error downloading this repository.";
                 return View("Index");
             }
@@ -46,6 +54,7 @@
             var solutionPaths = GetSolutionPaths(repoRootPath);
             if (solutionPaths.Length == 0)
             {
+                BrowserRepository.UnlockRepository(retriever.UserName, retriever.RepoName);
                 ViewBag.Error = "No C# solution was found. Ensure that a valid .sln file exists within your repository.";
                 return View("Index");
             }
@@ -65,6 +74,7 @@
                 }
                 catch (Exception ex)
                 {
+                    BrowserRepository.UnlockRepository(retriever.UserName, retriever.RepoName);
                     ViewBag.Error = "There was an error processing solution " + Path.GetFileName(solutionPath);
                     return View("Index");
                 }
@@ -80,8 +90,6 @@
 
                 var searchTransformer = new SearchIndexTransformer(retriever.UserName, retriever.RepoName);
                 searchTransformer.Visit(workspaceModel);
-
-
 
                 // Generate HTML of the tree view
                 var treeViewTransformer = new TreeViewTransformer(repoPath, retriever.UserName, retriever.RepoName);
