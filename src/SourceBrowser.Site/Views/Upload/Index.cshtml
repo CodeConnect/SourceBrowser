@@ -3,6 +3,9 @@
     ViewBag.Title = "Index";
 }
 
+@Scripts.Render("~/bundles/jquery")
+@Scripts.Render("~/bundles/upload")
+
 <div style="margin:65px 0px 65px 0px" class="text-center">
     <h2>Upload any Github Repo</h2>
     <h4>Paste the URL of the project</h4>
@@ -12,7 +15,7 @@
     }
 </div>
 
-<form method="post" action="~/Upload/Submit" style="margin:0px 0px 150px 0px" class="bs-example bs-example-form" role="form">
+<form method="post" action="~/Upload/Submit" style="margin:0px 0px 75px 0px" class="bs-example bs-example-form" role="form">
     <div style="margin:0 auto;max-width:1000px;" class="input-group input-group-lg" >
         <input name="githubUrl" style="max-width:100%" type="text" class="form-control" placeholder="http://github.com/JoshVarty/SampleProject" autofocus>
         <span class="input-group-btn">
@@ -20,3 +23,7 @@
         </span>
     </div>
 </form>
+
+<div id="uploadMessageDiv" style="margin:0px 0px 52px 0px" class="text-center">
+    Uploading.  Please Wait...
+</div>

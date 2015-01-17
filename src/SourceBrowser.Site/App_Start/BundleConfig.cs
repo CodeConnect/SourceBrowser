@@ -28,6 +28,9 @@ namespace SourceBrowser.Site
                                     "~/Scripts/history.js/history.html4.js",
                                     "~/Scripts/search.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/upload").Include(
+                                    "~/Scripts/upload.js"));
+
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
                         "~/Scripts/jquery.validate*"));
 

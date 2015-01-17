@@ -453,6 +453,7 @@
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\search.js" />
     <Content Include="Scripts\treeViewHelpers.js" />
+    <Content Include="Scripts\upload.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
