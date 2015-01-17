@@ -1,29 +1,31 @@
 ﻿$(document).ready(function () {
-    resetUI();
-    registerButtonClickEvent();
+    getFormFromDom().submit(prepareForUpload);
 });
 
-function registerButtonClickEvent() {
-    getButtonFromDom().click(prepareForChange);
-}
-
-function prepareForChange() {
+function prepareForUpload() {
     getButtonFromDom().prop("disabled", true);
+    var errorMessageElement = getErrorMessageFromDom();
+    if (errorMessageElement) {
+        errorMessageElement.css("visibility", "hidden");
+    }
     getMessageDivFromDom().css("visibility", "visible");
 }
 
-function resetUI() {
-    getButtonFromDom().prop("disabled", false);
-    getMessageDivFromDom().css("visibility", "hidden");
-}
-
-/*
-*  DOM access methods
-*/
+//
+//  DOM access methods
+//
 function getButtonFromDom() {
     return $(".btn");
 }
 
+function getFormFromDom() {
+    return $("#upload-form");
+}
+
 function getMessageDivFromDom() {
-    return $("#uploadMessageDiv");
+    return $(".upload-message");
+}
+
+function getErrorMessageFromDom() {
+    return $("#upload-error");
 }

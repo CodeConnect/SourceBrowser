@@ -278,6 +278,7 @@
     <Content Include="Content\slider.css" />
     <Content Include="Content\sortable.css" />
     <Content Include="Content\sourcebrowser-codebrowser.css" />
+    <Content Include="Content\sourcebrowser-upload.css" />
     <Content Include="Content\spinner.css" />
     <Content Include="Content\tabs.css" />
     <Content Include="Content\theme.css" />
