@@ -500,6 +500,7 @@
     <Content Include="Views\Browse\LookupUser.cshtml" />
     <Content Include="Views\Upload\Index.cshtml" />
     <Content Include="Views\Shared\_BrowseLayout.cshtml" />
+    <Content Include="Views\Browse\AwaitLookup.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

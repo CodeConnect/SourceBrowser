@@ -40,9 +40,16 @@
                 return this.View("LookupError");
             }
 
-            ViewBag.TreeView = loadTreeView(username, repository);
             var viewModel = BrowserRepository.SetUpSolutionStructure(username, repository, "");
-            return View("LookupFolder", "_BrowseLayout", viewModel);
+            if (!BrowserRepository.RepositoryIsReady(username, repository))
+            {
+                return View("AwaitLookup", "_BrowseLayout", viewModel);
+            }
+            else
+            {
+                ViewBag.TreeView = loadTreeView(username, repository);
+                return View("LookupFolder", "_BrowseLayout", viewModel);
+            }
         }
 
         public ActionResult LookupFolder(string username, string repository, string path)
