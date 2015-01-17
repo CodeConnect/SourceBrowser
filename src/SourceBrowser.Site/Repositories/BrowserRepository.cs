@@ -45,10 +45,7 @@
 	        {
 		        // Create a file that indicates that the upload will begin
 		        Directory.CreateDirectory(lockFileDirectory);
-		        using (var test = File.CreateText(lockFilePath))
-		        {
-			        test.WriteLine(Constants.REPO_STATUS_PROCESSING);
-		        }
+                File.WriteAllText(lockFilePath, Constants.REPO_STATUS_PROCESSING);
 		        return true;
 	        }
         }
@@ -62,7 +59,27 @@
 	        }
         }
 
-		internal static bool PathExists(string username, string repository = "", string path = "")
+        internal static void MarkRepositoryReady(string userName, string repoName)
+        {
+            string lockFilePath = Path.Combine(StaticHtmlAbsolutePath, userName, repoName, Constants.REPO_LOCK_FILENAME);
+            File.WriteAllText(lockFilePath, Constants.REPO_STATUS_READY);
+        }
+
+        internal static bool RepositoryIsReady(string userName, string repoName)
+        {
+            string lockFilePath = Path.Combine(StaticHtmlAbsolutePath, userName, repoName, Constants.REPO_LOCK_FILENAME);
+            if (File.Exists(lockFilePath))
+            {
+                var contents = File.ReadAllText(lockFilePath);
+                if (contents.Trim().Equals(Constants.REPO_STATUS_READY))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        internal static bool PathExists(string username, string repository = "", string path = "")
         {
             var fullPath = Path.Combine(StaticHtmlAbsolutePath, username, repository, path);
             return Directory.Exists(fullPath);
