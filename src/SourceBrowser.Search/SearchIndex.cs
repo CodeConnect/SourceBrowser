@@ -19,34 +19,40 @@ namespace SourceBrowser.Search
     {
         private static string basePath = System.Web.Hosting.HostingEnvironment.MapPath("~") ?? Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
         private static string _luceneDir =  Path.Combine(basePath, "luceneIndex");
-        private static FSDirectory _directoryTemp;
         private const int HITS_LIMIT = 100;
-        
-        private static FSDirectory _directory
+
+        private static FSDirectory _directory;
+
+        /// <summary>
+        /// Before doing anything with the search index, first make sure there's no existing
+        /// write lock on the directory. (This can happen if the application crashes and restarts)
+        /// </summary>
+        static SearchIndex()
         {
-            get
-            {
-                if (_directoryTemp == null)
-                    _directoryTemp = FSDirectory.Open(new DirectoryInfo(_luceneDir));
+            _directory = FSDirectory.Open(new DirectoryInfo(_luceneDir));
 
-                if (IndexWriter.IsLocked(_directoryTemp))
-                    IndexWriter.Unlock(_directoryTemp);
+            if (IndexWriter.IsLocked(_directory))
+                IndexWriter.Unlock(_directory);
 
-                var lockFilePath = Path.Combine(_luceneDir, "write.lock");
+            var lockFilePath = Path.Combine(_luceneDir, "write.lock");
 
-                if (File.Exists(lockFilePath))
-                    File.Delete(lockFilePath);
-
-                return _directoryTemp;
-            }
+            if (File.Exists(lockFilePath))
+                File.Delete(lockFilePath);
         }
 
-        public static void AddDeclarationToIndex(TokenViewModel token)
+        static object _luceneWriteLock = new object();
+        public static void AddDeclarationsToIndex(IEnumerable<TokenViewModel> tokenModels)
         {
-            using (var analyzer = new StandardAnalyzer(Lucene.Net.Util.Version.LUCENE_30))
-            using (var writer = new IndexWriter(_directory, analyzer, IndexWriter.MaxFieldLength.UNLIMITED))
+            lock(_luceneWriteLock)
             {
-                addDeclarationToIndex(writer, token);
+                using (var analyzer = new StandardAnalyzer(Lucene.Net.Util.Version.LUCENE_30))
+                using (var writer = new IndexWriter(_directory, analyzer, IndexWriter.MaxFieldLength.UNLIMITED))
+                {
+                    foreach(var tokenModel in tokenModels)
+                    {
+                        addDeclarationToIndex(writer, tokenModel);
+                    }
+                }
             }
         }
 
@@ -99,6 +105,7 @@ namespace SourceBrowser.Search
             }
             return query;
         }
+
         private static Query parseQuery(string searchQuery, QueryParser parser)
         {
             Query query;
