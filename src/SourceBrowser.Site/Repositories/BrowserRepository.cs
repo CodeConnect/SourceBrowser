@@ -17,6 +17,10 @@
     internal static class BrowserRepository
     {
         private static readonly string StaticHtmlAbsolutePath = System.Web.Hosting.HostingEnvironment.MapPath("~/SB_Files/");
+        /// <summary>
+        /// Lock used for querying repo's status (n/a, processing or ready)
+        /// </summary>
+        private static object fileOperationLock = new object();
 
         // TODO: DO NOT LOAD THIS INTO MEMORY.
         // This string could be really big. We should probably be distributing this
@@ -37,43 +41,55 @@
         {
 	        string lockFileDirectory = Path.Combine(StaticHtmlAbsolutePath, userName, repoName);
             string lockFilePath = Path.Combine(lockFileDirectory, Constants.REPO_LOCK_FILENAME);
-	        if (File.Exists(lockFilePath))
-	        {
-		        return false;
-	        }
-	        else
-	        {
-		        // Create a file that indicates that the upload will begin
-		        Directory.CreateDirectory(lockFileDirectory);
-                File.WriteAllText(lockFilePath, Constants.REPO_STATUS_PROCESSING);
-		        return true;
-	        }
+            lock (fileOperationLock)
+            {
+                if (File.Exists(lockFilePath))
+                {
+                    return false;
+                }
+                else
+                {
+                    // Create a file that indicates that the upload will begin
+                    Directory.CreateDirectory(lockFileDirectory);
+                    File.WriteAllText(lockFilePath, Constants.REPO_STATUS_PROCESSING);
+                    return true;
+                }
+            }
         }
 
         internal static void UnlockRepository(string userName, string repoName)
         {
 	        string lockFilePath = Path.Combine(StaticHtmlAbsolutePath, userName, repoName, Constants.REPO_LOCK_FILENAME);
-	        if (File.Exists(lockFilePath))
-	        {
-		        File.Delete(lockFilePath);
-	        }
+            lock (fileOperationLock)
+            {
+                if (File.Exists(lockFilePath))
+                {
+                    File.Delete(lockFilePath);
+                }
+            }
         }
 
         internal static void MarkRepositoryReady(string userName, string repoName)
         {
             string lockFilePath = Path.Combine(StaticHtmlAbsolutePath, userName, repoName, Constants.REPO_LOCK_FILENAME);
-            File.WriteAllText(lockFilePath, Constants.REPO_STATUS_READY);
+            lock (fileOperationLock)
+            {
+                File.WriteAllText(lockFilePath, Constants.REPO_STATUS_READY);
+            }
         }
 
         internal static bool RepositoryIsReady(string userName, string repoName)
         {
             string lockFilePath = Path.Combine(StaticHtmlAbsolutePath, userName, repoName, Constants.REPO_LOCK_FILENAME);
-            if (File.Exists(lockFilePath))
+            lock (fileOperationLock)
             {
-                var contents = File.ReadAllText(lockFilePath);
-                if (contents.Trim().Equals(Constants.REPO_STATUS_READY))
+                if (File.Exists(lockFilePath))
                 {
-                    return true;
+                    var contents = File.ReadAllText(lockFilePath);
+                    if (contents.Trim().Equals(Constants.REPO_STATUS_READY))
+                    {
+                        return true;
+                    }
                 }
             }
             return false;
