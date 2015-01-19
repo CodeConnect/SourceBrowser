@@ -69,34 +69,33 @@
                 // For now, we're assuming the shallowest and shortest .sln file is the one we're interested in
                 foreach (var solutionPath in solutionPaths.OrderBy(n => n.Length).Take(1))
                 {
-                    Generator.Model.WorkspaceModel workspaceModel;
                     try
                     {
-                        workspaceModel = UploadRepository.ProcessSolution(solutionPath, repoRootPath);
+                        var workspaceModel = UploadRepository.ProcessSolution(solutionPath, repoRootPath);
+
+                        //One pass to lookup all declarations
+                        var typeTransformer = new TokenLookupTransformer();
+                        typeTransformer.Visit(workspaceModel);
+                        var tokenLookup = typeTransformer.TokenLookup;
+
+                        //Another pass to generate HTMLs
+                        var htmlTransformer = new HtmlTransformer(tokenLookup, repoPath);
+                        htmlTransformer.Visit(workspaceModel);
+
+                        var searchTransformer = new SearchIndexTransformer(retriever.UserName, retriever.RepoName);
+                        searchTransformer.Visit(workspaceModel);
+
+                        // Generate HTML of the tree view
+                        var treeViewTransformer = new TreeViewTransformer(repoPath, retriever.UserName, retriever.RepoName);
+                        treeViewTransformer.Visit(workspaceModel);
                     }
                     catch (Exception ex)
                     {
+                        // TODO: Log this
                         ViewBag.Error = "There was an error processing solution " + Path.GetFileName(solutionPath);
                         return View("Index");
                     }
-
-                    //One pass to lookup all declarations
-                    var typeTransformer = new TokenLookupTransformer();
-                    typeTransformer.Visit(workspaceModel);
-                    var tokenLookup = typeTransformer.TokenLookup;
-
-                    //Another pass to generate HTMLs
-                    var htmlTransformer = new HtmlTransformer(tokenLookup, repoPath);
-                    htmlTransformer.Visit(workspaceModel);
-
-                    var searchTransformer = new SearchIndexTransformer(retriever.UserName, retriever.RepoName);
-                    searchTransformer.Visit(workspaceModel);
-
-                    // Generate HTML of the tree view
-                    var treeViewTransformer = new TreeViewTransformer(repoPath, retriever.UserName, retriever.RepoName);
-                    treeViewTransformer.Visit(workspaceModel);
                 }
-
                 processingSuccessful = true;
                 return Redirect("/Browse/" + retriever.UserName + "/" + retriever.RepoName);
             }
