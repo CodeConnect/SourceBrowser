@@ -28,6 +28,9 @@ namespace SourceBrowser.Site
                                     "~/Scripts/history.js/history.html4.js",
                                     "~/Scripts/search.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/upload").Include(
+                                    "~/Scripts/upload.js"));
+
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
                         "~/Scripts/jquery.validate*"));
 
@@ -52,6 +55,7 @@ namespace SourceBrowser.Site
                       "~/css/metro-bootstrap-responsive.css",
                       "~/Content/sourcebrowser-browse.css",
                       "~/Content/sourcebrowser-codebrowser.css",
+                      "~/Content/sourcebrowser-upload.css",
                       "~/Content/site.css"));
 
             // Set EnableOptimizations to false for debugging. For more information,
