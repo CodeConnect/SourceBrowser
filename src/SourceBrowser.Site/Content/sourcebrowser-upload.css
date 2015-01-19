@@ -1,0 +1,25 @@
+﻿#upload-form {
+    margin:0px 0px 75px 0px;
+}
+
+#upload-form div{
+    margin:0 auto;
+    max-width:1000px;
+}
+
+#upload-form input{
+    max-width:100%;
+}
+
+#upload-header{
+    margin:65px 0px 65px 0px;
+}
+
+#upload-error{
+     color:red;
+}
+
+.upload-message{
+    margin:0px 0px 52px 0px;
+    visibility:hidden;
+}
