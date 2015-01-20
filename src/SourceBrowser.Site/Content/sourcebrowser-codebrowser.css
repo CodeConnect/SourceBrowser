@@ -200,6 +200,30 @@
 #tree-view {
 }
 
+#readme {
+	font-family: "Helvetica Neue", Helvetica, "Segoe UI", Arial, freesans, sans-serif;
+	font-size: 16px;
+	line-height: 1.6;
+	word-wrap: break-word;
+	margin: 30px 0; /* top and bottom only */
+	width: 790px;
+	border: 1px solid #ddd;
+	border-radius: 3px;
+}
+
+#readme-header {
+	width: 100%;
+	background-color: #eee;
+	font-weight: bold;
+	border-bottom: 1px solid #ddd;
+	padding: 10px;
+}
+
+#readme article {
+	width: 100%;
+	padding: 0 30px 30px 30px; /* none at the top because it's too much. */
+}
+
 /* Individual search result */
 #search-results a {
     display:block;

@@ -41,6 +41,7 @@
             }
 
             ViewBag.TreeView = loadTreeView(username, repository);
+            ViewBag.Readme = loadReadme(username, repository);
             var viewModel = BrowserRepository.SetUpSolutionStructure(username, repository, "");
             return View("LookupFolder", "_BrowseLayout", viewModel);
         }
@@ -102,6 +103,19 @@
             treeViewFile.Close();
 
             return treeViewString;
+        }
+
+        private dynamic loadReadme(string username, string repository)
+        {
+            var organizationPath = System.Web.Hosting.HostingEnvironment.MapPath("~/") + "SB_Files\\";
+            string readmeFileName = "readme.html";
+            var readmePath = Path.Combine(organizationPath, username, repository, readmeFileName);
+
+            if (System.IO.File.Exists(readmePath))
+            {
+                return System.IO.File.ReadAllText(readmePath);
+            }
+            return null;
         }
     }
 }
