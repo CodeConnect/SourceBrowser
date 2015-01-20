@@ -59,3 +59,28 @@
 .String {
     color:#A31515;
 }
+
+.metro header .title-element {
+	padding: 0 !important;
+	font-family: 'Segoe UI','Open Sans',Verdana,Arial,Helvetica,sans-serif;
+	float: left;
+	width: auto;
+	display: block;
+	text-decoration: none;
+}
+
+.metro header .title-element .logo {
+	margin: 6px;
+    background-image: url("logo.png");
+    height: 32px;
+    width: 32px;
+    float: left;
+    display: inline-block;
+}
+
+.metro header .title-element .title {
+    padding: 15px 15px 15px 0;
+    line-height: 15px;
+    float: left;
+    display: inline-block;
+}
