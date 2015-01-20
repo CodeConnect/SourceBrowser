@@ -23,6 +23,13 @@
             {
                 return this.View("LookupError");
             }
+
+            if (!BrowserRepository.PathExists(username))
+            {
+                ViewBag.ErrorMessage = "We haven't seen any repositories of this user.";
+                return this.View("LookupError");
+            }
+
             var viewModel = BrowserRepository.SetUpUserStructure(username);
             return this.View("LookupUser", viewModel);
         }
@@ -36,7 +43,7 @@
 
             if(!BrowserRepository.PathExists(username, repository))
             {
-                ViewBag.ErrorMessage = "Specified repository could not be found";
+                ViewBag.ErrorMessage = "We haven't seen this repository.";
                 return this.View("LookupError");
             }
 
