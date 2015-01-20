@@ -169,6 +169,7 @@ namespace SourceBrowser.Generator.DocumentWalkers
 
         private string GetSymbolName(ISymbol symbol)
         {
+            symbol = symbol.OriginalDefinition;
             string fullyQualifiedName;
             if (symbol.Kind == SymbolKind.Parameter)
             {
@@ -179,6 +180,18 @@ namespace SourceBrowser.Generator.DocumentWalkers
             {
                 var containingName = symbol.ContainingSymbol.ToString();
                 fullyQualifiedName = containingName + _walkerUtils.LocalVariableDelimiter + symbol.Name;
+            }
+            else if(symbol.Kind == SymbolKind.Method)
+            {
+                var methodSymbol = (IMethodSymbol)symbol;
+                if (methodSymbol.ReducedFrom != null)
+                {
+                    fullyQualifiedName = methodSymbol.ReducedFrom.ToString();
+                }
+                else
+                {
+                    fullyQualifiedName = methodSymbol.ToString();
+                }
             }
             else
             {

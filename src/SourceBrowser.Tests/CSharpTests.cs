@@ -175,5 +175,52 @@ namespace SourceBrowser.Tests
             Assert.IsTrue(symbolLinks.Where(n => n.ReferencedSymbolName == "C1.M1()::l1").Count() == 3);
             Assert.IsTrue(symbolLinks.Where(n => n.ReferencedSymbolName == "C1.M1()::l2").Count() == 3);
         }
+
+        [TestMethod]
+        public void TestExtensionMethods()
+        {
+            var solution = base.Solution(
+           Project(
+               ProjectName("Project1"),
+               Sign,
+               Document(
+                  @"
+                    public static class MyExtensions
+                    {
+                        public string ExtensionMethod(this string myParam)
+                        {
+                        }
+                    }
+
+                    class MyClass
+                    {
+                        public void MyMethod()
+                        {
+                            ""string"".ExtensionMethod();
+                        }
+                    }
+                   ")));
+
+            WorkspaceModel ws = new WorkspaceModel("Workspace1", "");
+            FolderModel fm = new FolderModel(ws, "Project1");
+
+            var document = solution.Projects.SelectMany(n => n.Documents).Where(n => n.Name == "Document1.cs").Single();
+            var linkProvider = new ReferencesourceLinkProvider();
+
+            var walker = SourceBrowser.Generator.DocumentWalkers.WalkerSelector.GetWalker(fm, document, linkProvider);
+            walker.Visit(document.GetSyntaxRootAsync().Result);
+            var documentModel = walker.GetDocumentModel();
+
+            var links = documentModel.Tokens.Select(n => n.Link).Where(n => n != null);
+            var symbolLinks = links.Select(n => n as SymbolLink);
+
+            Assert.IsTrue(symbolLinks.Count() == 6);
+
+            Assert.IsTrue(symbolLinks.Where(n => n.ReferencedSymbolName == "MyExtensions").Count() == 1);
+            Assert.IsTrue(symbolLinks.Where(n => n.ReferencedSymbolName == "MyExtensions.ExtensionMethod(string)").Count() == 2);
+            Assert.IsTrue(symbolLinks.Where(n => n.ReferencedSymbolName == "MyExtensions.ExtensionMethod(string)::myParam").Count() == 1);
+            Assert.IsTrue(symbolLinks.Where(n => n.ReferencedSymbolName == "MyClass").Count() == 1);
+            Assert.IsTrue(symbolLinks.Where(n => n.ReferencedSymbolName == "MyClass.MyMethod()").Count() == 1);
+        }
     }
 }
