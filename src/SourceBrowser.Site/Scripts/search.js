@@ -2,11 +2,7 @@
     var path = window.location.pathname;
     var splitPath = path.split('/');
     splitPath = splitPath.filter(function (v) { return v !== '' });
-    if (splitPath.length <= 2)
-    {
-        $("#search-form").hide();
-    }
-    else
+    if (splitPath.length > 2)
     {
         //Only bind if the page is searchable. (ie. we're in a repository)
         window.History.Adapter.bind(window, 'statechange', handleStateChange);
