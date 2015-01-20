@@ -42,22 +42,14 @@
             }
 
             var viewModel = BrowserRepository.SetUpSolutionStructure(username, repository, "");
-            try
+            if (!BrowserRepository.IsRepositoryReady(username, repository))
             {
-                if (!BrowserRepository.RepositoryIsReady(username, repository))
-                {
-                    return View("AwaitLookup", "_BrowseLayout", viewModel);
-                }
-                else
-                {
-                    ViewBag.TreeView = loadTreeView(username, repository);
-                    return View("LookupFolder", "_BrowseLayout", viewModel);
-                }
+                return View("AwaitLookup", "_BrowseLayout", viewModel);
             }
-            catch (RepositoryDoesNotExistException ex)
+            else
             {
-                ViewBag.ErrorMessage = "An error occured during processing of repository " + repository;
-                return this.View("LookupError");
+                ViewBag.TreeView = loadTreeView(username, repository);
+                return View("LookupFolder", "_BrowseLayout", viewModel);
             }
         }
 

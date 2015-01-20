@@ -51,8 +51,11 @@
                 {
                     // Create a file that indicates that the upload will begin
                     Directory.CreateDirectory(lockFileDirectory);
-                    File.WriteAllText(lockFilePath, Constants.REPO_STATUS_PROCESSING);
-                    return true;
+                    // Properly dispose of the filesystem lock
+                    using (var stream = File.Create(lockFilePath))
+                    {
+                        return true;
+                    }
                 }
             }
         }
@@ -69,34 +72,29 @@
             }
         }
 
-        internal static void MarkRepositoryReady(string userName, string repoName)
-        {
-            string lockFilePath = Path.Combine(StaticHtmlAbsolutePath, userName, repoName, Constants.REPO_LOCK_FILENAME);
-            lock (fileOperationLock)
-            {
-                File.WriteAllText(lockFilePath, Constants.REPO_STATUS_READY);
-            }
-        }
-
-        internal static bool RepositoryIsReady(string userName, string repoName)
+        internal static bool IsRepositoryReady(string userName, string repoName)
         {
             string lockFilePath = Path.Combine(StaticHtmlAbsolutePath, userName, repoName, Constants.REPO_LOCK_FILENAME);
             lock (fileOperationLock)
             {
                 if (File.Exists(lockFilePath))
                 {
-                    var contents = File.ReadAllText(lockFilePath);
-                    if (contents.Trim().Equals(Constants.REPO_STATUS_READY))
-                    {
-                        return true;
-                    }
-                }
-                else
-                {
-                    throw new RepositoryDoesNotExistException(userName + "/" + repoName);
+                    return false;
                 }
             }
-            return false;
+            return true;
+        }
+
+        internal static void RemoveRepository(string userName, string repoName)
+        {
+            string lockFileDirectory = Path.Combine(StaticHtmlAbsolutePath, userName, repoName);
+            lock (fileOperationLock)
+            {
+                if (Directory.Exists(lockFileDirectory))
+                {
+                    Directory.Delete(lockFileDirectory, true);
+                }
+            }
         }
 
         internal static bool PathExists(string username, string repository = "", string path = "")

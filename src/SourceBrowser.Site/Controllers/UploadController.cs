@@ -103,11 +103,11 @@
             {
                 if (processingSuccessful)
                 {
-                    BrowserRepository.MarkRepositoryReady(retriever.UserName, retriever.RepoName);
+                    BrowserRepository.UnlockRepository(retriever.UserName, retriever.RepoName);
                 }
                 else
                 {
-                    BrowserRepository.UnlockRepository(retriever.UserName, retriever.RepoName);
+                    BrowserRepository.RemoveRepository(retriever.UserName, retriever.RepoName);
                 }
             }
         }
