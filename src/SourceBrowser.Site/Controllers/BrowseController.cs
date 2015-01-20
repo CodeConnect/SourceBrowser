@@ -6,6 +6,7 @@
     using SourceBrowser.Site.Repositories;
     using System.IO;
     using SourceBrowser.Site.Attributes;
+    using SourceBrowser.Shared;
 
     public class BrowseController : Controller
     {
@@ -47,9 +48,16 @@
                 return this.View("LookupError");
             }
 
-            ViewBag.TreeView = loadTreeView(username, repository);
             var viewModel = BrowserRepository.SetUpSolutionStructure(username, repository, "");
-            return View("LookupFolder", "_BrowseLayout", viewModel);
+            if (!BrowserRepository.IsRepositoryReady(username, repository))
+            {
+                return View("AwaitLookup", "_BrowseLayout", viewModel);
+            }
+            else
+            {
+                ViewBag.TreeView = loadTreeView(username, repository);
+                return View("LookupFolder", "_BrowseLayout", viewModel);
+            }
         }
 
         public ActionResult LookupFolder(string username, string repository, string path)

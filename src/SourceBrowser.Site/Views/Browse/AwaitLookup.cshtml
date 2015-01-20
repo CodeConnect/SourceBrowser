@@ -1,0 +1,24 @@
+﻿@model SourceBrowser.Site.Models.GithubSolutionStructure
+
+@{
+    ViewBag.Title = "AwaitLookup";
+}
+
+<div id="sb-viewhost">
+    <!-- Main Content-->
+    <article id="main-content">
+        <h3>We are currently processing @Model.ParentRepo.ParentUserName's repository @Model.ParentRepo.Name.</h3>
+        <p>This may take a few minutes. Refresh this page periodically.</p>
+        <p><a href="//github.com/@Model.ParentRepo.ParentUserName/@Model.ParentRepo.Name/" target="_blank">View @Model.ParentRepo.Name on github.</a></p>
+    </article>
+    <div id="drag-handle"></div>
+    <aside id="browser">
+        <section id="tree-view" class="metro">
+            
+        </section>
+        <section id="search-results" style="display:none;"></section>
+        <section id="no-results" style="display:none;">
+            
+        </section>
+    </aside>
+</div>
