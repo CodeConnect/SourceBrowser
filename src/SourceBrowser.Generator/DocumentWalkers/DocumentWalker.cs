@@ -169,6 +169,9 @@ namespace SourceBrowser.Generator.DocumentWalkers
 
         private string GetSymbolName(ISymbol symbol)
         {
+            //If this symbol was derived from another (eg. type substitution with generics)
+            //retrieve the original definition of the symbol as it appeared in source code
+            symbol = symbol.OriginalDefinition;
             string fullyQualifiedName;
             if (symbol.Kind == SymbolKind.Parameter)
             {
@@ -179,6 +182,21 @@ namespace SourceBrowser.Generator.DocumentWalkers
             {
                 var containingName = symbol.ContainingSymbol.ToString();
                 fullyQualifiedName = containingName + _walkerUtils.LocalVariableDelimiter + symbol.Name;
+            }
+            else if(symbol.Kind == SymbolKind.Method)
+            {
+                var methodSymbol = (IMethodSymbol)symbol;
+                if (methodSymbol.ReducedFrom != null)
+                {
+                    //If this method was reduced from an extension method, we 
+                    //want to work with the fully qualified name as it originally 
+                    //appeared in source code
+                    fullyQualifiedName = methodSymbol.ReducedFrom.ToString();
+                }
+                else
+                {
+                    fullyQualifiedName = methodSymbol.ToString();
+                }
             }
             else
             {

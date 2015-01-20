@@ -14,7 +14,10 @@
         <div class="navigation-bar dark">
             <div class="navigation-bar-content container">
                 @* Left aligned items: *@
-                <a href="/" class="element"><span class="icon-grid-view"></span> SOURCE BROWSER <sup>0.1</sup></a>
+				<a href="/" class="element title-element">
+					<div class="logo"></div>
+					<div class="title">SOURCE BROWSER <sup>0.2</sup></div>
+				</a>
                 <span class="element-divider"></span>
 
                 <a class="element1 pull-menu" href="#"></a>
@@ -28,10 +31,7 @@
                 </ul>
 
                 @* Right aligned items: *@
-                <div class="element-menu place-right input-element" id="search-form">
-                    <form>
-                        <input type="text" id="search-box" class="element place-right" placeholder="Search..." />
-                    </form>
+                <div class="element-menu place-right input-element">
                 </div>
 
 
@@ -53,5 +53,14 @@
     @Scripts.Render("~/bundles/search")
     @*Scripts.Render("~/bundles/sourcebrowser")*@
     @RenderSection("scripts", required: false)
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-58766117-1', 'auto');
+      ga('send', 'pageview');
+    </script>
 </body>
 </html>

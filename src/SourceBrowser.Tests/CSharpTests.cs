@@ -106,7 +106,7 @@ namespace SourceBrowser.Tests
                     {
                         public void M1(string p1, int p2, C1 p3)
                         {
-                            p1 = String.Empty;
+                            p1 = null;
                             p2 = 0;
                             p3 = null;   
                         }
@@ -123,14 +123,20 @@ namespace SourceBrowser.Tests
             var documentModel = walker.GetDocumentModel();
 
             var links = documentModel.Tokens.Select(n => n.Link).Where(n => n != null);
+            var symbolLinks = links.Select(n => n as SymbolLink);
 
-            //TODO: Test Parameters once PR #66 is merged.
+            Assert.IsTrue(links.Count() == 9);
 
+            Assert.IsTrue(symbolLinks.Where(n => n.ReferencedSymbolName == "C1").Count() == 2);
+            Assert.IsTrue(symbolLinks.Where(n => n.ReferencedSymbolName == "C1.M1(string, int, C1)").Count() == 1);
+            Assert.IsTrue(symbolLinks.Where(n => n.ReferencedSymbolName == "C1.M1(string, int, C1)::p1").Count() == 2);
+            Assert.IsTrue(symbolLinks.Where(n => n.ReferencedSymbolName == "C1.M1(string, int, C1)::p2").Count() == 2);
+            Assert.IsTrue(symbolLinks.Where(n => n.ReferencedSymbolName == "C1.M1(string, int, C1)::p3").Count() == 2);
         }
 
+        [TestMethod]
         public void TestLocals()
         {
-
             var solution = base.Solution(
              Project(
                  ProjectName("Project1"),
@@ -141,11 +147,11 @@ namespace SourceBrowser.Tests
                     {
                         public void M1()
                         {
-                            string p1 = String.Empty;
-                            int p2 = 0;
-                            
-                            p2 = p2 + 1;
-                            p1 = p1 + ""sample text""
+                            string l1 = ""hello""
+                            l1 = l1 + "" world""
+
+                            int l2 = 0;
+                            l2 = l2 + 1;
                         }
                     }")));
 
@@ -160,9 +166,61 @@ namespace SourceBrowser.Tests
             var documentModel = walker.GetDocumentModel();
 
             var links = documentModel.Tokens.Select(n => n.Link).Where(n => n != null);
+            var symbolLinks = links.Select(n => n as SymbolLink);
 
-            //TODO: Test locals once PR #66 is merged.
+            Assert.IsTrue(links.Count() == 8);
 
+            Assert.IsTrue(symbolLinks.Where(n => n.ReferencedSymbolName == "C1").Count() == 1);
+            Assert.IsTrue(symbolLinks.Where(n => n.ReferencedSymbolName == "C1.M1()").Count() == 1);
+            Assert.IsTrue(symbolLinks.Where(n => n.ReferencedSymbolName == "C1.M1()::l1").Count() == 3);
+            Assert.IsTrue(symbolLinks.Where(n => n.ReferencedSymbolName == "C1.M1()::l2").Count() == 3);
+        }
+
+        [TestMethod]
+        public void TestExtensionMethods()
+        {
+            var solution = base.Solution(
+           Project(
+               ProjectName("Project1"),
+               Sign,
+               Document(
+                  @"
+                    public static class MyExtensions
+                    {
+                        public string ExtensionMethod(this string myParam)
+                        {
+                        }
+                    }
+
+                    class MyClass
+                    {
+                        public void MyMethod()
+                        {
+                            ""string"".ExtensionMethod();
+                        }
+                    }
+                   ")));
+
+            WorkspaceModel ws = new WorkspaceModel("Workspace1", "");
+            FolderModel fm = new FolderModel(ws, "Project1");
+
+            var document = solution.Projects.SelectMany(n => n.Documents).Where(n => n.Name == "Document1.cs").Single();
+            var linkProvider = new ReferencesourceLinkProvider();
+
+            var walker = SourceBrowser.Generator.DocumentWalkers.WalkerSelector.GetWalker(fm, document, linkProvider);
+            walker.Visit(document.GetSyntaxRootAsync().Result);
+            var documentModel = walker.GetDocumentModel();
+
+            var links = documentModel.Tokens.Select(n => n.Link).Where(n => n != null);
+            var symbolLinks = links.Select(n => n as SymbolLink);
+
+            Assert.IsTrue(symbolLinks.Count() == 6);
+
+            Assert.IsTrue(symbolLinks.Where(n => n.ReferencedSymbolName == "MyExtensions").Count() == 1);
+            Assert.IsTrue(symbolLinks.Where(n => n.ReferencedSymbolName == "MyExtensions.ExtensionMethod(string)").Count() == 2);
+            Assert.IsTrue(symbolLinks.Where(n => n.ReferencedSymbolName == "MyExtensions.ExtensionMethod(string)::myParam").Count() == 1);
+            Assert.IsTrue(symbolLinks.Where(n => n.ReferencedSymbolName == "MyClass").Count() == 1);
+            Assert.IsTrue(symbolLinks.Where(n => n.ReferencedSymbolName == "MyClass.MyMethod()").Count() == 1);
         }
     }
 }

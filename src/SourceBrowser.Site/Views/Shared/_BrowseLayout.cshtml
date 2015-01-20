@@ -14,17 +14,15 @@
         <nav class="navigation-bar-content">
             <a href="/" class="title-element">
                 <div class="logo"></div>
-                <div class="title">SOURCE BROWSER <sup>0.1</sup></div>
+                <div class="title">SOURCE BROWSER <sup>0.2</sup></div>
             </a>
             <a class="element visible-on-wide-screen after-divider" href="/Browse/">Browse</a>
             <a class="element visible-on-wide-screen" href="/Upload/">Upload</a>
             <div class="input-element place-right" id="search-form">
-                <form>
-                    <div class="input-control text">
-                        <input type="text" id="search-box" placeholder="Search...">
-                        <button type="submit" id="search-button"></button>
-                    </div>
-                </form>
+                <div class="input-control text">
+                    <input type="text" id="search-box" placeholder="Search...">
+                    <button id="search-button"></button>
+                </div>
             </div>
         </nav>
     </header>
@@ -36,5 +34,15 @@
     @Scripts.Render("~/bundles/search")
     @*Scripts.Render("~/bundles/sourcebrowser")*@
     @RenderSection("scripts", required: false)
+    
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-58766117-1', 'auto');
+      ga('send', 'pageview');
+    </script>
 </body>
 </html>

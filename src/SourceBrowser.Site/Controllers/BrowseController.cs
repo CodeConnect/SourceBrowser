@@ -6,6 +6,7 @@
     using SourceBrowser.Site.Repositories;
     using System.IO;
     using SourceBrowser.Site.Attributes;
+    using SourceBrowser.Shared;
 
     public class BrowseController : Controller
     {
@@ -23,6 +24,13 @@
             {
                 return this.View("LookupError");
             }
+
+            if (!BrowserRepository.PathExists(username))
+            {
+                ViewBag.ErrorMessage = "We haven't seen any repositories of this user.";
+                return this.View("LookupError");
+            }
+
             var viewModel = BrowserRepository.SetUpUserStructure(username);
             return this.View("LookupUser", viewModel);
         }
@@ -36,14 +44,21 @@
 
             if(!BrowserRepository.PathExists(username, repository))
             {
-                ViewBag.ErrorMessage = "Specified repository could not be found";
+                ViewBag.ErrorMessage = "We haven't seen this repository.";
                 return this.View("LookupError");
             }
 
-            ViewBag.TreeView = loadTreeView(username, repository);
-            ViewBag.Readme = loadReadme(username, repository);
             var viewModel = BrowserRepository.SetUpSolutionStructure(username, repository, "");
-            return View("LookupFolder", "_BrowseLayout", viewModel);
+            if (!BrowserRepository.IsRepositoryReady(username, repository))
+            {
+                return View("AwaitLookup", "_BrowseLayout", viewModel);
+            }
+            else
+            {
+                ViewBag.TreeView = loadTreeView(username, repository);
+                ViewBag.Readme = loadReadme(username, repository);
+                return View("LookupFolder", "_BrowseLayout", viewModel);
+            }
         }
 
         public ActionResult LookupFolder(string username, string repository, string path)
