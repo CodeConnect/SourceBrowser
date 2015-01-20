@@ -91,6 +91,10 @@
                         return true;
                     }
                 }
+                else
+                {
+                    throw new RepositoryDoesNotExistException(userName + "/" + repoName);
+                }
             }
             return false;
         }

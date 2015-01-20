@@ -6,6 +6,7 @@
     using SourceBrowser.Site.Repositories;
     using System.IO;
     using SourceBrowser.Site.Attributes;
+    using SourceBrowser.Shared;
 
     public class BrowseController : Controller
     {
@@ -41,14 +42,22 @@
             }
 
             var viewModel = BrowserRepository.SetUpSolutionStructure(username, repository, "");
-            if (!BrowserRepository.RepositoryIsReady(username, repository))
+            try
             {
-                return View("AwaitLookup", "_BrowseLayout", viewModel);
+                if (!BrowserRepository.RepositoryIsReady(username, repository))
+                {
+                    return View("AwaitLookup", "_BrowseLayout", viewModel);
+                }
+                else
+                {
+                    ViewBag.TreeView = loadTreeView(username, repository);
+                    return View("LookupFolder", "_BrowseLayout", viewModel);
+                }
             }
-            else
+            catch (RepositoryDoesNotExistException ex)
             {
-                ViewBag.TreeView = loadTreeView(username, repository);
-                return View("LookupFolder", "_BrowseLayout", viewModel);
+                ViewBag.ErrorMessage = "An error occured during processing of repository " + repository;
+                return this.View("LookupError");
             }
         }
 
