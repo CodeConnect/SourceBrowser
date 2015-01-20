@@ -79,6 +79,8 @@ namespace SourceBrowser.Generator
         {
             var syntaxRoot = document.GetSyntaxRootAsync().Result;
             var containingFolder = findDocumentParent(workspaceModel, document);
+            if (containingFolder == null)
+                return;
             var docWalker = WalkerSelector.GetWalker(containingFolder, document, _refsourceLinkProvider);
             docWalker.Visit(syntaxRoot);
             
@@ -92,8 +94,10 @@ namespace SourceBrowser.Generator
             IProjectItem currentNode = workspaceModel;
             var rootPath = workspaceModel.BasePath ;
             var docPath = Directory.GetParent(document.FilePath).FullName;
+            
+            //If we can't find it, it's not located within our repo and we'll ignore it.
             if (!docPath.StartsWith(rootPath))
-                return currentNode;
+                return null;
 
             var relativePath = docPath.Remove(0, rootPath.Length);
 
