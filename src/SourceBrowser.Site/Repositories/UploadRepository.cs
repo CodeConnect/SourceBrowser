@@ -60,6 +60,12 @@ namespace SourceBrowser.Site.Repositories
                 // Releasing the context object stops the impersonation 
             }
         }
+
+        internal static void SaveReadme(string repoPath, string readmeInHtml)
+        {
+            string readmePath = Path.Combine(repoPath, "readme.html");
+            File.WriteAllText(readmePath, readmeInHtml);
+        }
     }
 
     sealed class SafeTokenHandle : SafeHandleZeroOrMinusOneIsInvalid

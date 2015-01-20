@@ -88,6 +88,15 @@
                 treeViewTransformer.Visit(workspaceModel);
             }
 
+            try
+            {
+                UploadRepository.SaveReadme(repoPath, retriever.ProvideParsedReadme());
+            }
+            catch (Exception ex)
+            {
+                // TODO: Log and swallow - readme is not essential.
+            }
+
             return Redirect("/Browse/" + retriever.UserName + "/" + retriever.RepoName);
         }
 
