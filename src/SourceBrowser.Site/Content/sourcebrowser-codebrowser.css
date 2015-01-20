@@ -93,7 +93,7 @@
 }
 
 .sourcebrowser-header .input-element {
-    padding: 15px 0; /* Only top and bottom padding */
+    padding: 10px 0; /* Only top and bottom padding */
     line-height: 15px;
     position: relative;
     margin: 0;
@@ -216,7 +216,7 @@
 	background-color: #eee;
 	font-weight: bold;
 	border-bottom: 1px solid #ddd;
-	padding: 10px;
+	padding: 6px 10px;
 }
 
 #readme article {
