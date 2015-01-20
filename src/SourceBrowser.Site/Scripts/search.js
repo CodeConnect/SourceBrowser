@@ -195,7 +195,7 @@ $("#search-box").keyup(function () {
     search.beginSearch();
 });
 
-$("search-button").click(function () {
+$("#search-button").click(function () {
     search.beginSearch();
 });
 
