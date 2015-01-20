@@ -8,6 +8,7 @@ namespace SourceBrowser.SolutionRetriever
     {
         private string _url;
         private Guid guid = Guid.NewGuid();
+        string _absoluteRepositoryPath;
         public string UserName { get; set; }
         public string RepoName { get; set; }
 
@@ -41,17 +42,17 @@ namespace SourceBrowser.SolutionRetriever
         {
             string baseRepositoryPath = Path.Combine(System.Web.Hosting.HostingEnvironment.MapPath("~/"),"GithubStaging");
 
-            string absoluteRepositoryPath = Path.Combine(baseRepositoryPath, UserName, RepoName);
+            _absoluteRepositoryPath = Path.Combine(baseRepositoryPath, UserName, RepoName);
 
             // libgit2 requires the target directory to be empty
-            if (Directory.Exists(absoluteRepositoryPath))
+            if (Directory.Exists(_absoluteRepositoryPath))
             {
-                DeleteReadOnlyDirectory(absoluteRepositoryPath);
+                DeleteReadOnlyDirectory(_absoluteRepositoryPath);
             }
-            Directory.CreateDirectory(absoluteRepositoryPath);
+            Directory.CreateDirectory(_absoluteRepositoryPath);
 
-            Repository.Clone(_url, absoluteRepositoryPath);
-            return absoluteRepositoryPath;
+            Repository.Clone(_url, _absoluteRepositoryPath);
+            return _absoluteRepositoryPath;
         }
 
         /// <summary>
@@ -72,6 +73,21 @@ namespace SourceBrowser.SolutionRetriever
                 fileInfo.Delete();
             }
             Directory.Delete(directory);
+        }
+
+        /// <summary>
+        /// Returns contents of the readme parsed to HTML
+        /// </summary>
+        /// <returns></returns>
+        public string ProvideParsedReadme()
+        {
+            string readmeLocation = Path.Combine(_absoluteRepositoryPath, "README.md");
+            if (!File.Exists(readmeLocation))
+            {
+                return String.Empty;
+            }
+            var md = new MarkdownDeep.Markdown();
+            return md.Transform(File.ReadAllText(readmeLocation));
         }
     }
 }
