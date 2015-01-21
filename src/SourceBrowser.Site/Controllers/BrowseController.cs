@@ -107,20 +107,19 @@
             return Json(viewModel, JsonRequestBehavior.AllowGet);
         }
 
-        private dynamic loadTreeView(string username, string repository)
+        private string loadTreeView(string username, string repository)
         {
             var organizationPath = System.Web.Hosting.HostingEnvironment.MapPath("~/") + "SB_Files\\";
             string treeViewFileName = "treeview.html";
             var treeViewPath = Path.Combine(organizationPath, username, repository, treeViewFileName);
 
-            var treeViewFile = new StreamReader(treeViewPath);
-            string treeViewString = treeViewFile.ReadToEnd();
-            treeViewFile.Close();
-
-            return treeViewString;
+            using (var treeViewFile = new StreamReader(treeViewPath))
+            {
+                return treeViewFile.ReadToEnd();
+            }
         }
 
-        private dynamic loadReadme(string username, string repository)
+        private string loadReadme(string username, string repository)
         {
             var organizationPath = System.Web.Hosting.HostingEnvironment.MapPath("~/") + "SB_Files\\";
             string readmeFileName = "readme.html";
