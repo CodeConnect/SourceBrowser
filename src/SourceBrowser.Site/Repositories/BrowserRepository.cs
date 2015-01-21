@@ -147,6 +147,7 @@
         internal static GithubUserStructure GetUserStructure(string userName)
         {
             var userDataFile = Path.Combine(StaticHtmlAbsolutePath, userName, "user.data");
+            // Fetch GitHub data if there is none
             if (!File.Exists(userDataFile))
             {
                 var userData = SetUpUserStructure(userName);
@@ -159,7 +160,7 @@
             }
             catch
             {
-                // There was some problem. Recreate the data.
+                // There was some problem reading from the disk. Recreate the data.
                 var userData = SetUpUserStructure(userName);
                 FileUtilities.SerializeData(userData, userDataFile);
                 return userData;
@@ -225,6 +226,7 @@
         internal static GithubRepoStructure GetRepoStructure(string userName, string repoName)
         {
             var repoDataFile = Path.Combine(StaticHtmlAbsolutePath, userName, repoName, "repo.data");
+            // Fetch GitHub data if there is none
             if (!File.Exists(repoDataFile))
             {
                 var repoData = SetUpRepoStructure(userName, repoName);
@@ -237,7 +239,7 @@
             }
             catch
             {
-                // There was some problem. Recreate the data.
+                // There was some problem reading from the disk. Recreate the data.
                 var repoData = SetUpRepoStructure(userName, repoName);
                 FileUtilities.SerializeData(repoData, repoDataFile);
                 return repoData;
