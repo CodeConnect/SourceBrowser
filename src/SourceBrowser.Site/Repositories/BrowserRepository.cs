@@ -147,6 +147,7 @@
         internal static GithubUserStructure GetUserStructure(string userName)
         {
             var userDataFile = Path.Combine(StaticHtmlAbsolutePath, userName, "user.data");
+            // Fetch GitHub data if there is none
             if (!File.Exists(userDataFile))
             {
                 var userData = SetUpUserStructure(userName);
@@ -159,7 +160,7 @@
             }
             catch
             {
-                // There was some problem. Recreate the data.
+                // There was some problem reading from the disk. Recreate the data.
                 var userData = SetUpUserStructure(userName);
                 FileUtilities.SerializeData(userData, userDataFile);
                 return userData;
@@ -183,7 +184,7 @@
         /// </summary>
         /// <param name="userName">The username.</param>
         /// <returns>The github structure.</returns>
-        internal static GithubUserStructure SetUpUserStructure(string userName)
+        private static GithubUserStructure SetUpUserStructure(string userName)
         {
             var repoPath = Path.Combine(StaticHtmlAbsolutePath, userName);
 
@@ -225,6 +226,7 @@
         internal static GithubRepoStructure GetRepoStructure(string userName, string repoName)
         {
             var repoDataFile = Path.Combine(StaticHtmlAbsolutePath, userName, repoName, "repo.data");
+            // Fetch GitHub data if there is none
             if (!File.Exists(repoDataFile))
             {
                 var repoData = SetUpRepoStructure(userName, repoName);
@@ -237,7 +239,7 @@
             }
             catch
             {
-                // There was some problem. Recreate the data.
+                // There was some problem reading from the disk. Recreate the data.
                 var repoData = SetUpRepoStructure(userName, repoName);
                 FileUtilities.SerializeData(repoData, repoDataFile);
                 return repoData;
@@ -262,7 +264,7 @@
         /// <param name="userName"></param>
         /// <param name="repoName"></param>
         /// <returns></returns>
-        internal static GithubRepoStructure SetUpRepoStructure(string userName, string repoName)
+        private static GithubRepoStructure SetUpRepoStructure(string userName, string repoName)
         {
             // Currently unused, might be useful at some point
             // var repoRoot = Path.Combine(StaticHtmlAbsolutePath, userName, repoName);
@@ -279,12 +281,12 @@
 
         internal static GithubSolutionStructure SetUpSolutionStructure(string userName, string repoName, string solutionName)
         {
-    var viewModel = new GithubSolutionStructure()
+            var viewModel = new GithubSolutionStructure()
             {
                 Name = solutionName,
                 RelativePath = CreatePath(userName, repoName, solutionName),
                 RelativeRootPath = CreatePath(userName, repoName, solutionName),
-                ParentRepo = SetUpRepoStructure(userName, repoName)
+                ParentRepo = GetRepoStructure(userName, repoName)
             };
 
             return viewModel;

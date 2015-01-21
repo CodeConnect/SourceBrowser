@@ -30,7 +30,7 @@
                 return this.View("LookupError");
             }
 
-            var viewModel = BrowserRepository.SetUpUserStructure(username);
+            var viewModel = BrowserRepository.GetUserStructure(username);
             return this.View("LookupUser", viewModel);
         }
 
