@@ -184,7 +184,7 @@
         /// </summary>
         /// <param name="userName">The username.</param>
         /// <returns>The github structure.</returns>
-        internal static GithubUserStructure SetUpUserStructure(string userName)
+        private static GithubUserStructure SetUpUserStructure(string userName)
         {
             var repoPath = Path.Combine(StaticHtmlAbsolutePath, userName);
 
@@ -264,7 +264,7 @@
         /// <param name="userName"></param>
         /// <param name="repoName"></param>
         /// <returns></returns>
-        internal static GithubRepoStructure SetUpRepoStructure(string userName, string repoName)
+        private static GithubRepoStructure SetUpRepoStructure(string userName, string repoName)
         {
             // Currently unused, might be useful at some point
             // var repoRoot = Path.Combine(StaticHtmlAbsolutePath, userName, repoName);
@@ -281,12 +281,12 @@
 
         internal static GithubSolutionStructure SetUpSolutionStructure(string userName, string repoName, string solutionName)
         {
-    var viewModel = new GithubSolutionStructure()
+            var viewModel = new GithubSolutionStructure()
             {
                 Name = solutionName,
                 RelativePath = CreatePath(userName, repoName, solutionName),
                 RelativeRootPath = CreatePath(userName, repoName, solutionName),
-                ParentRepo = SetUpRepoStructure(userName, repoName)
+                ParentRepo = GetRepoStructure(userName, repoName)
             };
 
             return viewModel;
