@@ -9,9 +9,19 @@ using Octokit;
 
 namespace SourceBrowser.SolutionRetriever
 {
-    public class GitHubInformationRetriever
+    public static class GitHubInformationRetriever
     {
         private static GitHubClient _github = new GitHubClient(new ProductHeaderValue("SourceBrowser"));
+
+        static GitHubInformationRetriever()
+        {
+            // Try to authenticate so that we can make 5000 API calls /hr instead of 60
+            // See: https://developer.github.com/v3/#rate-limiting
+            if (!String.IsNullOrEmpty(GitHubBasicAuthenticationProvider.Token))
+            {
+                _github.Connection.Credentials = new Credentials(GitHubBasicAuthenticationProvider.Token);
+            }
+        }
 
         public static void GetUserInformation(string username, ref string fullName, ref string avatarUrl, ref string gitHubUrl, ref string blogUrl)
         {
