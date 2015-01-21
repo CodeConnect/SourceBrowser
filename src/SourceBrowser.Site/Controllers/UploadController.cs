@@ -96,6 +96,16 @@
                         return View("Index");
                     }
                 }
+
+                try
+                {
+                    UploadRepository.SaveReadme(repoPath, retriever.ProvideParsedReadme());
+                }
+                catch (Exception ex)
+                {
+                    // TODO: Log and swallow - readme is not essential.
+                }
+
                 processingSuccessful = true;
                 return Redirect("/Browse/" + retriever.UserName + "/" + retriever.RepoName);
             }

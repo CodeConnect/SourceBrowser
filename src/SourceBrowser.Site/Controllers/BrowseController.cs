@@ -56,6 +56,7 @@
             else
             {
                 ViewBag.TreeView = loadTreeView(username, repository);
+                ViewBag.Readme = loadReadme(username, repository);
                 return View("LookupFolder", "_BrowseLayout", viewModel);
             }
         }
@@ -106,17 +107,29 @@
             return Json(viewModel, JsonRequestBehavior.AllowGet);
         }
 
-        private dynamic loadTreeView(string username, string repository)
+        private string loadTreeView(string username, string repository)
         {
             var organizationPath = System.Web.Hosting.HostingEnvironment.MapPath("~/") + "SB_Files\\";
             string treeViewFileName = "treeview.html";
             var treeViewPath = Path.Combine(organizationPath, username, repository, treeViewFileName);
 
-            var treeViewFile = new StreamReader(treeViewPath);
-            string treeViewString = treeViewFile.ReadToEnd();
-            treeViewFile.Close();
+            using (var treeViewFile = new StreamReader(treeViewPath))
+            {
+                return treeViewFile.ReadToEnd();
+            }
+        }
 
-            return treeViewString;
+        private string loadReadme(string username, string repository)
+        {
+            var organizationPath = System.Web.Hosting.HostingEnvironment.MapPath("~/") + "SB_Files\\";
+            string readmeFileName = "readme.html";
+            var readmePath = Path.Combine(organizationPath, username, repository, readmeFileName);
+
+            if (System.IO.File.Exists(readmePath))
+            {
+                return System.IO.File.ReadAllText(readmePath);
+            }
+            return null;
         }
     }
 }
