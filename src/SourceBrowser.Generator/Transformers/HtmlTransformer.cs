@@ -84,16 +84,22 @@ namespace SourceBrowser.Generator.Transformers
 
                 var symbolLink = token.Link as SymbolLink;
                 if (symbolLink != null)
+                {
                     processSymbolLink(sw, token);
+                    sw.Write("'>");
+                }
 
                 var urlLink = token.Link as UrlLink;
                 if (urlLink != null)
+                {
                     processUrlLink(sw, token);
+                    sw.Write("'");
+                    sw.Write(" target='_blank'");
+                    sw.Write(">");
+                }
 
-                sw.Write("'>");
                 sw.Write(HttpUtility.HtmlEncode(token.Value));
                 sw.Write("</a>");
-
             }
             else
             {
