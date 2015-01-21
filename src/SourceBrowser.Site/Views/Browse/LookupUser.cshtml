@@ -40,7 +40,7 @@
             <article class="col-xs-8" id="main">
                 <section>
 
-                    <h2>Browsing @Model.FullName's repositories.</h2>
+                    <h2>Browsing @(String.IsNullOrEmpty(Model.FullName) ? Model.Username : Model.FullName)'s repositories.</h2>
                     <ul>
                         @foreach (var repo in Model.Repos)
                         {
@@ -51,9 +51,12 @@
                                             <h4>@repo.Name</h4>
                                         </div>
                                         <div class="col-xs-4">
-                                            <p class="match-h-margin">
-                                                @repo.language, @repo.starsCount stars, @repo.forksCount forks
-                                            </p>
+											@if (!String.IsNullOrEmpty(repo.language))
+											{
+												<p class="match-h-margin">
+													@repo.language, @repo.starsCount stars, @repo.forksCount forks
+												</p>
+											}
                                         </div>
                                     </div>
                                     
