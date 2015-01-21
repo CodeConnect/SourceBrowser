@@ -6,7 +6,6 @@
     using SourceBrowser.Site.Repositories;
     using System.IO;
     using SourceBrowser.Site.Attributes;
-    using SourceBrowser.Shared;
 
     public class BrowseController : Controller
     {
