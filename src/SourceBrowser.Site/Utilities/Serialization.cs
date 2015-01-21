@@ -66,7 +66,7 @@ namespace SourceBrowser.Site.Utilities
             }
 
             // If file has been modified within last 60 minutes, it is considered "fresh"
-            DateTime freshThreshold = DateTime.Now - TimeSpan.FromMinutes(120);
+            DateTime freshThreshold = DateTime.Now - TimeSpan.FromDays(7);
             var lastWriteTime = File.GetLastWriteTimeUtc(filePath);
             var thresholdTime = freshThreshold.ToUniversalTime();
             if (lastWriteTime > thresholdTime)
