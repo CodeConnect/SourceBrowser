@@ -161,8 +161,11 @@ search = {
         var newUrl = splitByHash[0];
         var lineNumber = Number(splitByHash[1]);
 
+        var splitBySlash = newUrl.split('/');
+        var fileName = splitBySlash[splitBySlash.length - 1];
 
         window.History.pushState({ lineNumber: lineNumber }, null, newUrl);
+        document.title = fileName + " | Source Browser";
     }
 }
 
