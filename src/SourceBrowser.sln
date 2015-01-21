@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.22310.1
+VisualStudioVersion = 14.0.22512.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SourceBrowser.Generator", "SourceBrowser.Generator\SourceBrowser.Generator.csproj", "{C91050BD-5010-4EBD-A6AE-52CCA7C2553D}"
 EndProject
@@ -14,6 +14,11 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SourceBrowser.Search", "SourceBrowser.Search\SourceBrowser.Search.csproj", "{6C2ED4C0-E609-47D8-AA05-1CACBE5252AC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SourceBrowser.Tests", "SourceBrowser.Tests\SourceBrowser.Tests.csproj", "{EA8F0B24-B238-4A04-9A54-8AB12BDB5E88}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SourceBrowser.SensitiveConfiguration", "SourceBrowser.SensitiveConfiguration", "{0611834D-D53C-4F23-83FF-5F2A66724767}"
+	ProjectSection(SolutionItems) = preProject
+		Security.config = Security.config
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
