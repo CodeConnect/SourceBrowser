@@ -42,6 +42,7 @@
       <HintPath>..\packages\Octokit.0.5.2\lib\net45\Octokit.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.Net.Http" />
@@ -53,7 +54,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GitHubBasicAuthenticationProvider.cs" />
     <Compile Include="GitHubInformationRetriever.cs" />
     <Compile Include="GitHubSolutionRetriever.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

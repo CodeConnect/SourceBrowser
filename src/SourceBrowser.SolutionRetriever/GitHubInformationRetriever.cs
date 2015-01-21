@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.IO;
-using System.Net;
 using Octokit;
+using System.Configuration;
 
 namespace SourceBrowser.SolutionRetriever
 {
@@ -17,9 +12,10 @@ namespace SourceBrowser.SolutionRetriever
         {
             // Try to authenticate so that we can make 5000 API calls /hr instead of 60
             // See: https://developer.github.com/v3/#rate-limiting
-            if (!String.IsNullOrEmpty(GitHubBasicAuthenticationProvider.Token))
+            string token = ConfigurationManager.AppSettings["GitHubBasicAuthenticationToken"];
+            if (!String.IsNullOrEmpty(token))
             {
-                _github.Connection.Credentials = new Credentials(GitHubBasicAuthenticationProvider.Token);
+                _github.Connection.Credentials = new Credentials(token);
             }
         }
 
