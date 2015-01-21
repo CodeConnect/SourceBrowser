@@ -7,12 +7,10 @@
     using System.Threading.Tasks;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
-
     using SourceBrowser.Generator;
     using SourceBrowser.Site.Models;
     using SourceBrowser.Site.Utilities;
     using SourceBrowser.SolutionRetriever;
-    using SourceBrowser.Shared;
 
     internal static class BrowserRepository
     {

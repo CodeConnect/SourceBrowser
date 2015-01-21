@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Web;
 
-namespace SourceBrowser.Shared
+namespace SourceBrowser.Site.Utilities
 {
-    public class Constants
+    public static class Constants
     {
         public const string REPO_LOCK_FILENAME = "repo.lock";
     }

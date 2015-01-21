@@ -251,6 +251,7 @@
     <Compile Include="Repositories\BrowserRepository.cs" />
     <Compile Include="Repositories\UploadRepository.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="Utilities\Constants.cs" />
     <Compile Include="Utilities\Serialization.cs" />
   </ItemGroup>
   <ItemGroup>
