@@ -40,11 +40,17 @@
         internal static bool TryLockRepository(string userName, string repoName)
         {
 	        string lockFileDirectory = Path.Combine(StaticHtmlAbsolutePath, userName, repoName);
+            if (Directory.Exists(lockFileDirectory))
+            {
+                // The directory already exists, we can't modify this repository.
+                return false;
+            }
             string lockFilePath = Path.Combine(lockFileDirectory, Constants.REPO_LOCK_FILENAME);
             lock (fileOperationLock)
             {
                 if (File.Exists(lockFilePath))
                 {
+                    // Looks like someone is already working with this repository.
                     return false;
                 }
                 else
