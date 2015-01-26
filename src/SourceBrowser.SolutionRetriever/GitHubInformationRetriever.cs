@@ -1,17 +1,23 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.IO;
-using System.Net;
 using Octokit;
+using System.Configuration;
 
 namespace SourceBrowser.SolutionRetriever
 {
-    public class GitHubInformationRetriever
+    public static class GitHubInformationRetriever
     {
         private static GitHubClient _github = new GitHubClient(new ProductHeaderValue("SourceBrowser"));
+
+        static GitHubInformationRetriever()
+        {
+            // Try to authenticate so that we can make 5000 API calls /hr instead of 60
+            // See: https://developer.github.com/v3/#rate-limiting
+            string token = ConfigurationManager.AppSettings["GitHubBasicAuthenticationToken"];
+            if (!String.IsNullOrEmpty(token))
+            {
+                _github.Connection.Credentials = new Credentials(token);
+            }
+        }
 
         public static void GetUserInformation(string username, ref string fullName, ref string avatarUrl, ref string gitHubUrl, ref string blogUrl)
         {

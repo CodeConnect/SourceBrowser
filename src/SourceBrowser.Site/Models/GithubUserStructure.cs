@@ -23,7 +23,7 @@
             {
                 GitHubInformationRetriever.GetUserInformation(Username, ref FullName, ref AvatarURL, ref GitHubURL, ref BlogURL);
             }
-            catch
+            catch (Exception ex)
             {
                 // Swallow. This information is not essential to operation of SourceBrowser.
             }
