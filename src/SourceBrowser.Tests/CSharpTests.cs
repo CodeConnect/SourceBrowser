@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.CodeAnalysis.UnitTests;
-using Microsoft.CodeAnalysis.UnitTests.SolutionGeneration;
+using Generate = Microsoft.CodeAnalysis.UnitTests.SolutionGeneration;
 using Microsoft.CodeAnalysis;
 using System.Linq;
 using SourceBrowser.Generator.Model;
@@ -18,10 +18,10 @@ namespace SourceBrowser.Tests
         {
             //Set up the absolute minimum
             var solution = base.Solution(
-                Project(
-                    ProjectName("Project1"),
-                    Sign,
-                    Document(
+              Generate.Project(
+                Generate.ProjectName("Project1"),
+                Generate.Sign,
+                Generate.Document(
                         @"
                         class C1
                         {
@@ -53,10 +53,10 @@ namespace SourceBrowser.Tests
         public void BasicLinking()
         {
             var solution = base.Solution(
-             Project(
-                 ProjectName("Project1"),
-                 Sign,
-                 Document(
+              Generate.Project(
+                Generate.ProjectName("Project1"),
+                Generate.Sign,
+                Generate.Document(
                     @"
                     class C1
                     {
@@ -97,10 +97,10 @@ namespace SourceBrowser.Tests
         public void TestParameters()
         {
             var solution = base.Solution(
-             Project(
-                 ProjectName("Project1"),
-                 Sign,
-                 Document(
+              Generate.Project(
+                Generate.ProjectName("Project1"),
+                Generate.Sign,
+                Generate.Document(
                     @"
                     class C1
                     {
@@ -138,10 +138,10 @@ namespace SourceBrowser.Tests
         public void TestLocals()
         {
             var solution = base.Solution(
-             Project(
-                 ProjectName("Project1"),
-                 Sign,
-                 Document(
+              Generate.Project(
+                Generate.ProjectName("Project1"),
+                Generate.Sign,
+                Generate.Document(
                     @"
                     class C1
                     {
@@ -180,10 +180,10 @@ namespace SourceBrowser.Tests
         public void TestExtensionMethods()
         {
             var solution = base.Solution(
-           Project(
-               ProjectName("Project1"),
-               Sign,
-               Document(
+              Generate.Project(
+                Generate.ProjectName("Project1"),
+                Generate.Sign,
+                Generate.Document(
                   @"
                     public static class MyExtensions
                     {
