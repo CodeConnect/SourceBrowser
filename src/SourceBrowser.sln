@@ -28,8 +28,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SiteExtension", "SiteExtension", "{EEEFF764-36D9-48B2-B566-9FFD95CB0464}"
 	ProjectSection(SolutionItems) = preProject
-		..\SiteExtension\BuildExtension.cmd = ..\SiteExtension\BuildExtension.cmd
-		..\SiteExtension\DeployExtension.cmd = ..\SiteExtension\DeployExtension.cmd
+		..\SiteExtension\Deploy.cmd = ..\SiteExtension\Deploy.cmd
 	EndProjectSection
 EndProject
 Global
