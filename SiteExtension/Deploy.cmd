@@ -1,8 +1,15 @@
+SET FileToDelete=sourcebrowser.zip
+
+IF EXIST %FileToDelete% del /F %FileToDelete%
+
+IF EXIST %FileToDelete% exit 1
+
+powershell.exe -nologo -noprofile -command "& { Add-Type -A 'System.IO.Compression.FileSystem'; [IO.Compression.ZipFile]::CreateFromDirectory('PublishProfiles', 'sourcebrowser.zip'); }"
+
 @if "%_echo%" neq "1" @echo off
 
 setlocal
 set _SCRIPT=%~nx0
-set _EXTZIP=%~dp0sourcebrowser.zip
 set _SCMURI=%~1
 set _CURLEXE=%ProgramFiles(x86)%\git\bin\curl.exe
 
@@ -16,8 +23,8 @@ REM remove any after .net
 set _SCMURI=%_SCMURI:.net=&rem.%
 set _SCMURI=%_SCMURI%.net
 
-if NOT EXIST "%_EXTZIP%" (
-  @echo "%_EXTZIP%" does not exists! 
+if NOT EXIST "%FileToDelete%" (
+  @echo "%FileToDelete%" does not exists! 
   goto :EOF
 )
 
@@ -27,9 +34,9 @@ if NOT EXIST "%_CURLEXE%" (
 )
 
 @echo.
-@echo "%_CURLEXE%" -k -v -T "%_EXTZIP%" "%_SCMURI%/zip"
+@echo "%_CURLEXE%" -k -v -T "%FileToDelete%" "%_SCMURI%/zip"
 @echo.
-@call "%_CURLEXE%" -k -v -T "%_EXTZIP%" "%_SCMURI%/zip"
+@call "%_CURLEXE%" -k -v -T "%FileToDelete%" "%_SCMURI%/zip"
 @echo.
 
 exit /b 0
