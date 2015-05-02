@@ -231,7 +231,6 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\Constraints\AjaxOnlyConstraint.cs" />
     <Compile Include="Controllers\AccountController.cs" />
-    <Compile Include="Controllers\FindController.cs" />
     <Compile Include="Controllers\BrowseController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\SearchController.cs" />
@@ -439,9 +438,7 @@
     <Content Include="applicationHost.xdt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <None Include="..\..\SiteExtension\local.pubxml">
-      <Link>Properties\PublishProfiles\local.pubxml</Link>
-    </None>
+    <None Include="Properties\PublishProfiles\local.pubxml" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
     <None Include="Scripts\jquery-2.1.1.intellisense.js" />
     <Content Include="Scripts\jquery-2.1.1.js" />
@@ -507,7 +504,6 @@
     <Content Include="Views\Upload\Index.cshtml" />
     <Content Include="Views\Shared\_BrowseLayout.cshtml" />
     <Content Include="Views\Browse\AwaitLookup.cshtml" />
-    <Content Include="Views\Find\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
