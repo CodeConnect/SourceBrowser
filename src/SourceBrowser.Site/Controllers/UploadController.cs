@@ -7,7 +7,7 @@
     using SourceBrowser.Site.Repositories;
     using System;
     using System.Linq;
-
+    using Generator.Model;
     public class UploadController : Controller
     {
         // GET: Upload
@@ -62,49 +62,45 @@
                 var omnisharpPaths = Directory.GetFiles(repoRootPath, "omnisharp.json", SearchOption.AllDirectories);
                 var projectJsonPaths= Directory.GetFiles(repoRootPath, "project.json", SearchOption.AllDirectories);
 
-                // TODO: Use parallel for.
-                // TODO: Process all solutions.
-                // For now, we're assuming the shallowest and shortest .sln file is the one we're interested in
-                foreach (var solutionPath in solutionPaths.OrderBy(n => n.Length).Take(1))
+                string solutionPath = solutionPaths.OrderBy(n => n.Length).FirstOrDefault();
+                string omnisharpPath = omnisharpPaths.OrderBy(n => n.Length).FirstOrDefault();
+
+                WorkspaceModel workspaceModel = null;
+                if(solutionPath != null)
                 {
-                    try
-                    {
-                        var workspaceModel = UploadRepository.ProcessSolution(solutionPath, repoRootPath);
-
-                        //One pass to lookup all declarations
-                        var typeTransformer = new TokenLookupTransformer();
-                        typeTransformer.Visit(workspaceModel);
-                        var tokenLookup = typeTransformer.TokenLookup;
-
-                        //Another pass to generate HTMLs
-                        var htmlTransformer = new HtmlTransformer(tokenLookup, repoPath);
-                        htmlTransformer.Visit(workspaceModel);
-
-                        var searchTransformer = new SearchIndexTransformer(retriever.UserName, retriever.RepoName);
-                        searchTransformer.Visit(workspaceModel);
-
-                        // Generate HTML of the tree view
-                        var treeViewTransformer = new TreeViewTransformer(repoPath, retriever.UserName, retriever.RepoName);
-                        treeViewTransformer.Visit(workspaceModel);
-                    }
-                    catch (Exception ex)
-                    {
-                        // TODO: Log this
-                        ViewBag.Error = "There was an error processing solution " + Path.GetFileName(solutionPath);
-                        return View("Index");
-                    }
+                    workspaceModel = UploadRepository.ProcessSolution(solutionPath, repoRootPath);
                 }
 
-                try
+                if(workspaceModel == null && omnisharpPath != null)
                 {
-                    UploadRepository.SaveReadme(repoPath, retriever.ProvideParsedReadme());
-                }
-                catch (Exception ex)
-                {
-                    // TODO: Log and swallow - readme is not essential.
+                    workspaceModel = UploadRepository.ProcessOmnisharp(omnisharpPath, repoRootPath);
                 }
 
-                processingSuccessful = true;
+                if(workspaceModel == null && projectJsonPaths.Count() > 0)
+                {
+                    workspaceModel = UploadRepository.ProcessProjectJson(projectJsonPaths, repoRootPath);
+                }
+
+                if (workspaceModel != null)
+                {
+                    //One pass to lookup all declarations
+                    var typeTransformer = new TokenLookupTransformer();
+                    typeTransformer.Visit(workspaceModel);
+                    var tokenLookup = typeTransformer.TokenLookup;
+
+                    //Another pass to generate HTMLs
+                    var htmlTransformer = new HtmlTransformer(tokenLookup, repoPath);
+                    htmlTransformer.Visit(workspaceModel);
+
+                    var searchTransformer = new SearchIndexTransformer(retriever.UserName, retriever.RepoName);
+                    searchTransformer.Visit(workspaceModel);
+
+                    // Generate HTML of the tree view
+                    var treeViewTransformer = new TreeViewTransformer(repoPath, retriever.UserName, retriever.RepoName);
+                    treeViewTransformer.Visit(workspaceModel);
+                    processingSuccessful = true;
+                }
+
                 return Redirect("/Browse/" + retriever.UserName + "/" + retriever.RepoName);
             }
             finally

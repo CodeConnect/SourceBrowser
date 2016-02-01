@@ -7,6 +7,7 @@ using System.Runtime.ConstrainedExecution;
 using System.Security;
 using System.IO;
 using System.Configuration;
+using SourceBrowser.Generator.Model;
 
 namespace SourceBrowser.Site.Repositories
 {
@@ -18,7 +19,7 @@ namespace SourceBrowser.Site.Repositories
         [DllImport("kernel32.dll", CharSet = CharSet.Auto)]
         private extern static bool CloseHandle(IntPtr handle);
 
-        internal static Generator.Model.WorkspaceModel ProcessSolution(string solutionPath, string repoRootPath)
+        internal static WorkspaceModel ProcessSolution(string solutionPath, string repoRootPath)
         {
             SafeTokenHandle safeTokenHandle;
             string safeUserName = ConfigurationManager.AppSettings["safeUserName"];
@@ -28,6 +29,11 @@ namespace SourceBrowser.Site.Repositories
             if (String.IsNullOrEmpty(safeUserName))
             {
                 var sourceGenerator = new Generator.SolutionAnalayzer(solutionPath);
+                if(sourceGenerator.WorkspaceFailed)
+                {
+                    return null;
+                }
+
                 var workspaceModel = sourceGenerator.BuildWorkspaceModel(repoRootPath);
                 return workspaceModel;
             }
@@ -54,11 +60,25 @@ namespace SourceBrowser.Site.Repositories
                 using (WindowsImpersonationContext impersonatedUser = WindowsIdentity.Impersonate(safeTokenHandle.DangerousGetHandle()))
                 {
                     var sourceGenerator = new Generator.SolutionAnalayzer(solutionPath);
+                    if (sourceGenerator.WorkspaceFailed)
+                    {
+                        return null;
+                    }
                     var workspaceModel = sourceGenerator.BuildWorkspaceModel(repoRootPath);
                     return workspaceModel;
                 }
                 // Releasing the context object stops the impersonation 
             }
+        }
+
+        internal static WorkspaceModel ProcessOmnisharp(string omnisharpPath, string repoRootPath)
+        {
+            throw new NotImplementedException();
+        }
+
+        internal static WorkspaceModel ProcessProjectJson(string[] projectJsonPaths, string repoRootPath)
+        {
+            throw new NotImplementedException();
         }
 
         internal static void SaveReadme(string repoPath, string readmeInHtml)

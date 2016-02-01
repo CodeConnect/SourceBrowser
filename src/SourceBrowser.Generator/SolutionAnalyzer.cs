@@ -21,6 +21,7 @@ namespace SourceBrowser.Generator
 {
     public class SolutionAnalayzer
     {
+        public bool WorkspaceFailed { get; set; } 
         MSBuildWorkspace _workspace;
         Solution _solution;
         private ReferencesourceLinkProvider _refsourceLinkProvider = new ReferencesourceLinkProvider();
@@ -35,6 +36,7 @@ namespace SourceBrowser.Generator
 
         private void _workspace_WorkspaceFailed(object sender, WorkspaceDiagnosticEventArgs e)
         {
+            WorkspaceFailed = true;
             try
             {
                 var logDirectory = System.Web.Hosting.HostingEnvironment.MapPath("/WorkspaceLogs/");
