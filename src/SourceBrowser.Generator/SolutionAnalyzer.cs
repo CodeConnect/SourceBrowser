@@ -16,25 +16,40 @@ using System.Reflection;
 using SourceBrowser.Generator.Extensions;
 using SourceBrowser.Generator.Model;
 using SourceBrowser.Generator.DocumentWalkers;
+using Microsoft.DotNet.ProjectModel.Workspaces;
 
 namespace SourceBrowser.Generator
 {
     public class SolutionAnalayzer
     {
-        MSBuildWorkspace _workspace;
+        public bool WorkspaceFailed { get; set; } 
+        Workspace _workspace;
         Solution _solution;
         private ReferencesourceLinkProvider _refsourceLinkProvider = new ReferencesourceLinkProvider();
 
-        public SolutionAnalayzer(string solutionPath)
+        public static SolutionAnalayzer FromSolutionPath(string solutionPath)
         {
-            _workspace = MSBuildWorkspace.Create();
-            _workspace.WorkspaceFailed += _workspace_WorkspaceFailed;
-            _solution = _workspace.OpenSolutionAsync(solutionPath).Result;
+            var workspace = MSBuildWorkspace.Create();
+            var soln = workspace.OpenSolutionAsync(solutionPath).Result;
+            return new SolutionAnalayzer(workspace);
+        }
+
+        public static SolutionAnalayzer FromProjectJsonPaths(string[] projectJsonPaths)
+        {
+            var projectJsonWorkspace = new ProjectJsonWorkspace(projectJsonPaths);
+            return new SolutionAnalayzer(projectJsonWorkspace);
+        }
+
+        private SolutionAnalayzer(Workspace workspace)
+        {
+            _workspace = workspace;
+            _solution = workspace.CurrentSolution;
             _refsourceLinkProvider.Init();
         }
 
         private void _workspace_WorkspaceFailed(object sender, WorkspaceDiagnosticEventArgs e)
         {
+            WorkspaceFailed = true;
             try
             {
                 var logDirectory = System.Web.Hosting.HostingEnvironment.MapPath("/WorkspaceLogs/");
@@ -89,6 +104,7 @@ namespace SourceBrowser.Generator
             containingFolder.Children.Add(documentModel);
         }
 
+       
         private IProjectItem findDocumentParent(WorkspaceModel workspaceModel, Document document)
         {
             IProjectItem currentNode = workspaceModel;

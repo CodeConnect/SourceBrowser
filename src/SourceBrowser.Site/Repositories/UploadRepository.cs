@@ -7,6 +7,8 @@ using System.Runtime.ConstrainedExecution;
 using System.Security;
 using System.IO;
 using System.Configuration;
+using SourceBrowser.Generator.Model;
+using SourceBrowser.Generator;
 
 namespace SourceBrowser.Site.Repositories
 {
@@ -18,7 +20,7 @@ namespace SourceBrowser.Site.Repositories
         [DllImport("kernel32.dll", CharSet = CharSet.Auto)]
         private extern static bool CloseHandle(IntPtr handle);
 
-        internal static Generator.Model.WorkspaceModel ProcessSolution(string solutionPath, string repoRootPath)
+        internal static WorkspaceModel ProcessSolution(string solutionPath, string repoRootPath)
         {
             SafeTokenHandle safeTokenHandle;
             string safeUserName = ConfigurationManager.AppSettings["safeUserName"];
@@ -27,7 +29,12 @@ namespace SourceBrowser.Site.Repositories
             // When testing, give full trust to the developer's machine
             if (String.IsNullOrEmpty(safeUserName))
             {
-                var sourceGenerator = new Generator.SolutionAnalayzer(solutionPath);
+                var sourceGenerator = SolutionAnalayzer.FromSolutionPath(solutionPath);
+                if(sourceGenerator.WorkspaceFailed)
+                {
+                    return null;
+                }
+
                 var workspaceModel = sourceGenerator.BuildWorkspaceModel(repoRootPath);
                 return workspaceModel;
             }
@@ -53,12 +60,33 @@ namespace SourceBrowser.Site.Repositories
                 // Use the token handle returned by LogonUser. 
                 using (WindowsImpersonationContext impersonatedUser = WindowsIdentity.Impersonate(safeTokenHandle.DangerousGetHandle()))
                 {
-                    var sourceGenerator = new Generator.SolutionAnalayzer(solutionPath);
+                    var sourceGenerator = SolutionAnalayzer.FromSolutionPath(solutionPath);
+                    if (sourceGenerator.WorkspaceFailed)
+                    {
+                        return null;
+                    }
                     var workspaceModel = sourceGenerator.BuildWorkspaceModel(repoRootPath);
                     return workspaceModel;
                 }
                 // Releasing the context object stops the impersonation 
             }
+        }
+
+        internal static WorkspaceModel ProcessOmnisharp(string omnisharpPath, string repoRootPath)
+        {
+            return null;
+        }
+
+        internal static WorkspaceModel ProcessProjectJson(string[] projectJsonPaths, string repoRootPath)
+        {
+            
+            var sourceGenerator = SolutionAnalayzer.FromProjectJsonPaths(projectJsonPaths);
+            if (sourceGenerator.WorkspaceFailed)
+            {
+                return null;
+            }
+            var workspaceModel = sourceGenerator.BuildWorkspaceModel(repoRootPath);
+            return workspaceModel;
         }
 
         internal static void SaveReadme(string repoPath, string readmeInHtml)
