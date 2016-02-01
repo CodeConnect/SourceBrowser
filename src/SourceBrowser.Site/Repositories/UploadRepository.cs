@@ -8,6 +8,7 @@ using System.Security;
 using System.IO;
 using System.Configuration;
 using SourceBrowser.Generator.Model;
+using SourceBrowser.Generator;
 
 namespace SourceBrowser.Site.Repositories
 {
@@ -28,7 +29,7 @@ namespace SourceBrowser.Site.Repositories
             // When testing, give full trust to the developer's machine
             if (String.IsNullOrEmpty(safeUserName))
             {
-                var sourceGenerator = new Generator.SolutionAnalayzer(solutionPath);
+                var sourceGenerator = SolutionAnalayzer.FromSolutionPath(solutionPath);
                 if(sourceGenerator.WorkspaceFailed)
                 {
                     return null;
@@ -59,7 +60,7 @@ namespace SourceBrowser.Site.Repositories
                 // Use the token handle returned by LogonUser. 
                 using (WindowsImpersonationContext impersonatedUser = WindowsIdentity.Impersonate(safeTokenHandle.DangerousGetHandle()))
                 {
-                    var sourceGenerator = new Generator.SolutionAnalayzer(solutionPath);
+                    var sourceGenerator = SolutionAnalayzer.FromSolutionPath(solutionPath);
                     if (sourceGenerator.WorkspaceFailed)
                     {
                         return null;
@@ -73,12 +74,19 @@ namespace SourceBrowser.Site.Repositories
 
         internal static WorkspaceModel ProcessOmnisharp(string omnisharpPath, string repoRootPath)
         {
-            throw new NotImplementedException();
+            return null;
         }
 
         internal static WorkspaceModel ProcessProjectJson(string[] projectJsonPaths, string repoRootPath)
         {
-            throw new NotImplementedException();
+            
+            var sourceGenerator = SolutionAnalayzer.FromProjectJsonPaths(projectJsonPaths);
+            if (sourceGenerator.WorkspaceFailed)
+            {
+                return null;
+            }
+            var workspaceModel = sourceGenerator.BuildWorkspaceModel(repoRootPath);
+            return workspaceModel;
         }
 
         internal static void SaveReadme(string repoPath, string readmeInHtml)

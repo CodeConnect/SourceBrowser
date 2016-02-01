@@ -38,7 +38,7 @@ namespace SourceBrowser.Samples
                 Console.Write("Opening " + absoluteSolutionPath);
                 Console.WriteLine("...");
 
-                var solutionAnalyzer = new SolutionAnalayzer(absoluteSolutionPath);
+                var solutionAnalyzer = SolutionAnalayzer.FromSolutionPath(absoluteSolutionPath);
 
                 Console.Write("Analyzing and saving into " + absoluteSaveDirectory);
                 Console.WriteLine("...");
