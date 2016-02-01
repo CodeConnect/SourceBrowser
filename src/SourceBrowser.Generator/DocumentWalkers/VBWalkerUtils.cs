@@ -29,13 +29,13 @@ namespace SourceBrowser.Generator.DocumentWalkers
         public string LocalVariableDelimiter { get; } = VBDelimiters.LOCAL_VARIABLE;
 
 
-        public string GetFullName(SyntaxToken token) => token.CSharpKind().ToString();
+        public string GetFullName(SyntaxToken token) => token.Kind().ToString();
 
-        public bool IsIdentifier(SyntaxToken token) => token.VBKind() == SyntaxKind.IdentifierToken;
+        public bool IsIdentifier(SyntaxToken token) => token.Kind() == SyntaxKind.IdentifierToken;
 
         public bool IsKeyword(SyntaxToken token) => token.IsKeyword();
 
-        public bool IsLiteral(SyntaxToken token) => token.VBKind() == SyntaxKind.StringLiteralToken;
+        public bool IsLiteral(SyntaxToken token) => token.Kind() == SyntaxKind.StringLiteralToken;
 
         public override void VisitToken(SyntaxToken token) => _walker.VisitToken(token);
     }
