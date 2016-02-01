@@ -53,16 +53,14 @@
                     return View("Index");
                 }
 
-                // Generate the source browser files for this solution
-                var solutionPaths = GetSolutionPaths(repoRootPath);
-                if (solutionPaths.Length == 0)
-                {
-                    ViewBag.Error = "No C# solution was found. Ensure that a valid .sln file exists within your repository.";
-                    return View("Index");
-                }
-
                 var organizationPath = System.Web.Hosting.HostingEnvironment.MapPath("~/") + "SB_Files\\" + retriever.UserName;
                 var repoPath = Path.Combine(organizationPath, retriever.RepoName);
+
+
+                // Generate the source browser files for this solution
+                var solutionPaths = Directory.GetFiles(repoRootPath, "*.sln", SearchOption.AllDirectories);
+                var omnisharpPaths = Directory.GetFiles(repoRootPath, "omnisharp.json", SearchOption.AllDirectories);
+                var projectJsonPaths= Directory.GetFiles(repoRootPath, "project.json", SearchOption.AllDirectories);
 
                 // TODO: Use parallel for.
                 // TODO: Process all solutions.
@@ -120,20 +118,6 @@
                     BrowserRepository.RemoveRepository(retriever.UserName, retriever.RepoName);
                 }
             }
-        }
-
-        /// <summary>
-        /// Simply searches for the solution files and returns their paths.
-        /// </summary>
-        /// <param name="rootDirectory">
-        /// The root Directory.
-        /// </param>
-        /// <returns>
-        /// The solution paths.
-        /// </returns>
-        private string[] GetSolutionPaths(string rootDirectory)
-        {
-            return Directory.GetFiles(rootDirectory, "*.sln", SearchOption.AllDirectories);
         }
     }
 }
