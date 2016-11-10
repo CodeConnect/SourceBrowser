@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 using SourceBrowser.Generator.Model;
 using SourceBrowser.Generator.Extensions;
 using Microsoft.CodeAnalysis.FindSymbols;
@@ -81,7 +82,7 @@ namespace SourceBrowser.Generator.DocumentWalkers
         {
             var triviaModelList = triviaList.Select(n => new Trivia(
                 value: n.ToFullString(),
-                type: n.CSharpKind().ToString()
+                type: n.Kind().ToString()
             )).ToList();
 
             return triviaModelList;
@@ -92,7 +93,7 @@ namespace SourceBrowser.Generator.DocumentWalkers
         /// </summary>
         private Token ProcessOtherToken(SyntaxToken token)
         {
-            string fullName = token.CSharpKind().ToString();
+            string fullName = token.Kind().ToString();
             string value = token.ToString();
             string type = _walkerUtils.OtherTokenTypeName;
             int lineNumber = token.GetLocation().GetLineSpan().StartLinePosition.Line + 1;
