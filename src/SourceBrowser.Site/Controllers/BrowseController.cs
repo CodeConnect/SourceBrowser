@@ -111,10 +111,17 @@
             var organizationPath = System.Web.Hosting.HostingEnvironment.MapPath("~/") + "SB_Files\\";
             string treeViewFileName = "treeview.html";
             var treeViewPath = Path.Combine(organizationPath, username, repository, treeViewFileName);
-
-            using (var treeViewFile = new StreamReader(treeViewPath))
+            
+            try
             {
-                return treeViewFile.ReadToEnd();
+                using (var treeViewFile = new StreamReader(treeViewPath))
+                {
+                    return treeViewFile.ReadToEnd();
+                }
+            }
+            catch (FileNotFoundException)
+            {
+                return $"{treeViewFileName} was not found";
             }
         }
 

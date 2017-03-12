@@ -1,0 +1,26 @@
+﻿@{
+    ViewBag.Title = "Update existing repo";
+}
+
+@Scripts.Render("~/bundles/jquery")
+@Scripts.Render("~/bundles/upload")
+
+<div id="upload-header" class="text-center">
+    <h2>This repo already exists</h2>
+    <h5><a href="@ViewBag.BrowseUrl">@ViewBag.GithubUrl</a></h5>
+    @if (ViewBag.Error != null)
+    {
+        <h5 id="upload-error">@ViewBag.Error</h5>
+    }
+</div>
+
+<form id="upload-form" method="post" action="~/Upload/Update/" class="bs-example bs-example-form" role="form">
+    <div class="input-group input-group-lg" >
+		<input type="hidden" name="githubUrl" value="@ViewBag.GithubUrl">
+        <button class="btn btn-default button large primary" type="submit">Update existing repo</button>
+    </div>
+</form>
+
+<div class="text-center upload-message">
+    Uploading.  Please Wait...
+</div>

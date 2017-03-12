@@ -14,7 +14,8 @@ namespace SourceBrowser.Generator.Transformers
     public class TreeViewTransformer : AbstractWorkspaceVisitor
     {
         private string _savePath;
-        HtmlTextWriter _writer;
+        private StreamWriter _sw;
+        private HtmlTextWriter _writer;
         private readonly string _userNameAndRepoPrefix;
 
         private const string _treeViewOutputFile = "treeView.html";
@@ -34,20 +35,55 @@ namespace SourceBrowser.Generator.Transformers
 
         protected override void VisitWorkspace(WorkspaceModel workspaceModel)
         {
-            using (var stringWriter = new StreamWriter(_savePath, false))
-            using(_writer = new HtmlTextWriter(stringWriter))
+            // The first WorkspaceModel that is visited is the root of the tree view
+            // and its children are the solutions.
+
+            bool disposeWriters = false;
+
+            // Create the writers only if they're null
+            if (_sw == null)
             {
+                _sw = new StreamWriter(_savePath, false);
+
+                if (_writer != null)
+                    _writer.Dispose();
+
+                _writer = new HtmlTextWriter(_sw);
+
+                disposeWriters = true;
+            }
+
+            if (disposeWriters)
+            {
+                // The current WorkspaceModel is the root node, no need to increase the depth
                 _writer.AddAttribute(HtmlTextWriterAttribute.Id, "browserTree");
                 _writer.AddAttribute(HtmlTextWriterAttribute.Class, "treeview");
                 _writer.AddAttribute("data-role", "treeview");
                 _writer.RenderBeginTag(HtmlTextWriterTag.Ul);
-
+            }
+            else
+            {
+                // The current WorkspaceModel is a Child of the root node.
                 depth++;
-                base.VisitWorkspace(workspaceModel);
-                depth--;
+            }
+            
+            base.VisitWorkspace(workspaceModel);
 
+            if (disposeWriters)
+            {
+                // The current WorkspaceModel is the root node.
+                // Every child has been visited: dispose the writers.
+
+                disposeWriters = false;
                 _writer.RenderEndTag();
                 _writer.WriteLine();
+                _writer.Dispose();
+                _sw.Dispose();
+            }
+            else
+            {
+                // The current WorkspaceModel is a Child of the root node.
+                depth--;
             }
         }
 

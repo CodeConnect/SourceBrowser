@@ -26,7 +26,7 @@ namespace SourceBrowser.Generator.Transformers
 
         protected virtual void VisitWorkspace(WorkspaceModel workspaceModel)
         {
-            foreach(var child in _workspaceModel.Children)
+            foreach(var child in workspaceModel.Children)
             {
                 VisitProjectItem(child);
             }
@@ -54,7 +54,7 @@ namespace SourceBrowser.Generator.Transformers
 
         protected virtual void VisitFolder(FolderModel folderModel)
         {
-            foreach(var child in folderModel.Children)
+            foreach(var child in folderModel.Children.OrderBy(proj => proj.Name))
             {
                 VisitProjectItem(child);
             }

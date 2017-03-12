@@ -7,6 +7,11 @@ using System.Runtime.ConstrainedExecution;
 using System.Security;
 using System.IO;
 using System.Configuration;
+using System.Linq;
+using SourceBrowser.Generator.Transformers;
+using SourceBrowser.SolutionRetriever;
+using System.Threading.Tasks;
+using SourceBrowser.Generator.Model;
 
 namespace SourceBrowser.Site.Repositories
 {
@@ -18,7 +23,79 @@ namespace SourceBrowser.Site.Repositories
         [DllImport("kernel32.dll", CharSet = CharSet.Auto)]
         private extern static bool CloseHandle(IntPtr handle);
 
-        internal static Generator.Model.WorkspaceModel ProcessSolution(string solutionPath, string repoRootPath)
+        internal static bool ProcessRepo(GitHubRetriever retriever, string repoSourceStagingPath, string parsedRepoPath)
+        {
+            bool success = true;
+
+            var stagingSolutionPaths = GetSolutionPaths(repoSourceStagingPath);
+            if (stagingSolutionPaths.Length == 0)
+            {
+                throw new NoSolutionsFoundException();
+            }
+
+            try
+            {
+                // Create a WorkspaceModel that will contain every solution found in the repo.
+                // This is also the root of the tree view.
+                WorkspaceModel rootWorkspaceModel = new WorkspaceModel(parsedRepoPath, repoSourceStagingPath);
+
+                // Create an array to store the resulting workspace models from the solutions.
+                WorkspaceModel[] processedWorkspaces = new WorkspaceModel[stagingSolutionPaths.Count()];
+
+                // Parallel execution.
+                Parallel.For(0, stagingSolutionPaths.Count(), (i) =>
+                {
+                    string sln = stagingSolutionPaths[i]; // Get the current solutionPath
+                    var workspaceModel = ProcessSolution(retriever, sln, repoSourceStagingPath, parsedRepoPath);
+                    processedWorkspaces[i] = workspaceModel; // Set the result
+                });
+
+                // Add all the results to the root workspace model.
+                foreach (var workspace in processedWorkspaces)
+                    rootWorkspaceModel.Children.Add(workspace);
+
+                // Generate HTML of the tree view.
+                var treeViewTransformer = new TreeViewTransformer(parsedRepoPath, retriever.UserName, retriever.RepoName);
+                treeViewTransformer.Visit(rootWorkspaceModel); // The tree view contains all the processed solution.
+
+                try
+                {
+                    SaveReadme(parsedRepoPath, retriever.ProvideParsedReadme());
+                }
+                catch (Exception ex)
+                {
+                    // TODO: Log and swallow - readme is not essential.
+                }
+            }
+            catch (Exception)
+            {
+                // TODO: Log this
+                success = false;
+            }
+
+            return success;
+        }
+
+        private static WorkspaceModel ProcessSolution(GitHubRetriever retriever, string solutionPath, string repoSourceStagingPath, string parsedRepoPath)
+        {
+            var workspaceModel = ParseRepo(solutionPath, repoSourceStagingPath);
+
+            //One pass to lookup all declarations
+            var typeTransformer = new TokenLookupTransformer();
+            typeTransformer.Visit(workspaceModel);
+            var tokenLookup = typeTransformer.TokenLookup;
+
+            //Another pass to generate HTMLs
+            var htmlTransformer = new HtmlTransformer(tokenLookup, parsedRepoPath);
+            htmlTransformer.Visit(workspaceModel);
+
+            var searchTransformer = new SearchIndexTransformer(retriever.UserName, retriever.RepoName);
+            searchTransformer.Visit(workspaceModel);
+
+            return workspaceModel;
+        }
+
+        private static WorkspaceModel ParseRepo(string solutionPath, string repoSourceStagingPath)
         {
             SafeTokenHandle safeTokenHandle;
             string safeUserName = ConfigurationManager.AppSettings["safeUserName"];
@@ -28,7 +105,7 @@ namespace SourceBrowser.Site.Repositories
             if (String.IsNullOrEmpty(safeUserName))
             {
                 var sourceGenerator = new Generator.SolutionAnalayzer(solutionPath);
-                var workspaceModel = sourceGenerator.BuildWorkspaceModel(repoRootPath);
+                var workspaceModel = sourceGenerator.BuildWorkspaceModel(repoSourceStagingPath);
                 return workspaceModel;
             }
             // Otherwise, use impersonation to build the solution as user with low privileges.
@@ -54,17 +131,31 @@ namespace SourceBrowser.Site.Repositories
                 using (WindowsImpersonationContext impersonatedUser = WindowsIdentity.Impersonate(safeTokenHandle.DangerousGetHandle()))
                 {
                     var sourceGenerator = new Generator.SolutionAnalayzer(solutionPath);
-                    var workspaceModel = sourceGenerator.BuildWorkspaceModel(repoRootPath);
+                    var workspaceModel = sourceGenerator.BuildWorkspaceModel(repoSourceStagingPath);
                     return workspaceModel;
                 }
                 // Releasing the context object stops the impersonation 
             }
         }
 
-        internal static void SaveReadme(string repoPath, string readmeInHtml)
+        private static void SaveReadme(string repoPath, string readmeInHtml)
         {
             string readmePath = Path.Combine(repoPath, "readme.html");
             File.WriteAllText(readmePath, readmeInHtml);
+        }
+
+        /// <summary>
+        /// Simply searches for the solution files and returns their paths.
+        /// </summary>
+        /// <param name="rootDirectory">
+        /// The root Directory.
+        /// </param>
+        /// <returns>
+        /// The solution paths.
+        /// </returns>
+        private static string[] GetSolutionPaths(string rootDirectory)
+        {
+            return Directory.GetFiles(rootDirectory, "*.sln", SearchOption.AllDirectories);
         }
     }
 
@@ -85,5 +176,9 @@ namespace SourceBrowser.Site.Repositories
         {
             return CloseHandle(handle);
         }
+    }
+
+    public class NoSolutionsFoundException : Exception
+    {
     }
 }

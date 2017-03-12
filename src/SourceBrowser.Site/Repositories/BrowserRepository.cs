@@ -37,13 +37,13 @@
 
         internal static bool TryLockRepository(string userName, string repoName)
         {
-	        string lockFileDirectory = Path.Combine(StaticHtmlAbsolutePath, userName, repoName);
+	        string lockFileDirectory = GetLockFileDirectoryPath(userName, repoName);
             if (Directory.Exists(lockFileDirectory))
             {
                 // The directory already exists, we can't modify this repository.
                 return false;
             }
-            string lockFilePath = Path.Combine(lockFileDirectory, Constants.REPO_LOCK_FILENAME);
+            string lockFilePath = GetLockFilePath(userName, repoName);
             lock (fileOperationLock)
             {
                 if (File.Exists(lockFilePath))
@@ -66,7 +66,7 @@
 
         internal static void UnlockRepository(string userName, string repoName)
         {
-	        string lockFilePath = Path.Combine(StaticHtmlAbsolutePath, userName, repoName, Constants.REPO_LOCK_FILENAME);
+            string lockFilePath = GetLockFilePath(userName, repoName);
             lock (fileOperationLock)
             {
                 if (File.Exists(lockFilePath))
@@ -78,7 +78,7 @@
 
         internal static bool IsRepositoryReady(string userName, string repoName)
         {
-            string lockFilePath = Path.Combine(StaticHtmlAbsolutePath, userName, repoName, Constants.REPO_LOCK_FILENAME);
+            string lockFilePath = GetLockFilePath(userName, repoName);
             lock (fileOperationLock)
             {
                 if (File.Exists(lockFilePath))
@@ -91,7 +91,7 @@
 
         internal static void RemoveRepository(string userName, string repoName)
         {
-            string lockFileDirectory = Path.Combine(StaticHtmlAbsolutePath, userName, repoName);
+            string lockFileDirectory = GetLockFileDirectoryPath(userName, repoName);
             lock (fileOperationLock)
             {
                 if (Directory.Exists(lockFileDirectory))
@@ -111,6 +111,22 @@
         {
             var fullPath = Path.Combine(StaticHtmlAbsolutePath, username, repository, path);
             return File.Exists(fullPath);
+        }
+
+        /// <summary>
+        /// Helper method to retrieve the lock file directory path of the given repo.
+        /// </summary>
+        private static string GetLockFileDirectoryPath(string userName, string repoName)
+        {
+            return Path.Combine(StaticHtmlAbsolutePath, userName, repoName);
+        }
+
+        /// <summary>
+        /// Helper method to retrieve the lock file path of the given repo.
+        /// </summary>
+        private static string GetLockFilePath(string userName, string repoName)
+        {
+            return Path.Combine(GetLockFileDirectoryPath(userName, repoName), Constants.REPO_LOCK_FILENAME);
         }
 
         /// <summary>
@@ -267,7 +283,7 @@
         private static GithubRepoStructure SetUpRepoStructure(string userName, string repoName)
         {
             // Currently unused, might be useful at some point
-            // var repoRoot = Path.Combine(StaticHtmlAbsolutePath, userName, repoName);
+            // var repoRoot = GetLockFileDirectoryPath(userName, repoName);
 
             var repoData = new GithubRepoStructure()
             {
