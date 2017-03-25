@@ -44,7 +44,9 @@
 
             // We have locked the repository and marked it as processing.
             // Whenever we return or exit on an exception, we need to unlock this repository
-            bool processingSuccessful = false;
+
+            ProcessRepoResult result = ProcessRepoResult.Failed;
+
             try
             {
                 string repoSourceStagingPath = null;
@@ -66,12 +68,7 @@
 
                 try
                 {
-                    processingSuccessful = UploadRepository.ProcessRepo(retriever, repoSourceStagingPath, parsedRepoPath);
-                }
-                catch (NoSolutionsFoundException)
-                {
-                    ViewBag.Error = "No C# solution was found. Ensure that a valid .sln file exists within your repository.";
-                    return View("Index");
+                    result = UploadRepository.ProcessRepo(retriever, repoSourceStagingPath, parsedRepoPath);
                 }
                 catch (Exception ex)
                 {
@@ -79,12 +76,18 @@
                     ViewBag.Error = "There was an error processing solution."/* + Path.GetFileName(solutionPath)*/;
                     return View("Index");
                 }
-                
+
+                if (result == ProcessRepoResult.NoSolutionsFound)
+                {
+                    ViewBag.Error = "No C# solution was found. Ensure that a valid .sln file exists within your repository.";
+                    return View("Index");
+                }
+
                 return Redirect("/Browse/" + retriever.UserName + "/" + retriever.RepoName);
             }
             finally
             {
-                if (processingSuccessful)
+                if (result == ProcessRepoResult.Successful)
                 {
                     BrowserRepository.UnlockRepository(retriever.UserName, retriever.RepoName);
                 }
@@ -144,7 +147,9 @@
 
                 // We have locked the repository and marked it as processing.
                 // Whenever we return or exit on an exception, we need to unlock this repository
-                bool processingSuccessful = false;
+
+                ProcessRepoResult result = ProcessRepoResult.Failed;
+
                 try
                 {
                     string repoSourceStagingPath = null;
@@ -165,12 +170,7 @@
                     try
                     {
                         // Generate the source browser files for this solution
-                        processingSuccessful = UploadRepository.ProcessRepo(retriever, repoSourceStagingPath, parsedRepoPath);
-                    }
-                    catch (NoSolutionsFoundException)
-                    {
-                        ViewBag.Error = "No C# solution was found. Ensure that a valid .sln file exists within your repository.";
-                        return View("Index");
+                        result = UploadRepository.ProcessRepo(retriever, repoSourceStagingPath, parsedRepoPath);
                     }
                     catch (Exception ex)
                     {
@@ -178,12 +178,18 @@
                         ViewBag.Error = "There was an error processing solution."/* + Path.GetFileName(solutionPath)*/;
                         return View("Index");
                     }
-                    
+
+                    if (result == ProcessRepoResult.NoSolutionsFound)
+                    {
+                        ViewBag.Error = "No C# solution was found. Ensure that a valid .sln file exists within your repository.";
+                        return View("Index");
+                    }
+
                     return Redirect("/Browse/" + retriever.UserName + "/" + retriever.RepoName);
                 }
                 finally
                 {
-                    if (processingSuccessful)
+                    if (result == ProcessRepoResult.Successful)
                     {
                         BrowserRepository.UnlockRepository(retriever.UserName, retriever.RepoName);
                     }

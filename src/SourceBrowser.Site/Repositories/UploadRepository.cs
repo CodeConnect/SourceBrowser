@@ -23,15 +23,14 @@ namespace SourceBrowser.Site.Repositories
         [DllImport("kernel32.dll", CharSet = CharSet.Auto)]
         private extern static bool CloseHandle(IntPtr handle);
 
-        internal static bool ProcessRepo(GitHubRetriever retriever, string repoSourceStagingPath, string parsedRepoPath)
+        internal static ProcessRepoResult ProcessRepo(GitHubRetriever retriever, string repoSourceStagingPath, string parsedRepoPath)
         {
-            bool success = true;
-
             var stagingSolutionPaths = GetSolutionPaths(repoSourceStagingPath);
+
             if (stagingSolutionPaths.Length == 0)
-            {
-                throw new NoSolutionsFoundException();
-            }
+                return ProcessRepoResult.NoSolutionsFound;
+
+            ProcessRepoResult result = ProcessRepoResult.Successful;
 
             try
             {
@@ -45,9 +44,16 @@ namespace SourceBrowser.Site.Repositories
                 // Parallel execution.
                 Parallel.For(0, stagingSolutionPaths.Count(), (i) =>
                 {
-                    string sln = stagingSolutionPaths[i]; // Get the current solutionPath
-                    var workspaceModel = ProcessSolution(retriever, sln, repoSourceStagingPath, parsedRepoPath);
-                    processedWorkspaces[i] = workspaceModel; // Set the result
+                    try
+                    {
+                        string sln = stagingSolutionPaths[i]; // Get the current solutionPath
+                        var workspaceModel = ProcessSolution(retriever, sln, repoSourceStagingPath, parsedRepoPath);
+                        processedWorkspaces[i] = workspaceModel; // Set the result
+                    }
+                    catch (Exception)
+                    {
+                        // TODO: Log this
+                    }
                 });
 
                 // Add all the results to the root workspace model.
@@ -70,10 +76,10 @@ namespace SourceBrowser.Site.Repositories
             catch (Exception)
             {
                 // TODO: Log this
-                success = false;
+                result = ProcessRepoResult.Failed;
             }
 
-            return success;
+            return result;
         }
 
         private static WorkspaceModel ProcessSolution(GitHubRetriever retriever, string solutionPath, string repoSourceStagingPath, string parsedRepoPath)
@@ -178,7 +184,10 @@ namespace SourceBrowser.Site.Repositories
         }
     }
 
-    public class NoSolutionsFoundException : Exception
+    public enum ProcessRepoResult
     {
+        Failed,
+        NoSolutionsFound,
+        Successful,
     }
 }

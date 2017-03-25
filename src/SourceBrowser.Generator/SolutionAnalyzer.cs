@@ -21,13 +21,21 @@ namespace SourceBrowser.Generator
 {
     public class SolutionAnalayzer
     {
+        private static object _sync = new object();
+
         MSBuildWorkspace _workspace;
         Solution _solution;
+        private string _solutionPath;
         private ReferencesourceLinkProvider _refsourceLinkProvider = new ReferencesourceLinkProvider();
 
         public SolutionAnalayzer(string solutionPath)
         {
-            _workspace = MSBuildWorkspace.Create();
+            lock (_sync)
+            {
+                _workspace = MSBuildWorkspace.Create();
+            }
+
+            _solutionPath = solutionPath;
             _workspace.WorkspaceFailed += _workspace_WorkspaceFailed;
             _solution = _workspace.OpenSolutionAsync(solutionPath).Result;
             _refsourceLinkProvider.Init();
@@ -49,7 +57,9 @@ namespace SourceBrowser.Generator
 
                 if (!Directory.Exists(logDirectory))
                     Directory.CreateDirectory(logDirectory);
-                var logPath = logDirectory + "log.txt";
+
+                var logName = Path.GetFileName(_solutionPath);
+                var logPath = $"{logDirectory}{logName}.log.txt";
                 using (var sw = new StreamWriter(logPath))
                 {
                     sw.Write(e);
